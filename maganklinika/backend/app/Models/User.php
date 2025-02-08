@@ -45,4 +45,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function isDoctor()
+    {
+        return $this->role_id === 2;
+    }
 }
