@@ -2,6 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Role;
+use App\Models\Specialization;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +20,8 @@ class DoctorFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'user_id' => User::where('role_id', Role::where('name', 'doctor')->first()->role_id)->inRandomOrder()->first()->id,
+            'specialisation_id' => Specialization::inRandomOrder()->first()->specialisation_id,
         ];
     }
 }

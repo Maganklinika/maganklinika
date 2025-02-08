@@ -6,6 +6,7 @@ use App\Models\doctor;
 use App\Models\patient;
 use App\Models\role;
 use App\Models\specialisation;
+use App\Models\Specialization;
 use App\Models\treatment;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -36,7 +37,7 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($specialisations as $specialisation) {
-            Specialisation::create(['specialisation_name' => $specialisation]);
+            Specialization::create(['specialisation_name' => $specialisation]);
         }
 
         // Vizsgálatok generálása (minden specializációhoz legalább 3)

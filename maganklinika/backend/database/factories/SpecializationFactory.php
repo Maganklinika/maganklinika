@@ -16,8 +16,16 @@ class SpecializationFactory extends Factory
      */
     public function definition(): array
     {
+        $specialisations = [
+            'Kardiológia', 'Neurológia', 'Ortopédia', 'Bőrgyógyászat', 'Szemészet', 
+            'Fül-orr-gégészet', 'Nőgyógyászat', 'Urológia', 'Gasztroenterológia', 
+            'Pszichiátria', 'Endokrinológia', 'Reumatológia', 'Pulmonológia', 
+            'Nefrológia', 'Sebészet', 'Gyermekgyógyászat', 'Immunológia', 
+            'Onkológia', 'Fogászat', 'Radiológia'
+        ];
+
         return [
-            //
+            'specialisation_name' => fake()->randomElement($specialisations),
         ];
     }
 }
