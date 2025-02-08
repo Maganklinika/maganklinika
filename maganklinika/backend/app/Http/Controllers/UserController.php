@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DoctorAppointment;
-use App\Http\Requests\StoreDoctorAppointmentRequest;
-use App\Http\Requests\UpdateDoctorAppointmentRequest;
-use Illuminate\Support\Facades\Request;
+use App\Models\User;
+use Illuminate\Http\Request;
 
-class DoctorAppointmentController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return response()->json(DoctorAppointment::all());
+        return response()->json(User::all());
     }
 
     /**
@@ -28,15 +26,15 @@ class DoctorAppointmentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(string $id)
     {
-        //
+        return response()->json(User::find($id));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function update(Request $request, string $id)
     {
         //
     }
@@ -44,7 +42,7 @@ class DoctorAppointmentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(string $id)
     {
         //
     }
