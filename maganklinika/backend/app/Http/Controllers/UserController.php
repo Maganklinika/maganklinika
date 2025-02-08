@@ -20,7 +20,9 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = new User();
+        $data->fill($request->all());
+        $data->save();
     }
 
     /**
