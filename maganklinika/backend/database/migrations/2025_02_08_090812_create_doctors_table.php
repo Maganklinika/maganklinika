@@ -12,8 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('doctors', function (Blueprint $table) {
-            $table->foreignId('user_id')->primary()->constrained('users')->onDelete('cascade');
-            $table->foreignId('specialization_id')->constrained('specializations')->onDelete('cascade');
+            $table->id('doctor_id');
+            $table->foreignId('user_id')->references('id')->on('users');
+            $table->foreignId('specialization_id')->references('specialization_id')->on('specializations');
+            //????jelszó
             $table->timestamps();
         });
     }
