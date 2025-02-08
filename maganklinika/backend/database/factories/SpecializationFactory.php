@@ -16,7 +16,7 @@ class SpecializationFactory extends Factory
      */
     public function definition(): array
     {
-        $specialisations = [
+        $specializations = [
             'Kardiológia', 'Neurológia', 'Ortopédia', 'Bőrgyógyászat', 'Szemészet', 
             'Fül-orr-gégészet', 'Nőgyógyászat', 'Urológia', 'Gasztroenterológia', 
             'Pszichiátria', 'Endokrinológia', 'Reumatológia', 'Pulmonológia', 
@@ -25,7 +25,7 @@ class SpecializationFactory extends Factory
         ];
 
         return [
-            'specialisation_name' => fake()->randomElement($specialisations),
+            'specialization_name' => fake()->randomElement($specializations),
         ];
     }
 }

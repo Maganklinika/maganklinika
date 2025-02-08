@@ -41,11 +41,11 @@ class TreatmentFactory extends Factory
         ];
 
         // Kiválasztunk egy specializációt
-        $specialisation = Specialization::inRandomOrder()->first();
+        $specialization = Specialization::inRandomOrder()->first();
 
         return [
-            'specialisation_id' => $specialisation->specialisation_id,
-            'treatment_name' => fake()->randomElement($treatments[$specialisation->specialisation_name]),
+            'specialization_id' => $specialization->specialization_id,
+            'treatment_name' => fake()->randomElement($treatments[$specialization->specialization_name]),
             'treatment_length' => fake()->time('H:i:s', '02:00:00'), // max 2 órás kezelés
             'price' => fake()->numberBetween(5000, 20000),
         ];

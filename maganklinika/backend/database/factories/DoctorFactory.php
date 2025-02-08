@@ -21,7 +21,7 @@ class DoctorFactory extends Factory
     {
         return [
             'user_id' => User::where('role_id', Role::where('name', 'doctor')->first()->role_id)->inRandomOrder()->first()->id,
-            'specialisation_id' => Specialization::inRandomOrder()->first()->specialisation_id,
+            'specialization_id' => Specialization::inRandomOrder()->first()->specialization_id,
         ];
     }
 }

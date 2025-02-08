@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
         User::factory(20)->create();
 
         // Specializációk létrehozása
-        $specialisations = [
+        $specializations = [
             'Kardiológia', 'Neurológia', 'Ortopédia', 'Bőrgyógyászat', 'Szemészet', 
             'Fül-orr-gégészet', 'Nőgyógyászat', 'Urológia', 'Gasztroenterológia', 
             'Pszichiátria', 'Endokrinológia', 'Reumatológia', 'Pulmonológia', 
@@ -36,8 +36,8 @@ class DatabaseSeeder extends Seeder
             'Onkológia', 'Fogászat', 'Radiológia'
         ];
 
-        foreach ($specialisations as $specialisation) {
-            Specialization::create(['specialisation_name' => $specialisation]);
+        foreach ($specializations as $specialization) {
+            Specialization::create(['specialization_name' => $specialization]);
         }
 
         // Vizsgálatok generálása (minden specializációhoz legalább 3)
