@@ -12,7 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('patients', function (Blueprint $table) {
-            $table->id();
+            //$table->id(); // taj_szám az id
+            $table->unsignedBigInteger('taj_number')->primary();
+            $table->foreignId('user_id')->references('id')->on('users');
+            $table->date('birth_date');
+            $table->string('address');
             $table->timestamps();
         });
     }

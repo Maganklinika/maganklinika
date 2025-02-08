@@ -6,6 +6,7 @@ use App\Models\doctor;
 use App\Models\patient;
 use App\Models\role;
 use App\Models\specialisation;
+use App\Models\Specialization;
 use App\Models\treatment;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -27,7 +28,7 @@ class DatabaseSeeder extends Seeder
         User::factory(20)->create();
 
         // Specializációk létrehozása
-        $specialisations = [
+        $specializations = [
             'Kardiológia', 'Neurológia', 'Ortopédia', 'Bőrgyógyászat', 'Szemészet', 
             'Fül-orr-gégészet', 'Nőgyógyászat', 'Urológia', 'Gasztroenterológia', 
             'Pszichiátria', 'Endokrinológia', 'Reumatológia', 'Pulmonológia', 
@@ -35,8 +36,8 @@ class DatabaseSeeder extends Seeder
             'Onkológia', 'Fogászat', 'Radiológia'
         ];
 
-        foreach ($specialisations as $specialisation) {
-            Specialisation::create(['specialisation_name' => $specialisation]);
+        foreach ($specializations as $specialization) {
+            Specialization::create(['specialization_name' => $specialization]);
         }
 
         // Vizsgálatok generálása (minden specializációhoz legalább 3)

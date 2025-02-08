@@ -17,7 +17,9 @@ class DoctorAppointmentFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'start_time'=>fake()->dateTime(),
+            //státusz - enum hiányzik
+            'rating'=>fake()->rand(1,5)
         ];
     }
 }

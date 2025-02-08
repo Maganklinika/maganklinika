@@ -12,7 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('navigation_roles', function (Blueprint $table) {
-            $table->id();
+            $table->id('navigationRole_id');
+            $table->integer('ranking')->unique();
+            $table->integer('parent')->nullable();
+            $table->foreignId('role_id')->references('role_id')->on('roles');
+            $table->foreignId('navigation_id')->references('navigation_id')->on('navigations');
             $table->timestamps();
         });
     }
