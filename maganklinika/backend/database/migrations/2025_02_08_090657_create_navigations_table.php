@@ -12,7 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('navigations', function (Blueprint $table) {
-            $table->id();
+            $table->id('navigation_id');
+            $table->string('name');
+            $table->string('URL');
+            $table->string('component_name');
             $table->timestamps();
         });
     }
