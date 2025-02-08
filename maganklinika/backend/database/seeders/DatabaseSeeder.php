@@ -2,6 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\doctor;
+use App\Models\patient;
+use App\Models\role;
+use App\Models\specialisation;
+use App\Models\treatment;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -13,11 +18,33 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Szerepkörök létrehozása
+        Role::factory()->create(['name' => 'admin']);
+        Role::factory()->create(['name' => 'doctor']);
+        Role::factory()->create(['name' => 'patient']);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // 20 véletlenszerű felhasználó létrehozása
+        User::factory(20)->create();
+
+        // Specializációk létrehozása
+        $specialisations = [
+            'Kardiológia', 'Neurológia', 'Ortopédia', 'Bőrgyógyászat', 'Szemészet', 
+            'Fül-orr-gégészet', 'Nőgyógyászat', 'Urológia', 'Gasztroenterológia', 
+            'Pszichiátria', 'Endokrinológia', 'Reumatológia', 'Pulmonológia', 
+            'Nefrológia', 'Sebészet', 'Gyermekgyógyászat', 'Immunológia', 
+            'Onkológia', 'Fogászat', 'Radiológia'
+        ];
+
+        foreach ($specialisations as $specialisation) {
+            Specialisation::create(['specialisation_name' => $specialisation]);
+        }
+
+        // Vizsgálatok generálása (minden specializációhoz legalább 3)
+        Treatment::factory(60)->create();
+
+        // Orvosok és páciensek létrehozása
+        Doctor::factory(10)->create(); // 10 orvos, mindegyiknek 1 szakirány
+        Patient::factory(10)->create(); // 10 páciens
     }
 }
+
