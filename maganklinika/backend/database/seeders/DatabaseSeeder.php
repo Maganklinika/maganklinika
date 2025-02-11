@@ -23,17 +23,30 @@ class DatabaseSeeder extends Seeder
         Role::factory()->create(['name' => 'admin']);
         Role::factory()->create(['name' => 'doctor']);
         Role::factory()->create(['name' => 'patient']);
-
-        // 20 véletlenszerű felhasználó létrehozása
-        User::factory(20)->create();
+        Role::factory()->create(['name' => 'guest']);
 
         // Specializációk létrehozása
         $specializations = [
-            'Kardiológia', 'Neurológia', 'Ortopédia', 'Bőrgyógyászat', 'Szemészet', 
-            'Fül-orr-gégészet', 'Nőgyógyászat', 'Urológia', 'Gasztroenterológia', 
-            'Pszichiátria', 'Endokrinológia', 'Reumatológia', 'Pulmonológia', 
-            'Nefrológia', 'Sebészet', 'Gyermekgyógyászat', 'Immunológia', 
-            'Onkológia', 'Fogászat', 'Radiológia'
+            'Kardiológia',
+            'Neurológia',
+            'Ortopédia',
+            'Bőrgyógyászat',
+            'Szemészet',
+            'Fül-orr-gégészet',
+            'Nőgyógyászat',
+            'Urológia',
+            'Gasztroenterológia',
+            'Pszichiátria',
+            'Endokrinológia',
+            'Reumatológia',
+            'Pulmonológia',
+            'Nefrológia',
+            'Sebészet',
+            'Gyermekgyógyászat',
+            'Immunológia',
+            'Onkológia',
+            'Fogászat',
+            'Radiológia'
         ];
 
         foreach ($specializations as $specialization) {
@@ -42,10 +55,35 @@ class DatabaseSeeder extends Seeder
 
         // Vizsgálatok generálása (minden specializációhoz legalább 3)
         Treatment::factory(60)->create();
+        // 20 véletlenszerű felhasználó létrehozása
+        $doctorRoleId = 2;
+        $patientRoleId = 3;
 
-        // Orvosok és páciensek létrehozása
-        Doctor::factory(10)->create(); // 10 orvos, mindegyiknek 1 szakirány
-        Patient::factory(10)->create(); // 10 páciens
+        // Létrehozunk 20 orvost és 20 pácienst
+        User::factory(40)->create()->each(function ($user) use ($doctorRoleId, $patientRoleId) {
+            if ($user->role_id === $doctorRoleId) {
+                // Orvos rekord létrehozása
+                Doctor::create([
+                    'user_id' => $user->id,
+                    'specialization_id' => Specialization::inRandomOrder()->first()->specialization_id, // Random specializáció
+                ]);
+                echo ('doktor');
+            } elseif ($user->role_id === $patientRoleId) {
+                // Páciens rekord létrehozása
+                Patient::create([
+                    'user_id' => $user->id,
+                    'taj_number' => fake()->unique()->randomNumber(8, true), // Véletlenszerű 8 számjegyű TAJ szám
+                    'birth_date' => fake()->date(), // Véletlenszerű születési dátum
+                    'address' => fake()->address(), // Véletlenszerű cím
+                ]);
+            }
+        });
+
+
+        $this->call([
+            RoleSeeder::class,
+            NavigationSeeder::class,
+            NavigationRoleSeeder::class,
+        ]);
     }
 }
-

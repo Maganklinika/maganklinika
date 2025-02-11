@@ -9,4 +9,22 @@ class Patient extends Model
 {
     /** @use HasFactory<\Database\Factories\PatientFactory> */
     use HasFactory;
+
+    protected  $primaryKey = 'user_id';
+
+    protected $fillable = [
+        'taj_number',
+        'birth_date',
+        'address',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function appointments()
+    {
+        return $this->hasMany(DoctorAppointment::class, 'taj_number', 'taj_number');
+    }
 }

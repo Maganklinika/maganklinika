@@ -12,12 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('patients', function (Blueprint $table) {
-            //$table->id(); // taj_szám az id
-            $table->unsignedBigInteger('taj_number')->primary();
-            $table->foreignId('user_id')->references('id')->on('users');
+            $table->unsignedBigInteger('user_id');
+            $table->integer('taj_number');
             $table->date('birth_date');
             $table->string('address');
             $table->timestamps();
+
+            $table->primary('user_id'); // A user_id lesz az elsődleges kulcs
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unique('user_id');
         });
     }
 

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('URL');
             $table->string('component_name');
+            $table->integer('parent')->nullable();
             $table->timestamps();
         });
     }

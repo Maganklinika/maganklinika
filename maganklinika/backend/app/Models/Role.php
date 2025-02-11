@@ -9,4 +9,20 @@ class Role extends Model
 {
     /** @use HasFactory<\Database\Factories\RoleFactory> */
     use HasFactory;
+
+    protected  $primaryKey = 'role_id';
+
+    protected $fillable = [
+        'name',
+    ];
+
+    public function users()
+    {
+        return $this->hasMany(User::class, 'role_id', 'role_id');
+    }
+
+    public function navigationRoles()
+    {
+        return $this->hasMany(NavigationRole::class, 'role_id', 'role_id');
+    }
 }

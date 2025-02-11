@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Doctor;
 use App\Models\Role;
 use App\Models\Specialization;
 use App\Models\User;
@@ -17,11 +18,26 @@ class DoctorFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition(): array
+    public function definition()
     {
-        return [
-            'user_id' => User::where('role_id', Role::where('name', 'doctor')->first()->role_id)->inRandomOrder()->first()->id,
-            'specialization_id' => Specialization::inRandomOrder()->first()->specialization_id,
-        ];
+        /*
+        $existingUserIds = Doctor::pluck('user_id')->toArray();
+
+        // Kiválasztunk egy orvost, aki nem szerepel a doctors táblában
+        $user_id = User::where('role_id', Role::where('name', 'doctor')->first()->role_id)
+            ->whereNotIn('id', $existingUserIds) // Kizárjuk a már orvosként szereplőket
+            ->inRandomOrder()
+            ->first();
+
+        // Ha nem találtunk elérhető felhasználót, hibát dobunk
+        if ($user_id) {
+            return [
+                'user_id' => $user_id->id,
+                'specialization_id' => Specialization::inRandomOrder()->first()->specialization_id,
+            ];
+        } else {
+            // Ha nincs elérhető felhasználó, hibát dobunk
+            throw new \Exception('No available user_id for new doctor');
+        }*/
     }
 }
