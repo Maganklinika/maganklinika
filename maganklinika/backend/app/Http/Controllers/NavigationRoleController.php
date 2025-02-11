@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
 
-class NavigationRoleRoleController extends Controller
+class NavigationRoleController extends Controller
 {
     /**
      * Display a listing of the resource.
