@@ -3,48 +3,51 @@
 namespace App\Http\Controllers;
 
 use App\Models\Doctor;
-use App\Http\Requests\StoreDoctorRequest;
-use App\Http\Requests\UpdateDoctorRequest;
+use Illuminate\Support\Facades\Request;
 
 class DoctorController extends Controller
 {
-    /**
+   /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return response()->json(Doctor::all());
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreDoctorRequest $request)
+    public function store(Request $request)
     {
-        //
+        $data = new Doctor();
+        $data->fill($request->all());
+        $data->save();
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Doctor $doctor)
+    public function show(string $id)
     {
-        //
+        return response()->json(Doctor::find($id));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateDoctorRequest $request, Doctor $doctor)
+    public function update(Request $request, string $id)
     {
-        //
+        $data = new Doctor();
+        $data->fill($request->all());
+        $data->save();
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Doctor $doctor)
+    public function destroy(string $id)
     {
-        //
+        Doctor::find($id)->delete();
     }
 }

@@ -3,48 +3,51 @@
 namespace App\Http\Controllers;
 
 use App\Models\NavigationRole;
-use App\Http\Requests\StoreNavigationRoleRequest;
-use App\Http\Requests\UpdateNavigationRoleRequest;
+use Illuminate\Support\Facades\Request;
 
-class NavigationRoleController extends Controller
+class NavigationRoleRoleController extends Controller
 {
-    /**
+   /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return response()->json(NavigationRole::all());
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreNavigationRoleRequest $request)
+    public function store(Request $request)
     {
-        //
+        $data = new NavigationRole();
+        $data->fill($request->all());
+        $data->save();
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(NavigationRole $navigationRole)
+    public function show(string $id)
     {
-        //
+        return response()->json(NavigationRole::find($id));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateNavigationRoleRequest $request, NavigationRole $navigationRole)
+    public function update(Request $request, string $id)
     {
-        //
+        $data = new NavigationRole();
+        $data->fill($request->all());
+        $data->save();
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(NavigationRole $navigationRole)
+    public function destroy(string $id)
     {
-        //
+        NavigationRole::find($id)->delete();
     }
 }

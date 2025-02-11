@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Role;
-use App\Http\Requests\StoreRoleRequest;
-use App\Http\Requests\UpdateRoleRequest;
+use Illuminate\Support\Facades\Request;
 
 class RoleController extends Controller
 {
@@ -13,38 +12,42 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(Role::all());
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreRoleRequest $request)
+    public function store(Request $request)
     {
-        //
+        $data = new Role();
+        $data->fill($request->all());
+        $data->save();
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Role $role)
+    public function show(string $id)
     {
-        //
+        return response()->json(Role::find($id));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRoleRequest $request, Role $role)
+    public function update(Request $request, string $id)
     {
-        //
+        $data = new Role();
+        $data->fill($request->all());
+        $data->save();
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Role $role)
+    public function destroy(string $id)
     {
-        //
+        Role::find($id)->delete();
     }
 }

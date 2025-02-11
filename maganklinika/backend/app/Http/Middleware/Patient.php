@@ -16,7 +16,7 @@ class Patient
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::check() || !(Auth::user()->role > 4)) {
+        if (!Auth::check() || !(Auth::user()->role < 4)) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
         return $next($request); //folytatódhat a kérés

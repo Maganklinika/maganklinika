@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Navigation;
-use App\Http\Requests\StoreNavigationRequest;
-use App\Http\Requests\UpdateNavigationRequest;
+use Illuminate\Support\Facades\Request;
 
 class NavigationController extends Controller
 {
@@ -13,38 +12,42 @@ class NavigationController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(Navigation::all());
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreNavigationRequest $request)
+    public function store(Request $request)
     {
-        //
+        $data = new Navigation();
+        $data->fill($request->all());
+        $data->save();
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Navigation $navigation)
+    public function show(string $id)
     {
-        //
+        return response()->json(Navigation::find($id));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateNavigationRequest $request, Navigation $navigation)
+    public function update(Request $request, string $id)
     {
-        //
+        $data = new Navigation();
+        $data->fill($request->all());
+        $data->save();
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Navigation $navigation)
+    public function destroy(string $id)
     {
-        //
+        Navigation::find($id)->delete();
     }
 }

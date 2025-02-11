@@ -3,48 +3,51 @@
 namespace App\Http\Controllers;
 
 use App\Models\Specialization;
-use App\Http\Requests\StoreSpecializationRequest;
-use App\Http\Requests\UpdateSpecializationRequest;
+use Illuminate\Support\Facades\Request;
 
 class SpecializationController extends Controller
 {
-    /**
+     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return response()->json(Specialization::all());
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreSpecializationRequest $request)
+    public function store(Request $request)
     {
-        //
+        $data = new Specialization();
+        $data->fill($request->all());
+        $data->save();
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Specialization $specialization)
+    public function show(string $id)
     {
-        //
+        return response()->json(Specialization::find($id));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateSpecializationRequest $request, Specialization $specialization)
+    public function update(Request $request, string $id)
     {
-        //
+        $data = new Specialization();
+        $data->fill($request->all());
+        $data->save();
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Specialization $specialization)
+    public function destroy(string $id)
     {
-        //
+        Specialization::find($id)->delete();
     }
 }
