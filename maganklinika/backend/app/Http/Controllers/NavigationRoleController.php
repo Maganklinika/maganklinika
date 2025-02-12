@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\NavigationRole;
 use App\Models\Role;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Request;
+
 
 class NavigationRoleController extends Controller
 {
@@ -66,7 +67,7 @@ class NavigationRoleController extends Controller
     public function checkNavAssignedToRole(Request $request)
     {
         $validated = $request->validate([
-            'navigation_id' => 'required|integer|exists:navigations,id',  // Validáció, hogy a nav_id létezzen a navigations táblában
+            'navigation_id' => 'required|integer|exists:navigations,navigation_id',  // Validáció, hogy a nav_id létezzen a navigations táblában
             'name' => 'required|string',  // Validáljuk a role_name-t
         ]);
 
@@ -80,7 +81,7 @@ class NavigationRoleController extends Controller
 
         // Ellenőrizzük, hogy a nav_id és role_id páros már létezik
         $exists = NavigationRole::where('navigation_id', $validated['navigation_id'])
-            ->where('role_id', $role->id)
+            ->where('role_id', $role->role_id)
             ->exists();
 
         // Visszaadjuk az eredményt
@@ -91,12 +92,12 @@ class NavigationRoleController extends Controller
     {
         // Validáljuk a bemeneti adatokat
         $validated = $request->validate([
-            'navigation_id' => 'required|integer|exists:navigations,id',  // Validáció, hogy a nav_id létezzen a navigations táblában
+            'navigation_id' => 'required|integer|exists:navigations,navigation_id',  // Validáció, hogy a nav_id létezzen a navigations táblában
             'name' => 'required|string',  // Validáljuk a role_name-t
         ]);
 
         // A role_name alapján megszerezzük a role_id-t
-        $role = Role::where('name', $validated['role_name'])->first();
+        $role = Role::where('name', $validated['name'])->first();
 
         // Ha nem találunk ilyen role-t, hibát jelezünk
         if (!$role) {
@@ -105,12 +106,11 @@ class NavigationRoleController extends Controller
 
         // Ha a role_id megvan, akkor folytatjuk az adatbázis műveleteket
         $NavigationRole = new NavigationRole();
-        $NavigationRole->nav_id = $validated['navigation_id'];
-        $NavigationRole->role_id = $role->id;  // A role_id hozzárendelése a role_name alapján
-        $NavigationRole->parent = null;  // Beállítjuk a parent mezőt (ha szükséges, itt kezelhetjük)
+        $NavigationRole->navigation_id = $validated['navigation_id'];
+        $NavigationRole->role_id = $role->role_id;  // A role_id hozzárendelése a role_name alapján
 
         // A legmagasabb sorszám +1 beállítása
-        $maxranking = NavigationRole::where('role_id', $role->id)->max('ranking');
+        $maxranking = NavigationRole::where('role_id', $role->role_id)->max('ranking');
         $NavigationRole->ranking = $maxranking + 1;
 
         // Mentjük az új NavigationRole rekordot
@@ -143,9 +143,9 @@ class NavigationRoleController extends Controller
         // Lekérjük a menüpontokat és szerepköröket az adatbázisból, a megfelelő kapcsolatokat kezelve
         $navItems = DB::table('navigation_roles')
             ->join('navigations', 'navigations.navigation_id', '=', 'navigation_roles.navigation_id')
-            ->join('roles', 'role.role_id', '=', 'navigation_roles.role.id')
+            ->join('roles', 'roles.role_id', '=', 'navigation_roles.role_id')
             ->orderBy('navigation_roles.ranking')
-            ->select('navigation_roles.navigationRole_id', 'roles.name as role_name', 'navigations.name as nav_name', 'navigations.navigation_id as nav_id', 'roles.id as role_id', 'navigation_roles.ranking')
+            ->select('navigation_roles.navigationRole_id', 'roles.name as role_name', 'navigations.name as nav_name', 'navigations.navigation_id as nav_id', 'roles.role_id as role_id', 'navigation_roles.ranking')
             ->get();
 
         return response()->json($navItems)->header('Cache-Control', 'no-cache, no-store, must-revalidate');

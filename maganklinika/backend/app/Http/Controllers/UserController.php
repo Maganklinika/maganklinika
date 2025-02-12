@@ -72,13 +72,13 @@ class UserController extends Controller
         }
 
         // Ellenőrizzük, hogy létezik-e a szerepkör id, amit a body-ban kaptunk
-        $role = Role::find($request->id);  // Itt az $request->id a role_id-t reprezentálja
+        $role = Role::find($request->role_id);  // Itt az $request->id a role_id-t reprezentálja
         if (!$role) {
             return response()->json(['error' => 'Szerepkör nem található.'], 404);
         }
 
         // Módosítjuk a felhasználó szerepkörét
-        $user->role_id = $request->id;
+        $user->role_id = $request->role_id;
         $user->save();
 
         return response()->json(['message' => 'Sikeres módosítás', 'user' => $user], 200);

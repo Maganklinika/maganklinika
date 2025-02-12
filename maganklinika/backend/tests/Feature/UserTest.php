@@ -14,7 +14,7 @@ class UserTest extends TestCase
     /**
      * A basic feature test example.
      */
-    
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -34,11 +34,22 @@ class UserTest extends TestCase
     {
         Role::run();
         $adminRoleId = Role::where('name', 'admin')->first()->role_id;
-        echo($adminRoleId);
         $admin = User::factory()->create([
             'role_id' => $adminRoleId,
         ]);
         $response = $this->actingAs($admin)->get('/api/users/');
+        $response->assertStatus(200);
+    }
+
+    public function test_update_user_role(): void
+    {
+        Role::run();
+        $adminRoleId = Role::where('name', 'admin')->first()->role_id;
+        $admin = User::factory()->create([
+            'role_id' => $adminRoleId,
+        ]);
+
+        $response = $this->actingAs($admin)->put('/api/update-user-role/' . $admin->role_id, ['role_id' => 2]);
         $response->assertStatus(200);
     }
 }
