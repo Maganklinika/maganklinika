@@ -66,7 +66,6 @@ class DatabaseSeeder extends Seeder
                     'user_id' => $user->id,
                     'specialization_id' => Specialization::inRandomOrder()->first()->specialization_id, // Random specializáció
                 ]);
-                echo ('doktor');
             } elseif ($user->role_id === $patientRoleId) {
                 // Páciens rekord létrehozása
                 Patient::create([
@@ -79,7 +78,6 @@ class DatabaseSeeder extends Seeder
         });
 
         $this->call([
-            RoleSeeder::class,
             NavigationSeeder::class,
             NavigationRoleSeeder::class,
         ]);
