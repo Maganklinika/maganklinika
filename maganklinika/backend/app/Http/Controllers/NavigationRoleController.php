@@ -66,12 +66,12 @@ class NavigationRoleController extends Controller
     public function checkNavAssignedToRole(Request $request)
     {
         $validated = $request->validate([
-            'nav_id' => 'required|integer|exists:navs,id',  // Validáció, hogy a nav_id létezzen a navs táblában
-            'role_name' => 'required|string',  // Validáljuk a role_name-t
+            'navigation_id' => 'required|integer|exists:navigations,id',  // Validáció, hogy a nav_id létezzen a navigations táblában
+            'name' => 'required|string',  // Validáljuk a role_name-t
         ]);
 
         // A role_id-t a role_name alapján
-        $role = Role::where('megnevezes', $validated['role_name'])->first();
+        $role = Role::where('name', $validated['name'])->first();
 
         // Ha nem találjuk a szerepkört
         if (!$role) {
@@ -79,7 +79,7 @@ class NavigationRoleController extends Controller
         }
 
         // Ellenőrizzük, hogy a nav_id és role_id páros már létezik
-        $exists = NavigationRole::where('nav_id', $validated['nav_id'])
+        $exists = NavigationRole::where('navigation_id', $validated['navigation_id'])
             ->where('role_id', $role->id)
             ->exists();
 
@@ -91,12 +91,12 @@ class NavigationRoleController extends Controller
     {
         // Validáljuk a bemeneti adatokat
         $validated = $request->validate([
-            'nav_id' => 'required|integer|exists:navs,id',  // Validáció, hogy a nav_id létezzen a navs táblában
-            'role_name' => 'required|string',  // Validáljuk a role_name-t
+            'navigation_id' => 'required|integer|exists:navigations,id',  // Validáció, hogy a nav_id létezzen a navigations táblában
+            'name' => 'required|string',  // Validáljuk a role_name-t
         ]);
 
         // A role_name alapján megszerezzük a role_id-t
-        $role = Role::where('megnevezes', $validated['role_name'])->first();
+        $role = Role::where('name', $validated['role_name'])->first();
 
         // Ha nem találunk ilyen role-t, hibát jelezünk
         if (!$role) {
@@ -105,13 +105,13 @@ class NavigationRoleController extends Controller
 
         // Ha a role_id megvan, akkor folytatjuk az adatbázis műveleteket
         $NavigationRole = new NavigationRole();
-        $NavigationRole->nav_id = $validated['nav_id'];
+        $NavigationRole->nav_id = $validated['navigation_id'];
         $NavigationRole->role_id = $role->id;  // A role_id hozzárendelése a role_name alapján
         $NavigationRole->parent = null;  // Beállítjuk a parent mezőt (ha szükséges, itt kezelhetjük)
 
         // A legmagasabb sorszám +1 beállítása
-        $maxSorszam = NavigationRole::where('role_id', $role->id)->max('sorszam');
-        $NavigationRole->sorszam = $maxSorszam + 1;
+        $maxranking = NavigationRole::where('role_id', $role->id)->max('ranking');
+        $NavigationRole->ranking = $maxranking + 1;
 
         // Mentjük az új NavigationRole rekordot
         $NavigationRole->save();
@@ -127,11 +127,11 @@ class NavigationRoleController extends Controller
         $roleId = Auth::check() ? Auth::user()->role_id : 4; // Ha nincs bejelentkezett felhasználó, akkor vendég szerepkör (role_id = 4)
 
         // Lekérjük a menüpontokat a megadott szerepkörhöz
-        $navItems = DB::table('nav_roles')
-            ->join('navs', 'navs.id', '=', 'nav_roles.nav_id')
-            ->where('nav_roles.role_id', $roleId)
-            ->orderBy('nav_roles.sorszam')
-            ->select('navs.megnevezes', 'navs.url', 'componentName')
+        $navItems = DB::table('navigation_roles')
+            ->join('navigations', 'navigations.navigation_id', '=', 'navigation_roles.navigation_id')
+            ->where('navigation_roles.role_id', $roleId)
+            ->orderBy('navigation_roles.ranking')
+            ->select('navigations.name', 'navigations.url', 'component_name')
             ->get();
 
         return response()->json($navItems)->header('Cache-Control', 'no-cache, no-store, must-revalidate');
@@ -141,11 +141,11 @@ class NavigationRoleController extends Controller
     {
         // Ellenőrizzük, hogy van-e bejelentkezett felhasználó
         // Lekérjük a menüpontokat és szerepköröket az adatbázisból, a megfelelő kapcsolatokat kezelve
-        $navItems = DB::table('nav_roles')
-            ->join('navs', 'navs.id', '=', 'nav_roles.nav_id')
-            ->join('roles', 'roles.id', '=', 'nav_roles.role_id')
-            ->orderBy('nav_roles.sorszam')
-            ->select('nav_roles.id', 'roles.megnevezes as role_name', 'navs.megnevezes as nav_name', 'navs.id as nav_id', 'roles.id as role_id', 'nav_roles.sorszam')
+        $navItems = DB::table('navigation_roles')
+            ->join('navigations', 'navigations.navigation_id', '=', 'navigation_roles.navigation_id')
+            ->join('roles', 'role.role_id', '=', 'navigation_roles.role.id')
+            ->orderBy('navigation_roles.ranking')
+            ->select('navigation_roles.navigationRole_id', 'roles.name as role_name', 'navigations.name as nav_name', 'navigations.navigation_id as nav_id', 'roles.id as role_id', 'navigation_roles.ranking')
             ->get();
 
         return response()->json($navItems)->header('Cache-Control', 'no-cache, no-store, must-revalidate');
@@ -164,14 +164,14 @@ class NavigationRoleController extends Controller
 
             // 1. Módosítsuk a sorszámokat, és frissítsük az adatokat
             foreach ($items as $index => $item) {
-                if (!isset($item['id']) || !isset($item['sorszam'])) {
-                    return response()->json(['error' => 'Missing "id" or "sorszam" key in item'], 400);
+                if (!isset($item['id']) || !isset($item['ranking'])) {
+                    return response()->json(['error' => 'Missing "id" or "ranking" key in item'], 400);
                 }
 
                 // A sorszám újra kiadása, hogy a helyes sorrendben legyenek
-                DB::table('nav_roles')
-                    ->where('id', $item['id'])
-                    ->update(['sorszam' => $index + 1]); // Az index alapján módosítjuk a sorszámot
+                DB::table('navigation_roles')
+                    ->where('navigationRole_id', $item['id'])
+                    ->update(['ranking' => $index + 1]); // Az index alapján módosítjuk a sorszámot
             }
 
             // Ha minden rendben van, akkor commit-áljuk a tranzakciót

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -12,6 +13,8 @@ class AuthenticationTest extends TestCase
 
     public function test_users_can_authenticate_using_the_login_screen(): void
     {
+
+        Role::run();
         $user = User::factory()->create();
 
         $response = $this->post('/login', [
@@ -25,6 +28,7 @@ class AuthenticationTest extends TestCase
 
     public function test_users_can_not_authenticate_with_invalid_password(): void
     {
+        Role::run();
         $user = User::factory()->create();
 
         $this->post('/login', [
@@ -37,6 +41,7 @@ class AuthenticationTest extends TestCase
 
     public function test_users_can_logout(): void
     {
+        Role::run();
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)->post('/logout');

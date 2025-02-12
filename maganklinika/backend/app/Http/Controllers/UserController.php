@@ -56,8 +56,8 @@ class UserController extends Controller
     function getUsersAndRoles()
     {
         $data = DB::table('users')
-            ->join('roles', 'roles.id', '=', 'users.role_id')
-            ->select('users.id as user_id', 'roles.id', 'users.name as user_name', 'roles.megnevezes as role_name', 'users.role_id')
+            ->join('roles', 'roles.role_id', '=', 'users.role_id')
+            ->select('users.id as user_id', 'roles.role_id', 'users.name as user_name', 'roles.name as role_name', 'users.role_id')
             ->get();
 
         return response()->json($data);

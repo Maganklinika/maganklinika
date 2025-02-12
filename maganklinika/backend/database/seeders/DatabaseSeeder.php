@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\doctor;
 use App\Models\patient;
 use App\Models\role;
-use App\Models\specialisation;
 use App\Models\Specialization;
 use App\Models\treatment;
 use App\Models\User;
@@ -78,7 +77,6 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         });
-
 
         $this->call([
             RoleSeeder::class,
