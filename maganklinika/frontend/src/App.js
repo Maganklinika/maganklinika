@@ -1,24 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import { Route, Routes } from "react-router-dom";
+import "./App.css";
+import VendegLayout from "./layouts/VendegLayout";
+import Fooldal from "./pages/Fooldal";
+import useAuthContext from "./contexts/AuthContext";
+import { ComponentsMap } from "./components/componentsmap/ComponentsMap";
 
 function App() {
+  const { navigation } = useAuthContext(); // getNavItems lekérése az AuthContextből
+
+  const urls = [];
+    navigation.forEach((e) => {
+      urls.push(e.url.replace("/", ""));
+    });
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Routes>
+      <Route path="/" element={<VendegLayout />}>
+        <Route index element={<Fooldal />} />
+        {navigation ? navigation.map((e, index) => {
+          const Component = ComponentsMap[e.component_name]; // Komponens referenciájának lekérése
+
+          if (!Component) {
+            console.error(`Component ${e.component_name} not found.`);
+            return null; // Hibakezelés: ha nincs megfelelő komponens, kihagyjuk a route-ot
+          }
+
+          return (
+            <Route
+              key={index}
+              path={urls[index]}
+              element={<Component />} // Komponens JSX-ben történő renderelése
+            />
+          );
+        }):
+          <h1>Loading</h1>
+        }
+      </Route>
+    </Routes>
   );
 }
 

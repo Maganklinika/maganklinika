@@ -10,6 +10,7 @@ use App\Models\treatment;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -58,6 +59,12 @@ class DatabaseSeeder extends Seeder
         $doctorRoleId = 2;
         $patientRoleId = 3;
 
+        User::factory()->create([
+            'name' => 'test',
+            'email' => 'test@test.com',
+            'password' => Hash::make('teszt123'),
+            'role_id' => 1,
+        ]);
         // Létrehozunk 20 orvost és 20 pácienst
         User::factory(40)->create()->each(function ($user) use ($doctorRoleId, $patientRoleId) {
             if ($user->role_id === $doctorRoleId) {

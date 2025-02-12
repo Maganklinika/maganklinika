@@ -145,7 +145,7 @@ class NavigationRoleController extends Controller
             ->join('navigations', 'navigations.navigation_id', '=', 'navigation_roles.navigation_id')
             ->join('roles', 'roles.role_id', '=', 'navigation_roles.role_id')
             ->orderBy('navigation_roles.ranking')
-            ->select('navigation_roles.navigationRole_id', 'roles.name as role_name', 'navigations.name as nav_name', 'navigations.navigation_id as nav_id', 'roles.role_id as role_id', 'navigation_roles.ranking')
+            ->select('navigation_roles.navigationRole_id as navRole_id' , 'roles.name as role_name', 'navigations.name as nav_name', 'navigations.navigation_id as nav_id', 'roles.role_id as role_id', 'navigation_roles.ranking')
             ->get();
 
         return response()->json($navItems)->header('Cache-Control', 'no-cache, no-store, must-revalidate');
