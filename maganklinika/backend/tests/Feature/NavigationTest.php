@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Navigation;
 use App\Models\Role;
 use App\Models\User;
+use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
@@ -28,7 +29,7 @@ class NavigationTest extends TestCase
 
     public function test_update_nav(): void
     {
-        Role::run();
+        RoleSeeder::run();
         $admin = User::factory()->create([
             'role_id' => 1,
         ]);
@@ -54,7 +55,7 @@ class NavigationTest extends TestCase
 
     public function test_get_nav_items_with_roles(): void
     {
-        Role::run();
+        RoleSeeder::run();
         $admin = User::factory()->create([
             'role_id' => 1,
         ]);
@@ -70,7 +71,7 @@ class NavigationTest extends TestCase
 
     public function test_get_navigation(): void
     {
-        Role::run();
+        RoleSeeder::run();
         $admin = User::factory()->create([
             'role_id' => 1,
         ]);
@@ -86,7 +87,7 @@ class NavigationTest extends TestCase
 
     public function test_add_nav_to_role(): void
     {
-        Role::run();
+        RoleSeeder::run();
         $admin = User::factory()->create([
             'role_id' => 1,
         ]);
@@ -106,7 +107,7 @@ class NavigationTest extends TestCase
 
     public function test_check_nav_assigned_to_role(): void
     {
-        Role::run();
+        RoleSeeder::run();
         $admin = User::factory()->create([
             'role_id' => 1,
         ]);
@@ -127,7 +128,7 @@ class NavigationTest extends TestCase
 
     public function test_remove_nav_from_role(): void
     {
-        Role::run();
+        RoleSeeder::run();
         $admin = User::factory()->create([
             'role_id' => 1,
         ]);

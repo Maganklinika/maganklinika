@@ -5,21 +5,19 @@ import { Link } from "react-router-dom";
 const Navigacio = () => {
   const { navigation } = useAuthContext(); // getNavItems lekérése az AuthContextből
 
-
   return (
     <nav className="navbar navbar-expand-sm bg-light">
       <div className="container-fluid">
         <ul className="navbar-nav">
-          {
-           navigation ? (
+          {navigation ? (
             // Ha van navigációs adat, azt dinamikusan rendereljük
-            navigation.map( ( item, i ) => (
+            navigation.map((item, i) => (
               <li className="navbar-item" key={i}>
                 <Link className="nav-link" to={item.url}>
                   {item.name}
                 </Link>
               </li>
-            ) )
+            ))
           ) : (
             // Ha még nincs adat, vagy töltődik, akkor egy "loading" állapotot mutatunk
             <li className="navbar-item">

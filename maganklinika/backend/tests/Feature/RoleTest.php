@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Role;
 use App\Models\User;
+use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\DB;
@@ -26,7 +27,7 @@ class RoleTest extends TestCase
      */
     public function test_example(): void
     {
-        Role::run();
+        RoleSeeder::run();
         $admin = User::factory()->create([
             'role_id' => 1,
         ]);

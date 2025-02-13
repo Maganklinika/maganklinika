@@ -6,7 +6,8 @@ import { myAxios } from "../../api/Axios"; // Backend kommunikációhoz
 import useAdminContext from "../../contexts/AdminContext";
 
 const NavElemek = () => {
-  const { role, navRoleInfo, navs, fetchNavRoleInfo } = useAdminContext();
+  const { role, navRoleInfo, navs, fetchNavRoleInfo, isVerified } =
+    useAdminContext();
   const [globalItems, setGlobalItems] = useState({});
 
   // Frissítjük a globalItems állapotot a szerepkörökhöz tartozó menüpontokkal
@@ -16,7 +17,7 @@ const NavElemek = () => {
         (item) => item.role_name === e.name
       );
       acc[e.name] = filteredNavItems;
-      
+
       return acc;
     }, {});
     console.log(itemsByRole);
@@ -33,7 +34,7 @@ const NavElemek = () => {
     try {
       // Ha hozzáadjuk a menüpontot a szerepkörhöz
       if (isAdding) {
-        console.log(updatedMenuItem)
+        console.log(updatedMenuItem);
         const checkResponse = await myAxios.post(
           "/api/check-nav-assigned-to-role",
           {
@@ -79,8 +80,7 @@ const NavElemek = () => {
         updatedGlobalItems[roleName] = roleItems;
         return updatedGlobalItems;
       });
-
-      await fetchNavRoleInfo(); // Backend adatfrissítés
+        await fetchNavRoleInfo(); // Backend adatfrissítés
     } catch (error) {
       console.error("Error handling menu item:", error);
     }

@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Auth;
 
-use App\Models\Role;
+use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
@@ -20,18 +20,20 @@ class RegistrationTest extends TestCase
 
     public function test_new_users_can_register(): void
     {
-        Role::run();
+
+        RoleSeeder::run();
 
         $response = $this->post('/register', [
             'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => 'password',
             'password_confirmation' => 'password',
-            'role_id' => 3,
             'phone_number' => '1231343',
+            'role_id' => 3,
         ]);
-
+        
         $this->assertAuthenticated();
+
         $response->assertNoContent();
     }
 }

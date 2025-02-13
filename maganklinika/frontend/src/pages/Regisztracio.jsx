@@ -5,9 +5,10 @@ const Regisztracio = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [phone, setPhone] = useState("");
   const [password_confirmation, setPassword_confirmation] = useState("");
 
-  const { loginReg, errors } = useAuthContext();
+  const { reg, errors } = useAuthContext();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,11 +17,12 @@ const Regisztracio = () => {
     const adat = {
       name: name,
       email: email,
+      phone_number:phone,
       password: password,
       password_confirmation: password_confirmation,
     };
 
-    loginReg(adat, "/register");
+    reg(adat);
   };
 
   return (
@@ -46,10 +48,35 @@ const Regisztracio = () => {
           />
         </div>
         <div>
-          {errors.email && (
+          {errors.name && (
             <span className="text-danger">{errors.name[0]}</span>
           )}
         </div>
+
+        <div className="mb-3 mt-3">
+          <label htmlFor="phone" className="form-label">
+            Telefonszám:
+          </label>
+          <input
+            type="text"
+            // value beállítása a state értékére
+            value={phone}
+            // state értékének módosítása ha változik a beviteli mező tartalma
+            onChange={(e) => {
+              setPhone(e.target.value);
+            }}
+            className="form-control"
+            id="phone"
+            placeholder="Telefonszám"
+            name="phone"
+          />
+        </div>
+        <div>
+          {errors.phone && (
+            <span className="text-danger">{errors.phone[0]}</span>
+          )}
+        </div>
+
         <div className="mb-3 mt-3">
           <label htmlFor="email" className="form-label">
             Email:

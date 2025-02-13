@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Role;
 use App\Models\User;
+use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\DB;
@@ -32,7 +33,7 @@ class UserTest extends TestCase
 
     public function test_users_auth(): void
     {
-        Role::run();
+        RoleSeeder::run();
         $adminRoleId = Role::where('name', 'admin')->first()->role_id;
         $admin = User::factory()->create([
             'role_id' => $adminRoleId,
@@ -43,7 +44,7 @@ class UserTest extends TestCase
 
     public function test_update_user_role(): void
     {
-        Role::run();
+        RoleSeeder::run();
         $adminRoleId = Role::where('name', 'admin')->first()->role_id;
         $admin = User::factory()->create([
             'role_id' => $adminRoleId,

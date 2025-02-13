@@ -14,6 +14,12 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::middleware('auth:sanctum')->get('/user/email-status', function (Request $request) {
+    return response()->json([
+        'email_verified' => $request->user()->hasVerifiedEmail(),
+    ]);
+});
+
 Route::middleware(['auth:sanctum', Admin::class])
     ->group(function () {
         //Route::get('/users', [UserController::class, 'index']);

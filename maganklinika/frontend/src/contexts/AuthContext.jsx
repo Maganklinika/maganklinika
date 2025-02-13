@@ -8,6 +8,7 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [navigation, setNavigation] = useState([]);
+  const [isVerified, setIsVerified] = useState(true);
   const [errors, setErrors] = useState({
     name: "",
     email: "",
@@ -41,29 +42,24 @@ export const AuthProvider = ({ children }) => {
       // Kijelentkezés az API-ból
       await myAxios.post("/logout");
       localStorage.removeItem("user");
-      // Felhasználó törlése és navigációs lista frissítése
       setUser(null);
       setNavigation([]);
-      //fetchNavigation();
       navigate("/");
-      // Navigációs adat frissítése
     } catch (error) {
       console.error("Logout error:", error);
     }
   };
 
-  const loginReg = async ({ ...adat }, vegpont) => {
+  const login = async ({ ...adat }) => {
     //lekérjük a csrf tokent
     await csrf();
-    console.log(adat, vegpont);
 
     try {
-      await myAxios.post(vegpont, adat);
+      const response = await myAxios.post("/login", adat);
       console.log("siker");
-      //sikeres bejelentkezés/regisztráció esetén
-      //Lekérdezzük a usert
+
       await getUser();
-      //elmegyünk  a kezdőlapra
+
     } catch (error) {
       console.log(error);
       if (error.response.status === 422) {
@@ -73,12 +69,38 @@ export const AuthProvider = ({ children }) => {
     navigate("/");
   };
 
-  useEffect(() => {
-    // Ellenőrizzük, hogy van-e mentett felhasználó
-    const savedUser = localStorage.getItem("user");
+  const reg = async ({ ...adat }) => {
+    await csrf();
+    console.log(adat);
 
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
+    try {
+      const response = await myAxios.post("/register", adat);
+      await getUser();
+      navigate("/verify-email");
+    } catch (error) {
+      console.log(error);
+      if (error.response.status === 422) {
+        setErrors(error.response.data.errors);
+      }
+    }
+  };
+
+  const fetchEmailStatus = async () => {
+    try {
+      const response = await myAxios.get("/api/user/email-status");
+      setIsVerified(response.data.email_verified);
+    } catch (error) {
+      console.error("Email verification check failed:", error);
+    }
+  };
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem("user");
+    setUser(JSON.parse(savedUser));
+    if (user) {
+      if (!isVerified) {
+        navigate("/verify-email");
+      }
     }
   }, []); // Csak egyszer fut le, amikor az oldal betöltődik
 
@@ -86,12 +108,15 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         logout,
-        loginReg,
+        login,
         getUser,
+        reg,
         errors,
         user,
         navigation,
         fetchNavigation,
+        isVerified,
+        fetchEmailStatus,
       }}
     >
       {children}

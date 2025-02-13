@@ -6,7 +6,7 @@ const Bejelentkezes = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { loginReg, errors } = useAuthContext();
+  const { login, errors } = useAuthContext();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,7 +17,7 @@ const Bejelentkezes = () => {
       password: password,
     };
 
-    loginReg(adat, "/login");
+    login(adat);
   };
 
   return (

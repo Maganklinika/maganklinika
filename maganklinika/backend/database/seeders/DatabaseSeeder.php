@@ -20,10 +20,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Szerepkörök létrehozása
-        Role::factory()->create(['name' => 'admin']);
-        Role::factory()->create(['name' => 'doctor']);
-        Role::factory()->create(['name' => 'patient']);
-        Role::factory()->create(['name' => 'guest']);
+        RoleSeeder::run();
 
         // Specializációk létrehozása
         $specializations = [

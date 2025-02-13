@@ -1,11 +1,14 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { myAxios } from "../api/Axios";
 import useAuthContext from "./AuthContext";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const AdminContext = createContext();
 
 export const AdminProvider = ({ children }) => {
-  const { user, fetchNavigation } = useAuthContext();
+  const { user, fetchNavigation, fetchEmailStatus, isVerified } =
+    useAuthContext();
+  const navigate = useNavigate();
 
   const [role, setRole] = useState([]);
   const [users, setUsers] = useState([]);
@@ -40,11 +43,21 @@ export const AdminProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    fetchNavigation();
-    if (user && user.role_id === 1) {
+    const verify = async () => {
+      await fetchEmailStatus();
+    };
+    if (user) {
+      verify();
+    }
+    if (user && user.role_id === 1 && isVerified) {
       fetchAdminData();
-    } // Ha a felhasználó be van jelentkezve, töltse le az adatokat
-  }, [user]); // Csak akkor fut le, ha a user változik
+      fetchNavigation();
+    } else if (user && !isVerified) {
+      navigate("/verify-email");
+    } else {
+      fetchNavigation();
+    }
+  }, [user, isVerified]); // Csak akkor fut le, ha a user változik
 
   return (
     <AdminContext.Provider
