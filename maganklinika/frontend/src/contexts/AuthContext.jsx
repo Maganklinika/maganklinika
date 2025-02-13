@@ -55,11 +55,10 @@ export const AuthProvider = ({ children }) => {
     await csrf();
 
     try {
-      const response = await myAxios.post("/login", adat);
+      await myAxios.post("/login", adat);
       console.log("siker");
 
       await getUser();
-
     } catch (error) {
       console.log(error);
       if (error.response.status === 422) {
@@ -74,7 +73,7 @@ export const AuthProvider = ({ children }) => {
     console.log(adat);
 
     try {
-      const response = await myAxios.post("/register", adat);
+      await myAxios.post("/register", adat);
       await getUser();
       navigate("/verify-email");
     } catch (error) {

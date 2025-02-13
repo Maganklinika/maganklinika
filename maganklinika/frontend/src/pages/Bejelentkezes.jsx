@@ -75,9 +75,11 @@ const Bejelentkezes = () => {
           </button>
 
           <p>
-            Még nincs felhaszálóneve?
             <Link className="nav-link text-info" to="/register">
               Regisztráció
+            </Link>
+            <Link className="nav-link text-info" to="/forgot-password">
+              Jelszó resetelése
             </Link>
           </p>
         </div>

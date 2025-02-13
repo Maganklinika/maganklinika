@@ -1,6 +1,10 @@
 import React from "react";
+import useAuthContext from "../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const VerifyEmailPage = () => {
+  const { fetchEmailStatus } = useAuthContext();
+  const navigate = useNavigate();
   return (
     <div>
       <h1>Email cím megerősítése</h1>
@@ -8,6 +12,14 @@ const VerifyEmailPage = () => {
         Kérjük, ellenőrizd az email fiókodat, és kattints a megerősítő
         linkre,hogy hozzáférhess az alkalmazáshoz.
       </p>
+      <button
+        onClick={() => {
+          fetchEmailStatus();
+          navigate("/");
+        }}
+      >
+        Újratölt
+      </button>
     </div>
   );
 };
