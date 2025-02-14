@@ -5,59 +5,85 @@ import { Navigate, useNavigate } from "react-router-dom";
 
 const AdminContext = createContext();
 
-export const AdminProvider = ({ children }) => {
+export const AdminProvider = ( { children } ) => {
   const { user, fetchNavigation, fetchEmailStatus, isVerified } =
     useAuthContext();
   const navigate = useNavigate();
 
-  const [role, setRole] = useState([]);
-  const [users, setUsers] = useState([]);
-  const [navs, setNavs] = useState([]);
-  const [navRoleInfo, setNavRoleInfo] = useState([]);
+  const [ role, setRole ] = useState( [] );
+  const [ users, setUsers ] = useState( [] );
+  const [ navs, setNavs ] = useState( [] );
+  const [ navRoleInfo, setNavRoleInfo ] = useState( [] );
+  const [ treatmentsBySpec, setTreatmentsBySpec ] = useState( [] );
+  const [ testTBS, setTestTBS ] = useState( [] );
 
   const getUsers = async () => {
-    const { data } = await myAxios.get("/api/users");
-    console.log(data);
-    setUsers(data);
+    const { data } = await myAxios.get( "/api/users" );
+    console.log( data );
+    setUsers( data );
   };
 
   const fetchNavRoleInfo = async () => {
-    const navRoleData = await myAxios.get("/api/get-nav-items-with-roles");
-    setNavRoleInfo(navRoleData.data);
+    const navRoleData = await myAxios.get( "/api/get-nav-items-with-roles" );
+    setNavRoleInfo( navRoleData.data );
   };
 
   const fetchAdminData = async () => {
     try {
-      const roleData = await myAxios.get("/api/roles");
-      setRole(roleData.data);
+      const roleData = await myAxios.get( "/api/roles" );
+      setRole( roleData.data );
 
-      const navsData = await myAxios.get("/api/navs");
-      setNavs(navsData.data);
+      const navsData = await myAxios.get( "/api/navs" );
+      setNavs( navsData.data );
 
       getUsers();
 
       fetchNavRoleInfo();
-    } catch (error) {
-      console.error("Hiba az adatok lekérésekor:", error);
+    } catch ( error ) {
+      console.error( "Hiba az adatok lekérésekor:", error );
     }
   };
 
-  useEffect(() => {
+  const fetchTreatmentsBySpecialization = async () => {
+    try {
+      const treatmentsBySpecData = await myAxios.get( "/api/get-treatments-by-specialization" );
+      setTreatmentsBySpec( treatmentsBySpecData.data )
+      console.log( treatmentsBySpec )
+    } catch ( error ) {
+      console.log( error )
+    }
+  };
+
+  
+
+  const fetchTestGetTBS = async () => {
+    try {
+      const testTBS = await myAxios.get( "/api/test-get-tbs" );
+      setTestTBS( testTBS.data )
+      console.log( testTBS )
+    } catch ( error ) {
+      console.log( error )
+    }
+  };
+
+  useEffect( () => {
     const verify = async () => {
       await fetchEmailStatus();
     };
-    if (user) {
+    if ( user ) {
       verify();
     }
-    if (user && user.role_id === 1 && isVerified) {
+    if ( user && user.role_id === 1 && isVerified ) {
       fetchAdminData();
       fetchNavigation();
-    } else if (user && !isVerified) {
-      navigate("/verify-email");
+      fetchTestGetTBS();
+      fetchTreatmentsBySpecialization();
+    } else if ( user && !isVerified ) {
+      navigate( "/verify-email" );
     } else {
       fetchNavigation();
     }
-  }, [user, isVerified]); // Csak akkor fut le, ha a user változik
+  }, [ user, isVerified ] ); // Csak akkor fut le, ha a user változik
 
   return (
     <AdminContext.Provider
@@ -77,5 +103,5 @@ export const AdminProvider = ({ children }) => {
 };
 
 export default function useAdminContext() {
-  return useContext(AdminContext);
+  return useContext( AdminContext );
 }

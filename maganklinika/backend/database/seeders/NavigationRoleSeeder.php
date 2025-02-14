@@ -41,7 +41,12 @@ class NavigationRoleSeeder extends Seeder
         DB::table('navigation_roles')->insert([
             'ranking' => $ranking++,
             'role_id' => 3,
-            'navigation_id' => 9, // Regisztráció menüpont id-je
+            'navigation_id' => 10, 
+        ]);
+        DB::table('navigation_roles')->insert([
+            'ranking' => $ranking++,
+            'role_id' => 3,
+            'navigation_id' => 9,
         ]);
 
         DB::table('navigation_roles')->insert([

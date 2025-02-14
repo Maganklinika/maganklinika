@@ -3,7 +3,7 @@ import useAuthContext from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 const VerifyEmailPage = () => {
-  const { fetchEmailStatus } = useAuthContext();
+  const { fetchEmailStatus, isVerified } = useAuthContext();
   const navigate = useNavigate();
   return (
     <div>
@@ -15,7 +15,8 @@ const VerifyEmailPage = () => {
       <button
         onClick={() => {
           fetchEmailStatus();
-          navigate("/");
+          if ( isVerified )
+            navigate( "/" );
         }}
       >
         Újratölt

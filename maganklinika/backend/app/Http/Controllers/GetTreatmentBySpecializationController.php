@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Treatment;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Request;
+use App\Models\GetTreatmentBySpecialization as ModelsGetTreatmentBySpecialization;
+use Illuminate\Http\Request;
 
-class TreatmentController extends Controller
+class GetTreatmentBySpecializationController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return response()->json(Treatment::all());
+        return response()->json(ModelsGetTreatmentBySpecialization::all());
     }
 
     /**
@@ -21,9 +20,7 @@ class TreatmentController extends Controller
      */
     public function store(Request $request)
     {
-        $data = new Treatment();
-        $data->fill($request->all());
-        $data->save();
+        //
     }
 
     /**
@@ -31,7 +28,7 @@ class TreatmentController extends Controller
      */
     public function show(string $id)
     {
-        return response()->json(Treatment::find($id));
+        //
     }
 
     /**
@@ -39,9 +36,7 @@ class TreatmentController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $data = new Treatment();
-        $data->fill($request->all());
-        $data->save();
+        //
     }
 
     /**
@@ -49,9 +44,6 @@ class TreatmentController extends Controller
      */
     public function destroy(string $id)
     {
-        Treatment::find($id)->delete();
+        //
     }
-
-    //teszt
-    
 }

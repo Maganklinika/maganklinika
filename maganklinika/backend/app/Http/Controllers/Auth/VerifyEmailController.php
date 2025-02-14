@@ -25,7 +25,7 @@ class VerifyEmailController extends Controller
         }
 
         return redirect()->intended(
-            config('app.frontend_url').'/dashboard?verified=1'
+            config('app.frontend_url').'/'
         );
     }
 }

@@ -7,6 +7,7 @@ import Fooldal from "../../pages/Fooldal";
 import Kijelentkezes from "../../pages/Kijelentkezes";
 import Felhasznalok from "../../pages/Felhasznalok";
 import Kapcsolat from "../../pages/Kapcsolat";
+import Appointments from "../../pages/Appointments";
 
 export const ComponentsMap = {
   Doktorok,
@@ -18,4 +19,5 @@ export const ComponentsMap = {
   Regisztracio,
   Bejelentkezes,
   Kijelentkezes,
+  Appointments,
 };

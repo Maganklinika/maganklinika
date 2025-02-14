@@ -39,7 +39,7 @@ const ForgotPassword = () => {
             required
           />
         </div>
-        <button type="submit">Jelszó visszaállítása</button>
+        <button type="submit">Jelszó reset</button>
       </form>
       {message && <div>{message}</div>}
       {error && <div>{error}</div>}

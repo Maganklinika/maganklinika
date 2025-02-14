@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Request;
 
 class SpecializationController extends Controller
 {
-     /**
+    /**
      * Display a listing of the resource.
      */
     public function index()
@@ -49,5 +49,12 @@ class SpecializationController extends Controller
     public function destroy(string $id)
     {
         Specialization::find($id)->delete();
+    }
+
+    public function testGetTBS()
+    {
+        $specializations = Specialization::with('treatments')->get();
+        // JSON válasz visszaadása
+        return response()->json($specializations);
     }
 }

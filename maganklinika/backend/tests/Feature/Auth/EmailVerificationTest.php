@@ -23,6 +23,7 @@ class EmailVerificationTest extends TestCase
         // Reseteljük az auto-increment számlálót minden teszt előtt, ha szükséges
         DB::statement('ALTER TABLE roles AUTO_INCREMENT = 1');
     }
+    
     public function test_email_can_be_verified(): void
     {
         RoleSeeder::run();

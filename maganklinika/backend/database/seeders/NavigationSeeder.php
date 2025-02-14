@@ -23,6 +23,7 @@ class NavigationSeeder extends Seeder
             ['name' => 'Nav elemek', 'url' => '/navs', 'component_name' => 'NavElemek', 'parent' => null, 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Felhasználók', 'url' => '/users', 'component_name' => 'Felhasznalok', 'parent' => null, 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Kijelentkezés', 'url' => '/logout', 'component_name' => 'Kijelentkezes', 'parent' => null, 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Időpontok', 'url' => '/appointments', 'component_name' => 'Appointments', 'parent' => null, 'created_at' => now(), 'updated_at' => now()],
         ]);
     }
 }

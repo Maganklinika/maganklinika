@@ -1,8 +1,12 @@
 <?php
 
+use App\Http\Controllers\GetTreatmentBySpecialization;
+use App\Http\Controllers\GetTreatmentBySpecializationController;
 use App\Http\Controllers\NavigationController;
 use App\Http\Controllers\NavigationRoleController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SpecializationController;
+use App\Http\Controllers\TreatmentController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\Admin;
 use App\Http\Middleware\Doctor;
@@ -38,6 +42,9 @@ Route::middleware(['auth:sanctum', Doctor::class])
     ->group(function () {});
 
 Route::middleware(['auth:sanctum', Patient::class])
-    ->group(function () {});
+    ->group(function () {
+        Route::get('/get-treatments-by-specialization', [GetTreatmentBySpecializationController::class, 'index']);
+        Route::get('/test-get-tbs', [SpecializationController::class, 'testGetTBS']);
+    });
 
 Route::get('/nav-items', [NavigationRoleController::class, 'getNavItemsByRole']);

@@ -22,46 +22,14 @@ class DatabaseSeeder extends Seeder
         // Szerepkörök létrehozása
         RoleSeeder::run();
 
-        // Specializációk létrehozása
-        $specializations = [
-            'Kardiológia',
-            'Neurológia',
-            'Ortopédia',
-            'Bőrgyógyászat',
-            'Szemészet',
-            'Fül-orr-gégészet',
-            'Nőgyógyászat',
-            'Urológia',
-            'Gasztroenterológia',
-            'Pszichiátria',
-            'Endokrinológia',
-            'Reumatológia',
-            'Pulmonológia',
-            'Nefrológia',
-            'Sebészet',
-            'Gyermekgyógyászat',
-            'Immunológia',
-            'Onkológia',
-            'Fogászat',
-            'Radiológia'
-        ];
+        $this->call([
+            SpecializationSeeder::class,
+            TreatmentSeeder::class,
+        ]);
 
-        foreach ($specializations as $specialization) {
-            Specialization::create(['specialization_name' => $specialization]);
-        }
-
-        // Vizsgálatok generálása (minden specializációhoz legalább 3)
-        Treatment::factory(60)->create();
-        // 20 véletlenszerű felhasználó létrehozása
         $doctorRoleId = 2;
         $patientRoleId = 3;
 
-        User::factory()->create([
-            'name' => 'test',
-            'email' => 'test@test.com',
-            'password' => Hash::make('teszt123'),
-            'role_id' => 1,
-        ]);
         // Létrehozunk 20 orvost és 20 pácienst
         User::factory(40)->create()->each(function ($user) use ($doctorRoleId, $patientRoleId) {
             if ($user->role_id === $doctorRoleId) {
@@ -80,6 +48,13 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         });
+
+        User::factory()->create([
+            'name' => 'test',
+            'email' => 'test@test.com',
+            'password' => Hash::make('teszt123'),
+            'role_id' => 1,
+        ]);
 
         $this->call([
             NavigationSeeder::class,
