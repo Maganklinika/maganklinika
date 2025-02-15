@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import { useEffect, useState } from "react";
 import { Collapse, Button, Table } from "react-bootstrap";
 import usePatientContext from '../../contexts/PatientsContext';
@@ -52,7 +52,7 @@ const DoctorAppointments = () => {
         </div>
       </Collapse>
     </div>
-  )
-}
+  );
+};
 
-export default DoctorAppointments
+export default DoctorAppointments;

@@ -29,7 +29,7 @@ class UserFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => bcrypt('password'), // alapértelmezett jelszó
-            'role_id' => Role::inRandomOrder()->first()->role_id, // véletlenszerű szerepkör
+            'role_id' => \App\Models\Role::whereIn('role_id', [1, 2, 3])->inRandomOrder()->first()->role_id, // véletlenszerű szerepkör
             'remember_token' => Str::random(10),
         ];
     }

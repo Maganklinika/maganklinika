@@ -59,6 +59,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             NavigationSeeder::class,
             NavigationRoleSeeder::class,
+            DoctorAppointmentSeeder::class,
         ]);
     }
 }
