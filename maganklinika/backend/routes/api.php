@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\GetTreatmentBySpecialization;
 use App\Http\Controllers\GetTreatmentBySpecializationController;
 use App\Http\Controllers\NavigationController;
 use App\Http\Controllers\NavigationRoleController;
+use App\Http\Controllers\PatientController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SpecializationController;
 use App\Http\Controllers\TreatmentController;
@@ -28,6 +30,8 @@ Route::middleware(['auth:sanctum', Admin::class])
     ->group(function () {
         //Route::get('/users', [UserController::class, 'index']);
         Route::get('/roles', [RoleController::class, 'index']);
+        Route::get('/doctors', [DoctorController::class, 'index']); // Doktorok listája
+        Route::get('/patients', [PatientController::class, 'index']); // Páciensek listája
         Route::put('/update-nav', [NavigationRoleController::class, 'updateNavOrder']);
         Route::get('/get-nav-items-with-roles', [NavigationRoleController::class, 'getNavItemsWithRoles']);
         Route::get('/navs', [NavigationController::class, 'index']);
