@@ -1,22 +1,28 @@
 import React, { useState } from 'react'
 import { Form } from 'react-bootstrap'
 import "./textfilter.css"
+import usePatientContext from '../../../contexts/PatientsContext'
 
-const TextFilter = (props) => {
-
+const TextFilter = () => {
+    const { setFilteredList, appointments } = usePatientContext()
     const [filteredText, setFilteredText] = useState("");
-    const [list, setList] = useState(props.list);
+
 
     const handleChange = (event) => {
         setFilteredText(event.target.value)
+        console.log(event.target.value)
+        if (event.target.value === "") {
+            setFilteredList([...appointments])
+        }
 
-        const filteredList = list.map((e) => {
-            if (filteredList.toLowerCase() === e.name.toLowerCase()) {
+        const filteredList = appointments.filter((e) => {
+            if (e.d_name.toLowerCase().includes(event.target.value.toLowerCase())) {
                 return e
             }
         })
-        setList(filteredList);
+        setFilteredList([...filteredList])
     }
+
 
     return (
         <div className='top-filter'>
@@ -26,7 +32,8 @@ const TextFilter = (props) => {
                 id="inputText5"
                 aria-describedby="passwordHelpBlock"
                 placeholder='Keresendő szó'
-                onChange={(event) => { handleChange(event) }}
+                onChange={handleChange}
+                value={filteredText}
             />
         </div>
     )

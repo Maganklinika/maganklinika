@@ -1,10 +1,9 @@
 import React from 'react'
 import { Tab, Tabs } from 'react-bootstrap'
 import "./appointment.css"
-import BookingCalendar from '../components/appointments/ReservationAppointments'
-import Reservation from '../components/appointments/ReservationAppointments'
 import ReservationAppointments from '../components/appointments/ReservationAppointments'
 import DoctorAppointments from '../components/appointments/DoctorAppointments'
+import TextFilter from '../components/filters/text_filter_top/TextFilter'
 
 const Appointments = () => {
     return (
@@ -19,11 +18,11 @@ const Appointments = () => {
                 className="mb-2"
             >
                 <Tab eventKey="home" title="Időpont keresése doktorok alapján" className='tab'>
-                    <DoctorAppointments/>
+                    <DoctorAppointments />
                 </Tab>
                 <Tab eventKey="profile" title="Időpont keresése kezelések alapján" className='tab'>
                     Tab content for Profile
-                    <ReservationAppointments/>
+                    <ReservationAppointments />
                 </Tab>
             </Tabs>
 
