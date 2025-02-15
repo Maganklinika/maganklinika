@@ -1,0 +1,13 @@
+#inputText5 {
+    min-width: 60px;
+    max-width: 250px;
+}
+
+.top-filter {
+    margin-inline: auto;
+    width: fit-content;
+    margin-block: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}

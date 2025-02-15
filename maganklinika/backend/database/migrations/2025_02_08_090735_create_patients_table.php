@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('patients', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id');
-            $table->integer('taj_number');
+            $table->integer('taj_number')->unique();
             $table->date('birth_date');
             $table->string('address');
             $table->timestamps();

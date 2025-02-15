@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::statement("
-            CREATE VIEW if not exists get_treatment_by_specialization AS
+        DB::statement("DROP VIEW IF EXISTS get_treatment_by_specialization");
+        $viewExists = DB::select("SHOW TABLES LIKE 'get_treatment_by_specialization'");
+        if (empty($viewExists)) {
+            DB::statement("
+            CREATE VIEW get_treatment_by_specialization AS
             (
                 SELECT s.specialization_id as s_id, s.specialization_name as s_name,t.treatment_id as t_id, t.treatment_name as t_name, t.treatment_length as t_length, t.price as t_price, d.user_id as d_id, u.name as d_name
                 FROM treatments as t
@@ -22,6 +25,7 @@ return new class extends Migration
                 ORDER BY s_name, t_name
             )
         ");
+        }
     }
 
     /**
