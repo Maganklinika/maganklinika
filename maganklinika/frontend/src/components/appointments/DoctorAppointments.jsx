@@ -1,6 +1,7 @@
 import React from 'react';
 import { useEffect, useState } from "react";
 import { Collapse, Button, Table } from "react-bootstrap";
+import { myAxios } from '../../api/Axios';
 
 
 const DoctorAppointments = () => {
@@ -8,11 +9,14 @@ const DoctorAppointments = () => {
     const [doctors, setDoctors] = useState([]);
 
     useEffect(() => {
-        fetch("http://localhost:8000/api/doctors") // Itt az API végpont
-          .then((response) => response.json())
-          .then((data) => setDoctors(data))
-          .catch((error) => console.error("Hiba a lekérdezéskor:", error));
-      }, []);   
+        fetchDoctors();
+      }, []); 
+
+      
+      const fetchDoctors = async () => {
+          const doctors = await myAxios.get( "/api/get-treatments-by-specialization" );
+          setDoctors( doctors.data );
+        };
 
   return (
     <div>
@@ -33,15 +37,17 @@ const DoctorAppointments = () => {
         <thead>
           <tr>
             <th>Doktor neve</th>
-            <th>Specializáció</th>
+            <th>Kezelés</th>
+            <th>Kezelés hossza</th>
             <th>Időpontok</th>
           </tr>
         </thead>
         <tbody>
-          {doctors.map((doctor) => (
-            <tr key={doctor.d_id}>
+          {doctors.map((doctor, i) => (
+            <tr key={i}>
               <td>{doctor.d_name}</td>
-              <td>{doctor.s_name}</td>
+              <td>{doctor.t_name}</td>
+              <td>{doctor.t_length}</td>
               <td>
                 <Button variant="primary">Időpontok</Button>
               </td>

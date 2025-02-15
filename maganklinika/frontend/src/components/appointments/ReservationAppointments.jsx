@@ -10,7 +10,7 @@ const ReservationAppointments = () => {
   const [show, setShow] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
 
-  // Példa foglalások
+  // Példa foglalások   
   const reservations = {
     "2025-02-20": ["10:00 - 11:00", "14:00 - 15:00"],
     "2025-02-21": ["09:00 - 10:00", "16:00 - 17:00"],
