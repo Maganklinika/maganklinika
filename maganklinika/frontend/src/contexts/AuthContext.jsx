@@ -94,8 +94,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const savedUser = localStorage.getItem("user");
-    setUser(JSON.parse(savedUser));
+    // const savedUser = localStorage.getItem("user");
+    // setUser(JSON.parse(savedUser));
+    getUser();
     if (user) {
       if (!isVerified) {
         navigate("/verify-email");

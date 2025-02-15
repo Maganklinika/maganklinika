@@ -12,6 +12,7 @@ const Appointments = () => {
             <div className='appointment-page'>
                 <h1>Időpontfoglalás</h1>
             </div>
+            <TextFilter />
             <Tabs
                 defaultActiveKey="profile"
                 id="uncontrolled-tab-example"
