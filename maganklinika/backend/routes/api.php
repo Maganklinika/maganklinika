@@ -46,6 +46,7 @@ Route::middleware(['auth:sanctum', Doctor::class])
 Route::middleware(['auth:sanctum', Patient::class])
     ->group(function () {
         Route::get('/get-treatments-by-specialization', [GetTreatmentBySpecializationController::class, 'index']);
+        Route::get('/test-get-tbs', [SpecializationController::class, 'testGetTBS']);
         Route::get('/appointments', [DoctorAppointmentController::class, 'index']);
     });
 
