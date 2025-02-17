@@ -1,10 +1,16 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { myAxios } from "../api/Axios";
 import { useNavigate } from "react-router-dom";
+import useAdminContext from "./AdminContext";
+import useDoctorContext from "./DoctorContext";
+import usePatientContext from "./PatientsContext";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  const { fetchAdminData } = useAdminContext();
+  const { fetchPatientData } = usePatientContext();
+  const { fetchDoctorData } = useDoctorContext();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [navigation, setNavigation] = useState([]);
@@ -21,9 +27,8 @@ export const AuthProvider = ({ children }) => {
   //bejelentkezett felhasználó adatainak lekérdezése
   const getUser = async () => {
     const { data } = await myAxios.get("/api/user");
-    console.log(data);
     setUser(data);
-    localStorage.setItem("user", JSON.stringify(data));
+    sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
   };
 
   const fetchNavigation = async () => {
@@ -41,8 +46,8 @@ export const AuthProvider = ({ children }) => {
 
       // Kijelentkezés az API-ból
       await myAxios.post("/logout");
-      localStorage.removeItem("user");
       setUser(null);
+      sessionStorage.setItem("isLoggedIn", JSON.stringify(false));
       setNavigation([]);
       navigate("/");
     } catch (error) {
@@ -55,17 +60,18 @@ export const AuthProvider = ({ children }) => {
     await csrf();
 
     try {
-      await myAxios.post("/login", adat);
+      const response = await myAxios.post("/login", adat);
       console.log("siker");
-
       await getUser();
+      if (response.data.success) {
+        navigate("/");
+      }
     } catch (error) {
       console.log(error);
       if (error.response.status === 422) {
         setErrors(error.response.data.errors);
       }
     }
-    navigate("/");
   };
 
   const reg = async ({ ...adat }) => {
@@ -94,15 +100,47 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    // const savedUser = localStorage.getItem("user");
-    // setUser(JSON.parse(savedUser));
-    getUser();
+    const storedIsLoggedIn = JSON.parse(sessionStorage.getItem("isLoggedIn"));
+    if (storedIsLoggedIn) {
+      const checkUser = async () => {
+        await getUser();
+        await fetchEmailStatus();
+      };
+      checkUser();
+    }
     if (user) {
       if (!isVerified) {
         navigate("/verify-email");
       }
     }
-  }, []); // Csak egyszer fut le, amikor az oldal betöltődik
+  }, []);
+
+  useEffect(() => {
+    const verify = async () => {
+      await fetchEmailStatus();
+    };
+
+    if (user) {
+      verify();
+    }
+
+    if (user && user.role_id <= 3 && isVerified) {
+      fetchPatientData();
+      fetchNavigation();
+      if (user && user.role_id <= 2 && isVerified) {
+        fetchDoctorData();
+        fetchNavigation();
+        if (user && user.role_id === 1 && isVerified) {
+          fetchAdminData();
+          fetchNavigation();
+        }
+      }
+    } else if (user && !isVerified) {
+      navigate("/verify-email");
+    } else {
+      fetchNavigation();
+    }
+  }, [user]); // Csak akkor fut le, ha a user változik
 
   return (
     <AuthContext.Provider

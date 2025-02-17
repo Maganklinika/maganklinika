@@ -16,7 +16,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    return $request->user();
+    if ($request->user()) {
+        return $request->user(); // Ha be van jelentkezve, visszaküldjük a felhasználói adatokat
+    }
+
+    // Ha nincs bejelentkezve, visszaküldhetjük a null értéket
+    return response()->json(null);
 });
 
 Route::middleware('auth:sanctum')->get('/user/email-status', function (Request $request) {
@@ -29,7 +34,7 @@ Route::middleware(['auth:sanctum', Admin::class])
     ->group(function () {
         //Route::get('/users', [UserController::class, 'index']);
         Route::get('/roles', [RoleController::class, 'index']);
-        
+
         Route::put('/update-nav', [NavigationRoleController::class, 'updateNavOrder']);
         Route::get('/get-nav-items-with-roles', [NavigationRoleController::class, 'getNavItemsWithRoles']);
         Route::get('/navs', [NavigationController::class, 'index']);

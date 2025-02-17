@@ -1,51 +1,71 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { myAxios } from "../api/Axios";
-import useAuthContext from "./AuthContext";
-import { Navigate, useNavigate } from "react-router-dom";
 
 const PatientContext = createContext();
 
 export const PatientProvider = ({ children }) => {
-    const { user, isVerified } = useAuthContext();
-    const navigate = useNavigate();
-    const [appointments, setAppointments] = useState([])
-    const [filteredList, setFilteredList] = useState([]);
+  const [appointments, setAppointments] = useState([]);
+  const [filteredList, setFilteredList] = useState([]);
+  const [appointmentsByDate, setAppointmentsByDate] = useState({});
 
+  const fetchAppointments = async () => {
+    try {
+      const response = await myAxios.get("/api/appointments");
+      console.log(response.data); // Check the structure of the data
+      groupAppointmentsByDate(response.data);
+    } catch (error) {
+      console.error("Failed to fetch appointments:", error);
+    }
+  };
 
-    const fetchTreatmentsBySpecialization = async () => {
-        console.log('valami')
-        try {
-            const treatmentsBySpecData = await myAxios.get("/api/get-treatments-by-specialization");
-            setAppointments(treatmentsBySpecData.data)
-            setFilteredList(treatmentsBySpecData.data)
+  const groupAppointmentsByDate = (appointmentsArray) => {
+    // Csoportosítjuk az appointments-t a start_time alapján dátum szerint
+    const groupedAppointments = appointmentsArray.reduce((acc, appointment) => {
+      // Csak a dátumot veszük figyelembe (YYYY-MM-DD)
+      const date = appointment.start_time.split(" ")[0];
+      if (!acc[date]) {
+        acc[date] = [];
+      }
+      acc[date].push(appointment);
+      return acc;
+    }, {});
 
-        } catch (error) {
-            console.log(error)
-        }
-    };
+    setAppointmentsByDate(groupedAppointments);
+  };
 
-    useEffect(() => {
-        fetchTreatmentsBySpecialization()
-        if (user && user.role_id === 3) {
-            if (isVerified) {
+  const fetchTreatmentsBySpecialization = async () => {
+    console.log("valami");
+    try {
+      const treatmentsBySpecData = await myAxios.get(
+        "/api/get-treatments-by-specialization"
+      );
+      setAppointments(treatmentsBySpecData.data);
+      setFilteredList(treatmentsBySpecData.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-            }
-        }
-    }, [])
+  const fetchPatientData = () => {
+    fetchTreatmentsBySpecialization();
+    fetchAppointments();
+  };
 
-    return (
-        <PatientContext.Provider
-            value={{
-                setFilteredList,
-                appointments,
-                filteredList,
-            }}
-        >
-            {children}
-        </PatientContext.Provider>
-    );
+  return (
+    <PatientContext.Provider
+      value={{
+        setFilteredList,
+        appointments,
+        filteredList,
+        fetchPatientData,
+        appointmentsByDate,
+      }}
+    >
+      {children}
+    </PatientContext.Provider>
+  );
 };
 
 export default function usePatientContext() {
-    return useContext(PatientContext);
+  return useContext(PatientContext);
 }

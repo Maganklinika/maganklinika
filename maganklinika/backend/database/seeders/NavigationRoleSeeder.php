@@ -37,18 +37,18 @@ class NavigationRoleSeeder extends Seeder
             'role_id' => $guestRoleId,
             'navigation_id' => 3, // Regisztráció menüpont id-je
         ]);
-
+        $ranking = 1;
         DB::table('navigation_roles')->insert([
             'ranking' => $ranking++,
             'role_id' => 3,
-            'navigation_id' => 10, 
+            'navigation_id' => 10,
         ]);
         DB::table('navigation_roles')->insert([
             'ranking' => $ranking++,
             'role_id' => 3,
             'navigation_id' => 9,
         ]);
-
+        $ranking = 1;
         DB::table('navigation_roles')->insert([
             'ranking' => $ranking++,
             'role_id' => 2,
@@ -59,14 +59,16 @@ class NavigationRoleSeeder extends Seeder
 
         // Lekérjük az összes menüpontot a nav táblából
         $navItems = DB::table('navigations')->get();
-
+        $ranking = 1;
         // Iterálunk a menüpontokon és hozzárendeljük őket az admin szerepkörhöz
         foreach ($navItems as $navItem) {
-            DB::table('navigation_roles')->insert([
-                'ranking' => $ranking++,
-                'role_id' => $adminRoleId,
-                'navigation_id' => $navItem->navigation_id, // Menüpont ID-ja
-            ]);
+            if ($navItem->name !== "Bejelentkezés" && $navItem->name !== "Regisztráció") {
+                DB::table('navigation_roles')->insert([
+                    'ranking' => $ranking++,
+                    'role_id' => $adminRoleId,
+                    'navigation_id' => $navItem->navigation_id, // Menüpont ID-ja
+                ]);
+            }
         }
     }
 }
