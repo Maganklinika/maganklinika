@@ -1,12 +1,22 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useState } from "react";
+import { myAxios } from "../api/Axios";
 
 const DoctorContext = createContext();
 
 export const DoctorProvider = ({ children }) => {
-  const fetchDoctorData = () => {};
+  const [doctorsWithSpec, setDoctorsWithSpec] = useState([]);
+
+  const fetchDoctorsWithSpec = async () => {
+    const response = await myAxios.get("/api/doctors-with-spec");
+    setDoctorsWithSpec(response.data);
+  };
+
+  const fetchDoctorData = async () => {
+    await fetchDoctorsWithSpec();
+  };
 
   return (
-    <DoctorContext.Provider value={{ fetchDoctorData }}>
+    <DoctorContext.Provider value={{ fetchDoctorData, doctorsWithSpec }}>
       {children}
     </DoctorContext.Provider>
   );

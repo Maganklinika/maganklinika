@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Doctor;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
 
 class DoctorController extends Controller
 {
-   /**
+    /**
      * Display a listing of the resource.
      */
     public function index()
@@ -49,5 +50,17 @@ class DoctorController extends Controller
     public function destroy(string $id)
     {
         Doctor::find($id)->delete();
+    }
+
+    public function listDoctorsWithSpecialization()
+    {
+        $data = DB::select("
+            SELECT DISTINCT u.name, s.specialization_name as s_name, u.email
+            FROM doctors as d
+            INNER JOIN users as u on d.user_id = u.id
+            INNER JOIN specializations as s on d.specialization_id = s.specialization_id
+            order by u.name, s.specialization_name
+        ");
+        return response()->json($data);
     }
 }

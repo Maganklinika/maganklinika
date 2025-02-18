@@ -1,0 +1,96 @@
+.doctors-spec {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin: 1.5rem;
+  margin-inline: auto;
+  max-width: 100vh;
+}
+
+.card {
+  width: 400px;
+}
+
+.card h5 {
+  text-align: center;
+  align-items: center;
+}
+
+.card-body {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  margin-inline: auto;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.card .image {
+  width: 150px;
+  height: 150px;
+  border: 1px solid grey;
+  border-radius: 0.7rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.description {
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3rem;
+}
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: left;
+  text-align: left;
+}
+
+.description h6 {
+  width: fit-content;
+  padding: 0;
+  margin: 0;
+  font-size: 15px;
+}
+.description p {
+  width: fit-content;
+  text-align: right;
+  padding: 0;
+  margin: 0;
+  font-size: 12px;
+}
+
+.spec,
+.email {
+  margin: 0;
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 5px;
+  padding: 0;
+  width: fit-content;
+}
+
+.button-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media screen and (max-width: 375px) {
+  .spec,
+  .email {
+    grid-template-columns: auto;
+  }
+  .card-body {
+    margin: 10px;
+  }
+  .doctors-spec {
+    gap: 1rem;
+    margin-block: 1rem;
+  }
+}

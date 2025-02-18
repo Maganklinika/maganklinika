@@ -16,12 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    if ($request->user()) {
-        return $request->user(); // Ha be van jelentkezve, visszaküldjük a felhasználói adatokat
-    }
-
-    // Ha nincs bejelentkezve, visszaküldhetjük a null értéket
-    return response()->json(null);
+    return $request->user(); // Ha be van jelentkezve, visszaküldjük a felhasználói adatokat  
 });
 
 Route::middleware('auth:sanctum')->get('/user/email-status', function (Request $request) {
@@ -53,6 +48,7 @@ Route::middleware(['auth:sanctum', Patient::class])
         Route::get('/get-treatments-by-specialization', [GetTreatmentBySpecializationController::class, 'index']);
         Route::get('/test-get-tbs', [SpecializationController::class, 'testGetTBS']);
         Route::get('/appointments', [DoctorAppointmentController::class, 'index']);
+        Route::get('/doctors-with-spec', [DoctorController::class, 'listDoctorsWithSpecialization']);
     });
 
 Route::get('/nav-items', [NavigationRoleController::class, 'getNavItemsByRole']);
