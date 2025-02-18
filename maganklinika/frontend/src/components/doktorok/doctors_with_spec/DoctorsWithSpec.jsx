@@ -10,7 +10,7 @@ const DoctorsWithSpec = (props) => {
   return (
     <div className="card">
       <div className="card-header">
-        <h5>{props.e.name}</h5>
+        <h5>{props.e.d_name}</h5>
       </div>
       <div className="card-body">
         <div className="image">image</div>

@@ -1,16 +1,16 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { Collapse, Button, Table } from "react-bootstrap";
-import usePatientContext from '../../contexts/PatientsContext';
-import TextFilter from '../filters/text_filter_top/TextFilter';
+import usePatientContext from "../../contexts/PatientsContext";
+import TextFilter from "../filters/text_filter_top/TextFilter";
 
 const DoctorAppointments = () => {
-  const { appointments, filteredList } = usePatientContext();
+  const { appointments, filteredList, setFilteredList } = usePatientContext();
   const [open, setOpen] = useState(false);
 
   return (
     <div>
-      <TextFilter list={appointments} />
+      <TextFilter list={appointments} filterListSetter={setFilteredList} />
       <Button
         onClick={() => setOpen(!open)}
         aria-controls="example-collapse-text"
@@ -33,19 +33,21 @@ const DoctorAppointments = () => {
                 </tr>
               </thead>
               <tbody>
-                {
-                  filteredList ?
-                    filteredList.map((e, i) => (
-                      <tr key={i}>
-                        <td>{e.d_name}</td>
-                        <td>{e.s_name}</td>
-                        <td>
-                          <Button variant="primary">Időpontok</Button>
-                        </td>
-                      </tr>
-                    )) :
-                    <tr><td>loading</td></tr>
-                }
+                {filteredList ? (
+                  filteredList.map((e, i) => (
+                    <tr key={i}>
+                      <td>{e.d_name}</td>
+                      <td>{e.s_name}</td>
+                      <td>
+                        <Button variant="primary">Időpontok</Button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td>loading</td>
+                  </tr>
+                )}
               </tbody>
             </Table>
           </div>
