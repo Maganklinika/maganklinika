@@ -34,7 +34,7 @@ const DoctorsWithSpec = (props) => {
 
             <Modal show={show} onHide={handleClose}>
               <Modal.Header closeButton>
-                <Modal.Title>{props.e.name}</Modal.Title>
+                <Modal.Title>{props.e.d_name}</Modal.Title>
               </Modal.Header>
               <Modal.Body>
                 <div>

@@ -8,14 +8,16 @@ const TextFilter = (props) => {
 
   const handleChange = (event) => {
     setFilteredText(event.target.value);
-    console.log(event.target.value);
     if (event.target.value === "") {
       props.filterListSetter([...props.list]);
     }
 
     const filteredList = props.list.filter((e) => {
-      if (e.d_name.toLowerCase().includes(event.target.value.toLowerCase())) {
-        return e;
+      if (
+        e.d_name?.toLowerCase().includes(event.target.value.toLowerCase()) ||
+        e.s_name?.toLowerCase().includes(event.target.value.toLowerCase())
+      ) {
+        return true;
       }
     });
     props.filterListSetter([...filteredList]);
