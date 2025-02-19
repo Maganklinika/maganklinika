@@ -7,6 +7,19 @@ const DoctorsWithSpec = (props) => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const getStarCount = () => {
+    const result = props.ratingList
+      .map((e) => {
+        if (props.e.d_name === e.doctor_name) {
+          // Csillagok kiírása a kerekített pontszám alapján
+          return "⭐".repeat(Math.round(parseFloat(e.rating)));
+        }
+        return ""; // Ha nincs megfelelő találat, üres stringet adunk vissza
+      })
+      .filter((stars) => stars !== ""); // Eltávolítjuk az üres stringeket
+
+    return result.length > 0 ? result[0] : "Nincs értékelés"; // Ha van találat, visszaadjuk, ha nincs, jelezzük
+  };
   return (
     <div className="card">
       <div className="card-header">
@@ -49,7 +62,7 @@ const DoctorsWithSpec = (props) => {
                 </div>
                 <div>
                   <h6>Értékelés:</h6>
-                  <p>⭐⭐⭐⭐⭐</p>
+                  <p>{getStarCount()}</p>
                 </div>
               </Modal.Body>
               <Modal.Footer>

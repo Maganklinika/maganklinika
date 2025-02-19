@@ -15,6 +15,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [navigation, setNavigation] = useState([]);
   const [isVerified, setIsVerified] = useState(true);
+  const [doctorsByRating, setDoctorsByRating] = useState([]);
   const [errors, setErrors] = useState({
     name: "",
     email: "",
@@ -72,6 +73,11 @@ export const AuthProvider = ({ children }) => {
         setErrors(error.response.data.errors);
       }
     }
+  };
+
+  const fetchAVGDoctorsRatings = async () => {
+    const response = await myAxios.get("/api/get-avg-ratings-by-doctors");
+    setDoctorsByRating(response.data);
   };
 
   const reg = async ({ ...adat }) => {
@@ -139,6 +145,7 @@ export const AuthProvider = ({ children }) => {
       navigate("/verify-email");
     } else {
       fetchNavigation();
+      fetchAVGDoctorsRatings();
     }
   }, [user]); // Csak akkor fut le, ha a user változik
 
@@ -155,6 +162,7 @@ export const AuthProvider = ({ children }) => {
         fetchNavigation,
         isVerified,
         fetchEmailStatus,
+        doctorsByRating,
       }}
     >
       {children}

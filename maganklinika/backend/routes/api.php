@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DoctorAppointmentController;
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\DoctorRatingsViewController;
 use App\Http\Controllers\GetTreatmentBySpecializationController;
 use App\Http\Controllers\NavigationController;
 use App\Http\Controllers\NavigationRoleController;
@@ -52,3 +53,4 @@ Route::middleware(['auth:sanctum', Patient::class])
     });
 
 Route::get('/nav-items', [NavigationRoleController::class, 'getNavItemsByRole']);
+Route::get('/get-avg-ratings-by-doctors',[DoctorRatingsViewController::class, 'getAVGRatingsByDoctors']);

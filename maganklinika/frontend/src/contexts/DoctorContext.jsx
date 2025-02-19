@@ -7,6 +7,7 @@ export const DoctorProvider = ({ children }) => {
   const [doctorsWithSpec, setDoctorsWithSpec] = useState([]);
   const [filteredDoctorsList, setFilteredDoctorsList] = useState([]);
 
+
   const fetchDoctorsWithSpec = async () => {
     const response = await myAxios.get("/api/doctors-with-spec");
     setDoctorsWithSpec(response.data);

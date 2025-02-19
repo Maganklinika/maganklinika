@@ -8,11 +8,12 @@ export const AdminProvider = ({ children }) => {
   const [users, setUsers] = useState([]);
   const [navs, setNavs] = useState([]);
   const [navRoleInfo, setNavRoleInfo] = useState([]);
+  const [filteredUsersList, setFilteredUsersList] = useState([]);
 
   const getUsers = async () => {
     const { data } = await myAxios.get("/api/users");
-    console.log(data);
     setUsers(data);
+    setFilteredUsersList(data);
   };
 
   const fetchNavRoleInfo = async () => {
@@ -27,6 +28,8 @@ export const AdminProvider = ({ children }) => {
 
       const navsData = await myAxios.get("/api/navs");
       setNavs(navsData.data);
+
+      getUsers();
 
       fetchNavRoleInfo();
     } catch (error) {
@@ -45,6 +48,8 @@ export const AdminProvider = ({ children }) => {
         fetchAdminData,
         setNavRoleInfo,
         getUsers,
+        setFilteredUsersList,
+        filteredUsersList,
       }}
     >
       {children}

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Form } from "react-bootstrap";
 import "./textfilter.css";
-import usePatientContext from "../../../contexts/PatientsContext";
+
 
 const TextFilter = (props) => {
   const [filteredText, setFilteredText] = useState("");
@@ -15,12 +15,14 @@ const TextFilter = (props) => {
     const filteredList = props.list.filter((e) => {
       if (
         e.d_name?.toLowerCase().includes(event.target.value.toLowerCase()) ||
-        e.s_name?.toLowerCase().includes(event.target.value.toLowerCase())
+        e.s_name?.toLowerCase().includes(event.target.value.toLowerCase()) ||
+        e.user_name?.toLowerCase().includes(event.target.value.toLowerCase()) 
       ) {
         return true;
       }
     });
     props.filterListSetter([...filteredList]);
+    
   };
 
   return (

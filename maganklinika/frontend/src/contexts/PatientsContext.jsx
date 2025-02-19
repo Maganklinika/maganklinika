@@ -11,7 +11,6 @@ export const PatientProvider = ({ children }) => {
   const fetchAppointments = async () => {
     try {
       const response = await myAxios.get("/api/appointments");
-      console.log(response.data); // Check the structure of the data
       groupAppointmentsByDate(response.data);
     } catch (error) {
       console.error("Failed to fetch appointments:", error);
@@ -34,7 +33,6 @@ export const PatientProvider = ({ children }) => {
   };
 
   const fetchTreatmentsBySpecialization = async () => {
-    console.log("valami");
     try {
       const treatmentsBySpecData = await myAxios.get(
         "/api/get-treatments-by-specialization"
