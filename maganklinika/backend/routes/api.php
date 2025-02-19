@@ -9,6 +9,7 @@ use App\Http\Controllers\NavigationRoleController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SpecializationController;
+use App\Http\Controllers\TreatmentController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\Admin;
 use App\Http\Middleware\Doctor;
@@ -42,7 +43,9 @@ Route::middleware(['auth:sanctum', Admin::class])
     });
 
 Route::middleware(['auth:sanctum', Doctor::class])
-    ->group(function () {});
+    ->group(function () {
+        Route::get('/get-appointments-by-doctor', [DoctorAppointmentController::class, 'getAllAppointmentByDoctor']);
+    });
 
 Route::middleware(['auth:sanctum', Patient::class])
     ->group(function () {
@@ -53,4 +56,5 @@ Route::middleware(['auth:sanctum', Patient::class])
     });
 
 Route::get('/nav-items', [NavigationRoleController::class, 'getNavItemsByRole']);
-Route::get('/get-avg-ratings-by-doctors',[DoctorRatingsViewController::class, 'getAVGRatingsByDoctors']);
+Route::get('/get-avg-ratings-by-doctors', [DoctorRatingsViewController::class, 'getAVGRatingsByDoctors']);
+Route::get('/treatments', [TreatmentController::class, 'index']);

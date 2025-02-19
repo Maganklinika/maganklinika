@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\DoctorAppointment;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
 
 class DoctorAppointmentController extends Controller
@@ -49,5 +51,17 @@ class DoctorAppointmentController extends Controller
     public function destroy(string $id)
     {
         DoctorAppointment::find($id)->delete();
+    }
+
+    public function getAllAppointmentByDoctor()
+    {
+        $doctor = Auth::user()->id;
+
+        $result = DB::select("
+            SELECT *
+            FROM doctor_appointments
+            WHERE doctor_id = $doctor
+        ");
+        return $result;
     }
 }

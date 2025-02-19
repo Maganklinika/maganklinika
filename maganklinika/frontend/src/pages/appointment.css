@@ -1,8 +1,23 @@
 #uncontrolled-tab-example {
-	justify-content: center;
+  justify-content: center;
 }
 
 .appointment-page {
-	margin: 2rem;
-	text-align: center;
+  margin: 2rem;
+  text-align: center;
+}
+
+.red-tile {
+  background-color: lightcoral !important;
+  /*color: black; /* Betűk színe maradjon ugyanaz */
+  pointer-events: none; /* Nem kattintható */
+}
+.past-tile{
+	pointer-events: none;
+}
+
+
+/* Ha van foglalás egy napon, akkor külön szín */
+.has-appointments {
+  background-color: yellow !important;
 }

@@ -8,6 +8,7 @@ import Kijelentkezes from "../../pages/Kijelentkezes";
 import Felhasznalok from "../../pages/Felhasznalok";
 import Kapcsolat from "../../pages/Kapcsolat";
 import Appointments from "../../pages/Appointments";
+import CreateAppointmentsByDoctor from "../../pages/CreateAppointmentsByDoctor";
 
 export const ComponentsMap = {
   Doktorok,
@@ -20,4 +21,5 @@ export const ComponentsMap = {
   Bejelentkezes,
   Kijelentkezes,
   Appointments,
+  CreateAppointmentsByDoctor,
 };

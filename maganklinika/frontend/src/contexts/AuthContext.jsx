@@ -135,10 +135,8 @@ export const AuthProvider = ({ children }) => {
       fetchNavigation();
       if (user && user.role_id <= 2 && isVerified) {
         fetchDoctorData();
-        fetchNavigation();
         if (user && user.role_id === 1 && isVerified) {
           fetchAdminData();
-          fetchNavigation();
         }
       }
     } else if (user && !isVerified) {

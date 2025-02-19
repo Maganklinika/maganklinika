@@ -6,7 +6,7 @@ const DoctorContext = createContext();
 export const DoctorProvider = ({ children }) => {
   const [doctorsWithSpec, setDoctorsWithSpec] = useState([]);
   const [filteredDoctorsList, setFilteredDoctorsList] = useState([]);
-
+  const [appontmentsByDoctor, setAppontmentsByDoctor] = useState([]);
 
   const fetchDoctorsWithSpec = async () => {
     const response = await myAxios.get("/api/doctors-with-spec");
@@ -18,6 +18,11 @@ export const DoctorProvider = ({ children }) => {
     await fetchDoctorsWithSpec();
   };
 
+  const fetchAppontmentsByDoctor = async () => {
+    const response = myAxios.get("/api/get-appointments-by-doctor");
+    setAppontmentsByDoctor(response.data);
+  };
+
   return (
     <DoctorContext.Provider
       value={{
@@ -25,6 +30,7 @@ export const DoctorProvider = ({ children }) => {
         doctorsWithSpec,
         setFilteredDoctorsList,
         filteredDoctorsList,
+        appontmentsByDoctor,
       }}
     >
       {children}
