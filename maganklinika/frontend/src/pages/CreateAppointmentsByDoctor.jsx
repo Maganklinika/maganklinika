@@ -5,6 +5,7 @@ import { Button, ListGroup, Modal } from "react-bootstrap";
 import "./appointment.css";
 import usePatientContext from "../contexts/PatientsContext";
 import useAuthContext from "../contexts/AuthContext";
+import { myAxios } from "../api/Axios";
 
 const CreateAppointmentsByDoctor = () => {
   const { appontmentsByDoctor } = useDoctorContext();
@@ -13,6 +14,9 @@ const CreateAppointmentsByDoctor = () => {
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [treatment, setTreatment] = useState("");
+  const [startTime, setStartTime] = useState("7:00");
+  const [endTime, setEndTime] = useState("18:00");
 
   const handleDateClick = (value) => {
     const formattedDate = value.toLocaleDateString("sv-SE");
@@ -20,8 +24,89 @@ const CreateAppointmentsByDoctor = () => {
     setShow(true);
   };
 
+  // Az időpontok generálása 7:00 és 14:00 között, 30 perces lépésekben
+  const createStartTimes = () => {
+    const times = [];
+    const startHour = 7; // Kezdési idő 7:00
+    const endHour = 14; // Maximális kezdési idő 14:00
+
+    // 30 perces lépések generálása, 14:30 nem szerepel
+    for (let h = startHour; h <= endHour; h++) {
+      for (let m = 0; m < 60; m += 30) {
+        if (!(h === 14 && m === 30)) {
+          // 14:30 nem jelenhet meg
+          const hour = String(h).padStart(2, "0");
+          const minute = String(m).padStart(2, "0");
+          times.push(`${hour}:${minute}`);
+        }
+      }
+    }
+
+    return times;
+  };
+
+  const handleSubmit = () => {
+    const startDateTime = `${selectedDate}T${startTime}:00`; // dátum + időformátum
+    const endDateTime = `${selectedDate}T${endTime}:00`; // dátum + időformátum
+
+    // POST kérés küldése a backend felé
+    myAxios
+      .post("/api/create-appointments", {
+        start_time: startDateTime,
+        end_time: endDateTime,
+        treatment_name: treatment, // kezelés neve
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("sikeres felvitel:" + data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
+  const createEndTimes = (startTime) => {
+    const endTimes = [];
+    const [startHour, startMinute] = startTime.split(":");
+    let startInMinutes = parseInt(startHour) * 60 + parseInt(startMinute); // Kezdés időpontja percben
+
+    // Ha a kezdés 12:00 vagy később, akkor a zárás legkorábban 14:00
+    let displayTime = startInMinutes + 120; // Alapértelmezett 2 órás eltolás, ha 12:00 vagy későbbi kezdés
+
+    // A legkorábbi zárás 12:00, ha még nem érjük el
+    if (startInMinutes < 12 * 60) {
+      displayTime = 12 * 60; // Zárás legkorábban 12:00
+    }
+
+    // Ha a kezdés 12:00 után van, akkor a legkorábbi zárás 14:00
+    if (startInMinutes >= 12 * 60) {
+      displayTime = Math.max(startInMinutes + 120, 14 * 60); // 2 órás eltolás vagy minimum 14:00
+    }
+
+    // 30 perces lépésekben hozzuk létre a zárási időpontokat, de ne zárjuk le előre, hogy csak 8 órás legyen
+    for (let t = displayTime; t <= 18 * 60; t += 30) {
+      let hours = Math.floor(t / 60);
+      let minutes = t % 60;
+      const hour = String(hours).padStart(2, "0");
+      const minute = String(minutes).padStart(2, "0");
+      endTimes.push(`${hour}:${minute}`);
+    }
+
+    return endTimes;
+  };
+
+  // Kezdés időpont változása, zárás automatikus frissítése
+  const handleStartTimeChange = (event) => {
+    const selectedStartTime = event.target.value;
+    setStartTime(selectedStartTime);
+
+    // Zárás beállítása az új kezdéshez
+    const newEndTimes = createEndTimes(selectedStartTime);
+    setEndTime(newEndTimes[0]); // Az első elérhető zárás
+  };
+
   const handleChange = (event) => {
-    console.log(event.target.value);
+    setTreatment(event.target.value);
   };
 
   // Ellenőrizni, hogy egy adott nap hétvége vagy múltbeli dátum
@@ -59,7 +144,6 @@ const CreateAppointmentsByDoctor = () => {
       .filter((e) => e !== "");
     return result;
   };
-  console.log(getTreatmentsByDoctor());
 
   return (
     <div className="container mt-4 calendarParent">
@@ -74,7 +158,7 @@ const CreateAppointmentsByDoctor = () => {
       {/* Modális ablak a foglalások megjelenítéséhez */}
       <Modal show={show} onHide={() => setShow(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Időpontok: {selectedDate}</Modal.Title>
+          <Modal.Title>Nap: {selectedDate}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {/* Ellenőrzés, hogy van-e foglalás a kiválasztott napon */}
@@ -94,11 +178,33 @@ const CreateAppointmentsByDoctor = () => {
               )}
             </ListGroup>
           ) : (
-            <form>
-              <select value="teszt" onChange={handleChange}>
+            <form className="select-time-form">
+              <label htmlFor="kezeles">Kezelés:</label>
+              <select value={treatment} onChange={handleChange}>
                 {getTreatmentsByDoctor()?.map((e, i) => (
                   <option value={e} key={i}>
                     {e}
+                  </option>
+                ))}
+              </select>
+
+              <label htmlFor="start">Kezdés:</label>
+              <select value={startTime} onChange={handleStartTimeChange}>
+                {createStartTimes().map((time, i) => (
+                  <option value={time} key={i}>
+                    {time}
+                  </option>
+                ))}
+              </select>
+
+              <label htmlFor="end">Végzés:</label>
+              <select
+                value={endTime}
+                onChange={(e) => setEndTime(e.target.value)}
+              >
+                {createEndTimes(startTime).map((time, i) => (
+                  <option value={time} key={i}>
+                    {time}
                   </option>
                 ))}
               </select>
@@ -106,6 +212,9 @@ const CreateAppointmentsByDoctor = () => {
           )}
         </Modal.Body>
         <Modal.Footer>
+          <Button variant="primary" onClick={handleSubmit}>
+            Mentés
+          </Button>
           <Button variant="secondary" onClick={() => setShow(false)}>
             Bezárás
           </Button>

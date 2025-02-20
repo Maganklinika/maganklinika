@@ -45,6 +45,7 @@ Route::middleware(['auth:sanctum', Admin::class])
 Route::middleware(['auth:sanctum', Doctor::class])
     ->group(function () {
         Route::get('/get-appointments-by-doctor', [DoctorAppointmentController::class, 'getAllAppointmentByDoctor']);
+        Route::post('/create-appointments', [DoctorAppointmentController::class, 'createAppointments']);
     });
 
 Route::middleware(['auth:sanctum', Patient::class])
