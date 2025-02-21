@@ -94,7 +94,7 @@ class DoctorAppointmentController extends Controller
         $treatmentLengthMinutes = $treatmentLength->hour * 60 + $treatmentLength->minute; // átalakítjuk percbe
 
         // Ellenőrizzük, hogy van-e már időpont az orvosnak ebben az időszakban
-        $existingAppointments = DoctorAppointment::where('doctor_id', $doctor)
+        /*$existingAppointments = DoctorAppointment::where('doctor_id', $doctor)
             ->where(function ($query) use ($startTime, $endTime, $treatmentLengthMinutes) {
                 $query->whereBetween('start_time', [$startTime, $endTime])
                     ->orWhere(function ($query) use ($startTime, $endTime, $treatmentLengthMinutes) {
@@ -119,7 +119,7 @@ class DoctorAppointmentController extends Controller
         if ($existingAppointments) {
             return response()->json(['error' => 'Az orvosnak már van időpontja ebben az időszakban'], 400);
         }
-
+*/
         // Kezelések generálása
         $appointments = [];
         $currentStartTime = $startTime;
