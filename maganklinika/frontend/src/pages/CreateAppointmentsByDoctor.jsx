@@ -8,7 +8,7 @@ import useAuthContext from "../contexts/AuthContext";
 import { myAxios } from "../api/Axios";
 
 const CreateAppointmentsByDoctor = () => {
-  const { appontmentsByDoctor } = useDoctorContext();
+  const { appointmentsByDoctor, appointmentsByDate } = useDoctorContext();
   const { appointments } = usePatientContext();
   const { user } = useAuthContext();
   const [date, setDate] = useState(new Date());
@@ -17,6 +17,7 @@ const CreateAppointmentsByDoctor = () => {
   const [treatment, setTreatment] = useState("");
   const [startTime, setStartTime] = useState("7:00");
   const [endTime, setEndTime] = useState("18:00");
+
 
   const handleDateClick = (value) => {
     const formattedDate = value.toLocaleDateString("sv-SE");
@@ -118,20 +119,20 @@ const CreateAppointmentsByDoctor = () => {
     // Ha múltbeli vagy hétvégi dátum, pirosra színezzük és nem lehet kattintani
     if (isWeekend) {
       return "red-tile"; // Osztály, amit a CSS-ben kezelhetünk
-    } else if (isPastDate) {
-      return "past-tile";
     }
 
     // Ha van foglalás az adott napon, akkor azt is kezelhetjük
     if (
-      appontmentsByDoctor[formattedDate] &&
-      appontmentsByDoctor[formattedDate].length > 0
+      appointmentsByDate[formattedDate] &&
+      appointmentsByDate[formattedDate].length > 0
     ) {
       return "has-appointments"; // Ha van foglalás, külön osztály
     }
 
     return null;
   };
+  console.log("appointmentsByDoctor:", appointmentsByDoctor);
+  console.log(selectedDate);
 
   const getTreatmentsByDoctor = () => {
     const result = appointments
@@ -162,10 +163,10 @@ const CreateAppointmentsByDoctor = () => {
         </Modal.Header>
         <Modal.Body>
           {/* Ellenőrzés, hogy van-e foglalás a kiválasztott napon */}
-          {appontmentsByDoctor[selectedDate] &&
-          appontmentsByDoctor[selectedDate].length > 0 ? (
+          {appointmentsByDate[selectedDate] &&
+          appointmentsByDate[selectedDate].length > 0 ? (
             <ListGroup>
-              {appontmentsByDoctor[selectedDate].map(
+              {appointmentsByDate[selectedDate].map(
                 (appointmentsByDate, index) => (
                   <ListGroup.Item key={index}>
                     {`

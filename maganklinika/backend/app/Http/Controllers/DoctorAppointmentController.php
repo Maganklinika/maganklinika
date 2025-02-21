@@ -93,33 +93,6 @@ class DoctorAppointmentController extends Controller
         $treatmentLength = Carbon::parse($treatment->treatment_length); // 01:00:00 -> Carbon objektum
         $treatmentLengthMinutes = $treatmentLength->hour * 60 + $treatmentLength->minute; // átalakítjuk percbe
 
-        // Ellenőrizzük, hogy van-e már időpont az orvosnak ebben az időszakban
-        /*$existingAppointments = DoctorAppointment::where('doctor_id', $doctor)
-            ->where(function ($query) use ($startTime, $endTime, $treatmentLengthMinutes) {
-                $query->whereBetween('start_time', [$startTime, $endTime])
-                    ->orWhere(function ($query) use ($startTime, $endTime, $treatmentLengthMinutes) {
-                        // A meglévő időpontok vége (start_time + treatment_length) átfedhet az új időszakkal
-                        $query->whereRaw('DATE_ADD(start_time, INTERVAL ? MINUTE) BETWEEN ? AND ?', [
-                            $treatmentLengthMinutes,
-                            $startTime,
-                            $endTime
-                        ]);
-                    })
-                    ->orWhere(function ($query) use ($startTime, $endTime, $treatmentLengthMinutes) {
-                        // A meglévő időpontok teljesen lefedhetik az új időszakot
-                        $query->where('start_time', '<', $startTime)
-                            ->whereRaw('DATE_ADD(start_time, INTERVAL ? MINUTE) > ?', [
-                                $treatmentLengthMinutes,
-                                $endTime
-                            ]);
-                    });
-            })
-            ->exists();  // Megnézzük, hogy van-e átfedés
-
-        if ($existingAppointments) {
-            return response()->json(['error' => 'Az orvosnak már van időpontja ebben az időszakban'], 400);
-        }
-*/
         // Kezelések generálása
         $appointments = [];
         $currentStartTime = $startTime;
