@@ -11,12 +11,31 @@
   /*color: black; /* Betűk színe maradjon ugyanaz */
   pointer-events: none; /* Nem kattintható */
 }
-.past-tile{
-	pointer-events: none;
+.past-tile {
+  pointer-events: none;
 }
-
 
 /* Ha van foglalás egy napon, akkor külön szín */
 .has-appointments {
   background-color: rgb(240, 240, 159) !important;
+}
+
+.book {
+  margin-top: 3rem;
+}
+
+.calendar {
+  margin-top: 2rem;
+  margin-inline: auto;
+}
+
+.h2book {
+  text-align: center;
+  padding: 2rem;
+  font-size: 3rem;
+}
+
+.calendarParent {
+  display: flex;
+  flex-direction: column;
 }

@@ -18,7 +18,6 @@ const CreateAppointmentsByDoctor = () => {
   const [startTime, setStartTime] = useState("7:00");
   const [endTime, setEndTime] = useState("18:00");
 
-
   const handleDateClick = (value) => {
     const formattedDate = value.toLocaleDateString("sv-SE");
     setSelectedDate(formattedDate);
@@ -148,7 +147,7 @@ const CreateAppointmentsByDoctor = () => {
 
   return (
     <div className="container mt-4 calendarParent">
-      <h2>Foglalási Naptár</h2>
+      <h2 className="h2book">Foglalási Naptár</h2>
       <Calendar
         className="calendar"
         onClickDay={handleDateClick}
@@ -156,28 +155,59 @@ const CreateAppointmentsByDoctor = () => {
         tileClassName={tileClassName}
       />
 
-      {/* Modális ablak a foglalások megjelenítéséhez */}
       <Modal show={show} onHide={() => setShow(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Nap: {selectedDate}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {/* Ellenőrzés, hogy van-e foglalás a kiválasztott napon */}
           {appointmentsByDate[selectedDate] &&
           appointmentsByDate[selectedDate].length > 0 ? (
-            <ListGroup>
-              {appointmentsByDate[selectedDate].map(
-                (appointmentsByDate, index) => (
-                  <ListGroup.Item key={index}>
-                    {`
+            <div>
+              <ListGroup>
+                {appointmentsByDate[selectedDate].map(
+                  (appointmentsByDate, index) => (
+                    <ListGroup.Item key={index}>
+                      {`
                     Doctor ID: ${appointmentsByDate.doctor_id}, 
                     Treatment ID: ${appointmentsByDate.treatment_id}, 
-                    Start Time: ${appointmentsByDate.start_time}
+                    Start Time: ${appointmentsByDate.start_time},
                     `}
-                  </ListGroup.Item>
-                )
-              )}
-            </ListGroup>
+                    </ListGroup.Item>
+                  )
+                )}
+              </ListGroup>
+              <form className="select-time-form book">
+                <label htmlFor="kezeles">Kezelés: </label>
+                <select value={treatment} onChange={handleChange}>
+                  {getTreatmentsByDoctor()?.map((e, i) => (
+                    <option value={e} key={i}>
+                      {e}
+                    </option>
+                  ))}
+                </select>
+                <p>
+                  <label htmlFor="start">Kezdés: </label>
+                  <select value={startTime} onChange={handleStartTimeChange}>
+                    {createStartTimes().map((time, i) => (
+                      <option value={time} key={i}>
+                        {time}
+                      </option>
+                    ))}
+                  </select>
+                  <label htmlFor="end">Végzés: </label>
+                  <select
+                    value={endTime}
+                    onChange={(e) => setEndTime(e.target.value)}
+                  >
+                    {createEndTimes(startTime).map((time, i) => (
+                      <option value={time} key={i}>
+                        {time}
+                      </option>
+                    ))}
+                  </select>
+                </p>
+              </form>
+            </div>
           ) : (
             <form className="select-time-form">
               <label htmlFor="kezeles">Kezelés:</label>
