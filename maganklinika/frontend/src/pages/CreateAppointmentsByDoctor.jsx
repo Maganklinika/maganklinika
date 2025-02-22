@@ -164,7 +164,6 @@ const CreateAppointmentsByDoctor = () => {
                   (appointmentsByDate, index) => (
                     <ListGroup.Item key={index}>
                       {`
-                    Doctor ID: ${appointmentsByDate.doctor_id}, 
                     Treatment ID: ${appointmentsByDate.treatment_id}, 
                     Start Time: ${appointmentsByDate.start_time},
                     `}
