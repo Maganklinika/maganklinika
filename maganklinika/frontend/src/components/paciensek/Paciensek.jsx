@@ -6,4 +6,4 @@ const Paciensek = () => {
   )
 }
 
-export default Paciensek
+export default Paciensek  
