@@ -8,7 +8,7 @@ import useAuthContext from "../contexts/AuthContext";
 import { myAxios } from "../api/Axios";
 
 const CreateAppointmentsByDoctor = () => {
-  const { appointmentsByDoctor, appointmentsByDate } = useDoctorContext();
+  const { appointmentsByDoctor, appointmentsByDate, fetchAppontmentsByDoctor } = useDoctorContext();
   const { appointments } = usePatientContext();
   const { user } = useAuthContext();
   const [date, setDate] = useState(new Date());
@@ -45,24 +45,20 @@ const CreateAppointmentsByDoctor = () => {
     return times;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const startDateTime = `${selectedDate}T${startTime}:00`; // dátum + időformátum
     const endDateTime = `${selectedDate}T${endTime}:00`; // dátum + időformátum
 
     // POST kérés küldése a backend felé
-    myAxios
+    const response = await myAxios
       .post("/api/create-appointments", {
         start_time: startDateTime,
         end_time: endDateTime,
         treatment_name: treatment, // kezelés neve
       })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("sikeres felvitel:" + data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+    console.log(response.message)
+    fetchAppontmentsByDoctor()
+
   };
 
   const createEndTimes = (startTime) => {
@@ -147,7 +143,7 @@ const CreateAppointmentsByDoctor = () => {
 
   return (
     <div className="container mt-4 calendarParent">
-      <h2 className="h2book">Foglalási Naptár</h2>
+      <h2 className="h2book">Időpont létrehozása</h2>
       <Calendar
         className="calendar"
         onClickDay={handleDateClick}
@@ -161,7 +157,7 @@ const CreateAppointmentsByDoctor = () => {
         </Modal.Header>
         <Modal.Body>
           {appointmentsByDate[selectedDate] &&
-          appointmentsByDate[selectedDate].length > 0 ? (
+            appointmentsByDate[selectedDate].length > 0 ? (
             <div>
               <ListGroup>
                 {appointmentsByDate[selectedDate].map(

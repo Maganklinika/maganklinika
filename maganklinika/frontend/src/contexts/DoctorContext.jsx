@@ -28,20 +28,20 @@ export const DoctorProvider = ({ children }) => {
     groupAppointmentsByDate(response.data);
   };
 
-    const groupAppointmentsByDate = (appointmentsArray) => {
-      // Csoportosítjuk az appointments-t a start_time alapján dátum szerint
-      const groupedAppointments = appointmentsArray.reduce((acc, appointment) => {
-        // Csak a dátumot veszük figyelembe (YYYY-MM-DD)
-        const date = appointment.start_time.split(" ")[0];
-        if (!acc[date]) {
-          acc[date] = [];
-        }
-        acc[date].push(appointment);
-        return acc;
-      }, {});
-  
-      setAppointmentsByDate(groupedAppointments);
-    };
+  const groupAppointmentsByDate = (appointmentsArray) => {
+    // Csoportosítjuk az appointments-t a start_time alapján dátum szerint
+    const groupedAppointments = appointmentsArray.reduce((acc, appointment) => {
+      // Csak a dátumot veszük figyelembe (YYYY-MM-DD)
+      const date = appointment.start_time.split(" ")[0];
+      if (!acc[date]) {
+        acc[date] = [];
+      }
+      acc[date].push(appointment);
+      return acc;
+    }, {});
+
+    setAppointmentsByDate(groupedAppointments);
+  };
 
   return (
     <DoctorContext.Provider
@@ -52,6 +52,7 @@ export const DoctorProvider = ({ children }) => {
         filteredDoctorsList,
         appointmentsByDoctor,
         appointmentsByDate,
+        fetchAppontmentsByDoctor,
       }}
     >
       {children}
