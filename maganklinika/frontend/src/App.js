@@ -7,6 +7,7 @@ import { ComponentsMap } from "./components/componentsmap/ComponentsMap";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import Profile from "./pages/Profile";
 
 function App() {
   const { navigation } = useAuthContext(); // getNavItems lekérése az AuthContextből
@@ -22,6 +23,7 @@ function App() {
         <Route path="/verify-email/*" element={<VerifyEmailPage />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/password-reset/*" element={<ResetPassword />} />
+        <Route path="/profile" element={<Profile />} />
         <Route index element={<Fooldal />} />
         {navigation ? (
           navigation.map((e, index) => {

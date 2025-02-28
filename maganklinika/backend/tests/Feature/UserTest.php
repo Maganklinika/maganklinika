@@ -34,7 +34,7 @@ class UserTest extends TestCase
     public function test_users_auth(): void
     {
         RoleSeeder::run();
-        $adminRoleId = Role::where('name', 'admin')->first()->role_id;
+        $adminRoleId = 1;
         $admin = User::factory()->create([
             'role_id' => $adminRoleId,
         ]);
@@ -44,8 +44,8 @@ class UserTest extends TestCase
 
     public function test_update_user_role(): void
     {
-        RoleSeeder::run();
-        $adminRoleId = Role::where('name', 'admin')->first()->role_id;
+        
+        $adminRoleId = 1;
         $admin = User::factory()->create([
             'role_id' => $adminRoleId,
         ]);
