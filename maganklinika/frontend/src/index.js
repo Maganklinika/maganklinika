@@ -8,6 +8,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { AdminProvider } from "./contexts/AdminContext";
 import { PatientProvider } from "./contexts/PatientsContext";
 import { DoctorProvider } from "./contexts/DoctorContext";
+import "./variables.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

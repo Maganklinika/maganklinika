@@ -1,11 +1,13 @@
-.infobar{
+.infobar {
     display: flex;
     justify-content: space-between;
-    background-color: rgb(237, 237, 237);
+    background-color: var(--infobar-bg-color);
 }
-.infobar p{
+
+.infobar p {
     margin: 0;
 }
-.user-info{
+
+.user-info {
     margin-right: 1rem;
 }

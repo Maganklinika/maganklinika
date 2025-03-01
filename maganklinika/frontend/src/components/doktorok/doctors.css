@@ -1,17 +1,18 @@
 .doctors-spec {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
   gap: 4rem;
-  margin: 1.5rem;
+  justify-content: center;
+  margin-block: 1.5rem;
   margin-inline: auto;
-  max-width: 100vh;
+  width: 80vw;
 }
 
 .card {
   width: 425px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  box-shadow: var(--nav-and-border-color) 0px 4px 12px;
   transition: 0.2s;
+  border: 1px solid var(--nav-and-border-color)
 }
 
 .card:hover {
@@ -50,6 +51,7 @@
   justify-content: center;
   gap: 3rem;
 }
+
 .text {
   display: flex;
   flex-direction: column;
@@ -64,6 +66,7 @@
   margin: 0;
   font-size: 15px;
 }
+
 .description p {
   width: fit-content;
   text-align: right;
@@ -89,13 +92,16 @@
 }
 
 @media screen and (max-width: 375px) {
+
   .spec,
   .email {
     grid-template-columns: auto;
   }
+
   .card-body {
     margin: 10px;
   }
+
   .doctors-spec {
     gap: 1rem;
     margin-block: 1rem;

@@ -1,12 +1,13 @@
 import React from "react";
 import useAuthContext from "../../contexts/AuthContext";
 import { Link } from "react-router-dom";
+import "./nav.css";
 
 const Navigacio = () => {
   const { navigation } = useAuthContext(); // getNavItems lekérése az AuthContextből
 
   return (
-    <nav className="navbar navbar-expand-sm bg-light">
+    <nav className="navbar navbar-expand-sm">
       <div className="container-fluid">
         <ul className="navbar-nav">
           {navigation ? (
