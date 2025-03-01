@@ -1,7 +1,6 @@
 import React from 'react'
-import useAuthContext from '../contexts/AuthContext'
 
-const Profile = () => {
+const DoctorProfile = () => {
     const { user } = useAuthContext();
     return (
         <div>
@@ -42,4 +41,4 @@ const Profile = () => {
     )
 }
 
-export default Profile
+export default DoctorProfile

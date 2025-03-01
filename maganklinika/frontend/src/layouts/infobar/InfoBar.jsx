@@ -10,7 +10,8 @@ const InfoBar = () => {
       <div></div>
       <div className="user-info">
         {user ? (
-          <p>Bejelentkezett felhasználó: <Link to="/profile">{user.name}</Link></p>
+          <p>Bejelentkezett felhasználó: <Link to="">{user.name}</Link></p>
+          
         ) : (
           <p>Nincs bejelentkezett felhasználó. <Link to="/login">Bejelentkezés</Link></p>
         )}
