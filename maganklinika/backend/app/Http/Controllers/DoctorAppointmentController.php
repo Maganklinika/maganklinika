@@ -129,4 +129,26 @@ class DoctorAppointmentController extends Controller
 
         return response()->json(['message' => 'Kezelések sikeresen létrehozva'], 200);
     }
+
+    public function getAppointmentsCount() {
+        $data = DB::select("
+            select p.user_id as u_id ,count(*) as da_number
+            from doctor_appointments da
+            INNER join patients p on p.user_id=da.patient_id
+            GROUP by p.user_id
+        ");
+        return response()->json($data);
+    }
+
+    public function getAppointmentsByPatients(string $id) {
+        $data = DB::select("
+            select p.user_id as u_id,da.start_time as time, t.treatment_name as t_name, da.status as da_status
+            from doctor_appointments as da
+            inner join patients as p on da.patient_id = p.user_id
+            inner join treatments as t on t.treatment_id = da.treatment_id
+            where p.user_id=3
+        ");
+
+        return response()->json($data);
+    }
 }

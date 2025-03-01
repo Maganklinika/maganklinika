@@ -8,7 +8,35 @@ export const DoctorProvider = ({ children }) => {
   const [filteredDoctorsList, setFilteredDoctorsList] = useState([]);
   const [appointmentsByDoctor, setAppointmentsByDoctor] = useState([]);
   const [appointmentsByDate, setAppointmentsByDate] = useState({});
+  const [allPatients, setAllPatients] = useState([]);
+  const [filteredAllPatientsList, setFilteredAllPatientsList] = useState([])
+  const [patientsByAppointments, setPatientsByAppointments] = useState([])
+  const [filteredPatientsByAppointmentsList, setFilteredPatientsByAppointmentsList] = useState([])
+  const [appointmentsByPatients, setAppointmentsByPatients] = useState([]);
+  const [appointmentCount, setAppointmentCount] = useState([]);
 
+
+  const fetchAllPatients = async () => {
+    const response = await myAxios.get("/api/get-all-patients-with-name");
+    setAllPatients(response.data)
+    setFilteredAllPatientsList([...response.data]);
+  }
+
+  const fetchAppointmentByPatients = async (pac_id) => {
+    const response = await myAxios.get(`/api/get-appointments-by-patients/${pac_id}`);
+    setAppointmentsByPatients(response.data)
+  }
+
+  const fetchAppointmentsCount = async () => {
+    const response = await myAxios.get(`/api/get-appointments-count`);
+    setAppointmentCount(response.data)
+  }
+
+  const fetchPatientsByAppointments = async () => {
+    const response = await myAxios.get("/api/get-patients-to-auth-doctor")
+    setPatientsByAppointments(response.data)
+    setFilteredPatientsByAppointmentsList([...response.data])
+  }
 
   const fetchDoctorsWithSpec = async () => {
     const response = await myAxios.get("/api/doctors-with-spec");
@@ -20,6 +48,8 @@ export const DoctorProvider = ({ children }) => {
   const fetchDoctorData = async () => {
     await fetchDoctorsWithSpec();
     await fetchAppontmentsByDoctor();
+    await fetchPatientsByAppointments();
+    await fetchAppointmentsCount();
   };
 
   const fetchAppontmentsByDoctor = async () => {
@@ -53,6 +83,16 @@ export const DoctorProvider = ({ children }) => {
         appointmentsByDoctor,
         appointmentsByDate,
         fetchAppontmentsByDoctor,
+        fetchAllPatients,
+        allPatients,
+        filteredAllPatientsList,
+        patientsByAppointments,
+        setFilteredPatientsByAppointmentsList,
+        filteredPatientsByAppointmentsList,
+        setFilteredAllPatientsList,
+        fetchAppointmentByPatients,
+        appointmentsByPatients,
+        appointmentCount,
       }}
     >
       {children}
