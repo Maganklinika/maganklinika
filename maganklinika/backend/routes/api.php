@@ -31,7 +31,6 @@ Route::middleware(['auth:sanctum', Admin::class])
     ->group(function () {
         //Route::get('/users', [UserController::class, 'index']);
         Route::get('/roles', [RoleController::class, 'index']);
-
         Route::put('/update-nav', [NavigationRoleController::class, 'updateNavOrder']);
         Route::get('/get-nav-items-with-roles', [NavigationRoleController::class, 'getNavItemsWithRoles']);
         Route::get('/navs', [NavigationController::class, 'index']);
@@ -54,6 +53,8 @@ Route::middleware(['auth:sanctum', Patient::class])
         Route::get('/test-get-tbs', [SpecializationController::class, 'testGetTBS']);
         Route::get('/appointments', [DoctorAppointmentController::class, 'index']);
         Route::get('/doctors-with-spec', [DoctorController::class, 'listDoctorsWithSpecialization']);
+        Route::get('/get-treatments', [TreatmentController::class, 'index']);
+        Route::get('/get-treatment/{id}', [TreatmentController::class, 'show']);
     });
 
 Route::get('/nav-items', [NavigationRoleController::class, 'getNavItemsByRole']);

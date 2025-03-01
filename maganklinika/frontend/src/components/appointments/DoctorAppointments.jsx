@@ -19,12 +19,17 @@ const DoctorAppointments = () => {
     return grouped;
   };
 
-  const toggleAppointments = (doctorId, treatmentId) => {
-    setOpenAppointments((prevState) => ({
-      ...prevState,
-      [doctorId]: prevState[doctorId] === treatmentId ? null : treatmentId,
-    }));
+  
 
+  const toggleAppointments = (doctorId, treatmentId) => {
+    setOpenAppointments((prevState) => {
+      if (prevState[doctorId] === treatmentId) {
+        return { ...prevState, [doctorId]: null };
+      }
+      const newState = {};
+      newState[doctorId] = treatmentId;
+      return newState;
+    });
     fetchDoctorAppointments(doctorId);
   };
 
