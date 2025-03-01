@@ -58,14 +58,12 @@ class DoctorAppointmentController extends Controller
 
     public function getAllAppointmentByDoctor()
     {
-        $doctor = Auth::user()->id;
-
-        $result = DB::select("
-            SELECT *
-            FROM doctor_appointments
-            WHERE doctor_id = $doctor
-        ");
-        return $result;
+        $doctorId = Auth::user()->id;
+    
+        $appointments = DoctorAppointment::with(['treatment', 'patient'])
+                                         ->where('doctor_id', $doctorId)
+                                         ->get();
+        return response()->json($appointments); 
     }
 
     public function createAppointments(Request $request)

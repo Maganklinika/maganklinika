@@ -7,6 +7,7 @@ export const PatientProvider = ({ children }) => {
   const [appointments, setAppointments] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [appointmentsByDate, setAppointmentsByDate] = useState({});
+    const [appointmentsDoctor, setAppointmentsDoctor] = useState([]);
 
   const fetchAppointments = async () => {
     try {
@@ -14,6 +15,15 @@ export const PatientProvider = ({ children }) => {
       groupAppointmentsByDate(response.data);
     } catch (error) {
       console.error("Failed to fetch appointments:", error);
+    }
+  };
+
+  const fetchAppointmentstoDoctor = async () => {
+    try {
+      const response = await myAxios.get('/api/get-appointments-by-doctor');
+      setAppointmentsDoctor(response.data);
+    } catch (error) {
+      console.error('Hiba az időpontok lekérésekor:', error);
     }
   };
 
@@ -47,6 +57,7 @@ export const PatientProvider = ({ children }) => {
   const fetchPatientData = () => {
     fetchTreatmentsBySpecialization();
     fetchAppointments();
+    fetchAppointmentstoDoctor();
   };
 
   return (
@@ -57,6 +68,7 @@ export const PatientProvider = ({ children }) => {
         filteredList,
         fetchPatientData,
         appointmentsByDate,
+        appointmentsDoctor,
       }}
     >
       {children}
