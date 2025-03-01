@@ -7,7 +7,7 @@ export const PatientProvider = ({ children }) => {
   const [appointments, setAppointments] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [appointmentsByDate, setAppointmentsByDate] = useState({});
-    const [appointmentsDoctor, setAppointmentsDoctor] = useState([]);
+  const [appointmentsDoctor, setAppointmentsDoctor] = useState([]);
 
   const fetchAppointments = async () => {
     try {
@@ -20,12 +20,28 @@ export const PatientProvider = ({ children }) => {
 
   const fetchAppointmentstoDoctor = async () => {
     try {
-      const response = await myAxios.get('/api/get-appointments-by-doctor');
+      const doctorId = 'id_a_doktortól'; // Itt cseréld ki arra a megfelelő módra, ahogy megkapod a doktor ID-t
+      const response = await myAxios.get('/api/get-appointments-by-doctor', {
+        params: { doctor_id: doctorId }, // átadjuk a doctor_id paramétert
+      });
       setAppointmentsDoctor(response.data);
     } catch (error) {
       console.error('Hiba az időpontok lekérésekor:', error);
     }
   };
+  
+  
+    const fetchDoctorAppointments = async (doctorId) => {
+      try {
+        const response = await myAxios.get('/api/get-appointments-by-doctor', {
+          params: { doctor_id: doctorId }
+        });
+        console.log('Appointments:', response.data);
+        setAppointmentsDoctor(response.data);
+      } catch (error) {
+        console.error('Error fetching appointments:', error);
+      }
+    };
 
   const groupAppointmentsByDate = (appointmentsArray) => {
     // Csoportosítjuk az appointments-t a start_time alapján dátum szerint
@@ -69,6 +85,7 @@ export const PatientProvider = ({ children }) => {
         fetchPatientData,
         appointmentsByDate,
         appointmentsDoctor,
+        fetchDoctorAppointments,
       }}
     >
       {children}

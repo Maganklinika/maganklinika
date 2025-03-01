@@ -56,15 +56,19 @@ class DoctorAppointmentController extends Controller
         DoctorAppointment::find($id)->delete();
     }
 
-    public function getAllAppointmentByDoctor()
+    public function getAllAppointmentByDoctor(Request $request)
     {
-        $doctorId = Auth::user()->id;
+        $doctorId = $request->input('doctor_id'); // A doktor ID-t a kérésből vesszük
+    
+        if (!$doctorId) {
+            return response()->json(['error' => 'Doctor ID is required'], 400); // Ha nincs doctor_id, visszaadunk egy hibaüzenetet
+        }
     
         $appointments = DoctorAppointment::with(['treatment', 'patient'])
                                          ->where('doctor_id', $doctorId)
                                          ->get();
         return response()->json($appointments); 
-    }
+    }   
 
     public function createAppointments(Request $request)
     {

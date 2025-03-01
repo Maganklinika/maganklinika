@@ -5,13 +5,13 @@ import TextFilter from "../filters/text_filter_top/TextFilter";
 import { myAxios } from '../../api/Axios';
 
 const DoctorAppointments = () => {
-  const { filteredList, setFilteredList, appointmentsDoctor } = usePatientContext();
+  const { filteredList, setFilteredList, appointmentsDoctor, setAppointmentsDoctor, fetchDoctorAppointments, fetchPatientData } = usePatientContext(); 
   const [openAppointments, setOpenAppointments] = useState({});
 
   const groupAppointmentsByMonth = (appointments) => {
     const grouped = {};
     appointments.forEach((appointment) => {
-      const date = new Date(appointment.start_time); // Az időpont helyett 'start_time' kell
+      const date = new Date(appointment.start_time); 
       const monthYear = date.toLocaleString("hu-HU", { year: "numeric", month: "long" });
       if (!grouped[monthYear]) grouped[monthYear] = [];
       grouped[monthYear].push(appointment);
@@ -24,6 +24,8 @@ const DoctorAppointments = () => {
       ...prevState,
       [doctorId]: prevState[doctorId] === treatmentId ? null : treatmentId,
     }));
+
+    fetchDoctorAppointments(doctorId);
   };
 
   return (
@@ -79,7 +81,6 @@ const DoctorAppointments = () => {
                                           hour: "2-digit",
                                           minute: "2-digit",
                                         })}{" "}
-                                        - {appointment.patient_name}
                                       </li>
                                     ))}
                                   </ul>
