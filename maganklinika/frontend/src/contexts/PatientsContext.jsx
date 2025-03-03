@@ -21,29 +21,27 @@ export const PatientProvider = ({ children }) => {
 
   const fetchAppointmentstoDoctor = async () => {
     try {
-      const doctorId = 'id_a_doktortól';
-      const response = await myAxios.get('/api/get-appointments-by-doctor', {
-        params: { doctor_id: doctorId },
+      const doctorId = "id_a_doktortól";
+      const response = await myAxios.get("/api/get-appointments-by-doctor", {
+        params: { doctor_id: 2 },
       });
       setAppointmentsDoctor(response.data);
     } catch (error) {
-      console.error('Hiba az időpontok lekérésekor:', error);
+      console.error("Hiba az időpontok lekérésekor:", error);
     }
   };
-  
 
-  
-    const fetchDoctorAppointments = async (doctorId) => {
-      try {
-        const response = await myAxios.get('/api/get-appointments-by-doctor', {
-          params: { doctor_id: doctorId }
-        });
-        console.log('Appointments:', response.data);
-        setAppointmentsDoctor(response.data);
-      } catch (error) {
-        console.error('Error fetching appointments:', error);
-      }
-    };
+  const fetchDoctorAppointments = async (doctorId) => {
+    try {
+      const response = await myAxios.get("/api/get-appointments-by-doctor", {
+        params: { doctor_id: doctorId },
+      });
+      console.log("Appointments:", response.data);
+      setAppointmentsDoctor(response.data);
+    } catch (error) {
+      console.error("Error fetching appointments:", error);
+    }
+  };
 
   const groupAppointmentsByDate = (appointmentsArray) => {
     const groupedAppointments = appointmentsArray.reduce((acc, appointment) => {
@@ -98,7 +96,7 @@ export const PatientProvider = ({ children }) => {
         fetchDoctorAppointments,
         setTreatmentOptions,
         treatmentOptions,
-  }}
+      }}
     >
       {children}
     </PatientContext.Provider>
