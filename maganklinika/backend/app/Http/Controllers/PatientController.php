@@ -55,11 +55,11 @@ class PatientController extends Controller
     public function getAllPatientsWithName()
     {
         $data = DB::select("
-            SELECT u.name as user_name, p.taj_number as tn,u.phone_number as u_phone
+            SELECT p.user_id as user_id, u.name as user_name, p.taj_number as tn,u.phone_number as u_phone
             FROM users u
-            INNER JOIN patients as p on p.user_id = u_id
+            INNER JOIN patients as p on p.user_id = u.id
         ");
-        return $data;
+        return response()->json($data);
     }
     public function getPatientsToAuthDoctor()
     {

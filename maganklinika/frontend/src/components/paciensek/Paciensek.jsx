@@ -27,7 +27,7 @@ const Paciensek = () => {
   ];
 
   const handleClick = async () => {
-    if (!allPatients) {
+    if (!allPat && allPatients.length <= 0) {
       await fetchAllPatients();
     }
     setAllPat(!allPat);
@@ -62,7 +62,9 @@ const Paciensek = () => {
               })}
         </tbody>
       </Table>
-      <Button onClick={handleClick}>{!allPat ? "Összes Páciens" : "Saját páciensek"}</Button>
+      <Button onClick={handleClick}>
+        {!allPat ? "Összes Páciens" : "Saját páciensek"}
+      </Button>
     </div>
   );
 };
