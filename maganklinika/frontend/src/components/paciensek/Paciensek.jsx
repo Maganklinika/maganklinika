@@ -54,11 +54,11 @@ const Paciensek = () => {
         </thead>
         <tbody>
           {!allPat
-            ? filteredPatientsByAppointmentsList?.map((e) => {
-                return <PatientsRow e={e} />;
+            ? filteredPatientsByAppointmentsList?.map((e,i) => {
+                return <PatientsRow e={e} key={i}/>;
               })
-            : filteredAllPatientsList?.map((e) => {
-                return <PatientsRow e={e} />;
+            : filteredAllPatientsList?.map((e,i) => {
+                return <PatientsRow e={e} key={i}/>;
               })}
         </tbody>
       </Table>
