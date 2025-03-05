@@ -114,14 +114,15 @@ export const AuthProvider = ({ children }) => {
       };
       checkUser();
     }
+  }, []);
+
+  useEffect(() => {
     if (user) {
       if (!isVerified) {
         navigate("/verify-email");
       }
     }
-  }, []);
 
-  useEffect(() => {
     const verify = async () => {
       await fetchEmailStatus();
     };
