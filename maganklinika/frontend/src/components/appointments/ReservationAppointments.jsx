@@ -4,7 +4,7 @@ import "react-calendar/dist/Calendar.css";
 import { Modal, Button, ListGroup, Form } from "react-bootstrap";
 import "./ReservationAppointments.css";
 import usePatientContext from "../../contexts/PatientsContext";
-import { myAxios } from "../../api/Axios";
+
 
 
 const ReservationAppointments = () => {

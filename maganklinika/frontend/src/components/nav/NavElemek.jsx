@@ -51,11 +51,10 @@ const NavElemek = () => {
           name: roleName,
         });
       } else {
-        // Ha eltávolítjuk a menüpontot a szerepkörből
         try {
           const response = await myAxios.delete(
             `/api/remove-nav-from-role/${id}`
-          ); // Itt az id-t használjuk
+          ); 
           console.log("Sikeres törlés:", response);
         } catch (error) {
           console.log("sikertelen törlés: ", error);

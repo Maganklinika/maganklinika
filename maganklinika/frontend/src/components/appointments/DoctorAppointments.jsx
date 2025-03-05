@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Collapse, Table } from 'react-bootstrap';
 import usePatientContext from "../../contexts/PatientsContext";
 import TextFilter from "../filters/text_filter_top/TextFilter";
-import { myAxios } from '../../api/Axios';
+
 
 const DoctorAppointments = () => {
   const { filteredList, setFilteredList, appointmentsDoctor, setAppointmentsDoctor, fetchDoctorAppointments, fetchPatientData } = usePatientContext(); 
