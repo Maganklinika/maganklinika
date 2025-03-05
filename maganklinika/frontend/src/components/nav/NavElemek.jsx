@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import Tables from "../tables/Tables"; // Táblázatok kezelése
+import Tables from "../tables/Tables";
 import { Table } from "react-bootstrap";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import { myAxios } from "../../api/Axios"; // Backend kommunikációhoz
+import { myAxios } from "../../api/Axios";
 import useAdminContext from "../../contexts/AdminContext";
 
 const NavElemek = () => {

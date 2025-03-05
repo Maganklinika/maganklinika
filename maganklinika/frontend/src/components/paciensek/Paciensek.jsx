@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
-import UserDivList from "../userdivlist/UserDivList";
+import React, { useState } from "react";
 import useDoctorContext from "../../contexts/DoctorContext";
-import ListHeader from "../userdivlist/ListHeader";
 import "./userlist.css";
-import { Button, ListGroup, Table } from "react-bootstrap";
+import { Button, Table } from "react-bootstrap";
 import TextFilter from "../filters/text_filter_top/TextFilter";
 import PatientsRow from "./PatientsRow";
 
@@ -33,6 +31,8 @@ const Paciensek = () => {
     setAllPat(!allPat);
   };
 
+  if (filteredPatientsByAppointmentsList <= 0) {
+  }
   return (
     <div>
       <h1>Páciensek</h1>
@@ -54,11 +54,11 @@ const Paciensek = () => {
         </thead>
         <tbody>
           {!allPat
-            ? filteredPatientsByAppointmentsList?.map((e,i) => {
-                return <PatientsRow e={e} key={i}/>;
+            ? filteredPatientsByAppointmentsList?.map((e, i) => {
+                return <PatientsRow e={e} key={i} />;
               })
-            : filteredAllPatientsList?.map((e,i) => {
-                return <PatientsRow e={e} key={i}/>;
+            : filteredAllPatientsList?.map((e, i) => {
+                return <PatientsRow e={e} key={i} />;
               })}
         </tbody>
       </Table>
