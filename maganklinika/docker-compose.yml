@@ -9,6 +9,7 @@ services:
       - /var/www/html/storage
       - /var/www/html/bootstrap/cache
       - ./backend/php-fpm/www.conf:/usr/local/etc/php-fpm.d/www.conf
+    env_file: ".env"
     ports:
       - 9000:9000
     depends_on:
