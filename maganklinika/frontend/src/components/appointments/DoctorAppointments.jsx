@@ -33,16 +33,6 @@ const DoctorAppointments = () => {
     agenda: 'Napló',
   };
 
-  const groupAppointmentsByMonth = (appointments) => {
-    const grouped = {};
-    appointments.forEach((appointment) => {
-      const date = new Date(appointment.start_time); 
-      const monthYear = date.toLocaleString("hu-HU", { year: "numeric", month: "long" });
-      if (!grouped[monthYear]) grouped[monthYear] = [];
-      grouped[monthYear].push(appointment);
-    });
-    return grouped;
-  };
 
   const toggleAppointments = (doctorId, treatmentId) => {
     setOpenAppointments((prevState) => {
@@ -56,14 +46,23 @@ const DoctorAppointments = () => {
     fetchDoctorAppointments(doctorId);
   };
 
-
   const generateEvents = (appointments) => {
-    return appointments.map((appointment) => ({
-      start: new Date(appointment.start_time),
-      end: new Date(appointment.end_time),
-      title: `${appointment.patient_name} (${appointment.treatment_name})`,
-    }));
+    return appointments.map((appointment) => {
+      const start = new Date(appointment.start_time.replace(" ", "T"));
+  
+      const [hours, minutes, seconds] = appointment.treatment.treatment_length.split(":").map(Number);
+      const durationInMinutes = hours * 60 + minutes;
+  
+      const end = new Date(start.getTime() + durationInMinutes * 60000);
+  
+      return {
+        start,
+        end,
+        title: `${appointment.patient ? appointment.patient.name : "Szabad időpont"} (${appointment.treatment.treatment_name})`,
+      };
+    });
   };
+
 
   const handleViewChange = (view) => {
     setView(view);
@@ -72,6 +71,8 @@ const DoctorAppointments = () => {
   const handleNavigate = (date) => {
     setCurrentDate(date);
   };
+
+  
 
   return (
     <div>
@@ -122,7 +123,7 @@ const DoctorAppointments = () => {
                             {doctorAppointments.length > 0 ? (
                               <Calendar
                               localizer={localizer}
-                              events={events}
+                              events={generateEvents(doctorAppointments)}
                               startAccessor="start"
                               endAccessor="end"
                               views={['month', 'week', 'day']}
