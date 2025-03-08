@@ -16,13 +16,15 @@ const TextFilter = (props) => {
       if (
         e.d_name?.toLowerCase().includes(event.target.value.toLowerCase()) ||
         e.s_name?.toLowerCase().includes(event.target.value.toLowerCase()) ||
-        e.user_name?.toLowerCase().includes(event.target.value.toLowerCase()) 
+        e.user_name?.toLowerCase().includes(event.target.value.toLowerCase()) ||
+        e.u_phone?.toLowerCase().includes(event.target.value.toLowerCase()) ||
+        e.tn?.toString().includes(event.target.value)
       ) {
         return true;
       }
     });
     props.filterListSetter([...filteredList]);
-    
+
   };
 
   return (

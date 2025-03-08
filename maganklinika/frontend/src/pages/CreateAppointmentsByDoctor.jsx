@@ -129,6 +129,7 @@ const CreateAppointmentsByDoctor = () => {
   console.log("appointmentsByDoctor:", appointmentsByDoctor);
   console.log(selectedDate);
 
+
   const getTreatmentsByDoctor = () => {
     const result = appointments
       .map((e) => {
@@ -204,37 +205,40 @@ const CreateAppointmentsByDoctor = () => {
               </form>
             </div>
           ) : (
-            <form className="select-time-form">
-              <label htmlFor="kezeles">Kezelés:</label>
-              <select value={treatment} onChange={handleChange}>
-                {getTreatmentsByDoctor()?.map((e, i) => (
-                  <option value={e} key={i}>
-                    {e}
-                  </option>
-                ))}
-              </select>
+            selectedDate >= date.toLocaleDateString("sv-SE") ?
+              < form className="select-time-form">
+                <label htmlFor="kezeles">Kezelés:</label>
+                <select value={treatment} onChange={handleChange}>
+                  {getTreatmentsByDoctor()?.map((e, i) => (
+                    <option value={e} key={i}>
+                      {e}
+                    </option>
+                  ))}
+                </select>
 
-              <label htmlFor="start">Kezdés:</label>
-              <select value={startTime} onChange={handleStartTimeChange}>
-                {createStartTimes().map((time, i) => (
-                  <option value={time} key={i}>
-                    {time}
-                  </option>
-                ))}
-              </select>
+                <label htmlFor="start">Kezdés:</label>
+                <select value={startTime} onChange={handleStartTimeChange}>
+                  {createStartTimes().map((time, i) => (
+                    <option value={time} key={i}>
+                      {time}
+                    </option>
+                  ))}
+                </select>
 
-              <label htmlFor="end">Végzés:</label>
-              <select
-                value={endTime}
-                onChange={(e) => setEndTime(e.target.value)}
-              >
-                {createEndTimes(startTime).map((time, i) => (
-                  <option value={time} key={i}>
-                    {time}
-                  </option>
-                ))}
-              </select>
-            </form>
+                <label htmlFor="end">Végzés:</label>
+                <select
+                  value={endTime}
+                  onChange={(e) => setEndTime(e.target.value)}
+                >
+                  {createEndTimes(startTime).map((time, i) => (
+                    <option value={time} key={i}>
+                      {time}
+                    </option>
+                  ))}
+                </select>
+              </form>
+              :
+              ""
           )}
         </Modal.Body>
         <Modal.Footer>
@@ -246,7 +250,7 @@ const CreateAppointmentsByDoctor = () => {
           </Button>
         </Modal.Footer>
       </Modal>
-    </div>
+    </div >
   );
 };
 

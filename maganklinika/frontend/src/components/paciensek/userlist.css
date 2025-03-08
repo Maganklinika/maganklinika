@@ -1,0 +1,26 @@
+.list-headers {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-inline: 4rem;
+    border: 2px solid var(--nav-and-border-color);
+    border-radius: 1.5rem;
+    height: 50px;
+    padding-inline: 1rem;
+}
+
+.list-headers p {
+    margin: 0;
+    align-content: center;
+}
+
+.list-group-users {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-inline: 4rem;
+    border: 2px solid var(--nav-and-border-color);
+    border-radius: 1.5rem;
+    height: 50px;
+    padding-inline: 1rem;
+}

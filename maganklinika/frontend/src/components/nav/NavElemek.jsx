@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import Tables from "../tables/Tables"; // Táblázatok kezelése
+import Tables from "../tables/Tables";
 import { Table } from "react-bootstrap";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import { myAxios } from "../../api/Axios"; // Backend kommunikációhoz
+import { myAxios } from "../../api/Axios";
 import useAdminContext from "../../contexts/AdminContext";
 
 const NavElemek = () => {
@@ -51,11 +51,10 @@ const NavElemek = () => {
           name: roleName,
         });
       } else {
-        // Ha eltávolítjuk a menüpontot a szerepkörből
         try {
           const response = await myAxios.delete(
             `/api/remove-nav-from-role/${id}`
-          ); // Itt az id-t használjuk
+          ); 
           console.log("Sikeres törlés:", response);
         } catch (error) {
           console.log("sikertelen törlés: ", error);

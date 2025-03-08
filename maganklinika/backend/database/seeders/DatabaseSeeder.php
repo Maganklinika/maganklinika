@@ -3,10 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\doctor;
+use App\Models\DoctorLicence;
 use App\Models\patient;
-use App\Models\role;
 use App\Models\Specialization;
-use App\Models\treatment;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -60,6 +59,7 @@ class DatabaseSeeder extends Seeder
             NavigationSeeder::class,
             NavigationRoleSeeder::class,
             DoctorAppointmentSeeder::class,
+            DoctorLicenceSeeder::class,
         ]);
     }
 }

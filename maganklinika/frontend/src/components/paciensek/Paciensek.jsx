@@ -1,9 +1,72 @@
-import React from 'react'
+import React, { useState } from "react";
+import useDoctorContext from "../../contexts/DoctorContext";
+import "./userlist.css";
+import { Button, Table } from "react-bootstrap";
+import TextFilter from "../filters/text_filter_top/TextFilter";
+import PatientsRow from "./PatientsRow";
 
 const Paciensek = () => {
-  return (
-    <div>Paciensek</div>
-  )
-}
+  const {
+    fetchAllPatients,
+    allPatients,
+    filteredAllPatientsList,
+    setFilteredAllPatientsList,
+    setFilteredPatientsByAppointmentsList,
+    filteredPatientsByAppointmentsList,
+    patientsByAppointments,
+  } = useDoctorContext();
+  const [allPat, setAllPat] = useState(false);
+  const headerList = [
+    "Név",
+    "Taj",
+    "Telefonszám",
+    "Befejezett kezelések",
+    "Kezelési előzmények",
+  ];
 
-export default Paciensek  
+  const handleClick = async () => {
+    if (!allPat && allPatients.length <= 0) {
+      await fetchAllPatients();
+    }
+    setAllPat(!allPat);
+  };
+
+  if (filteredPatientsByAppointmentsList <= 0) {
+  }
+  return (
+    <div>
+      <h1>Páciensek</h1>
+      <TextFilter
+        list={!allPat ? patientsByAppointments : allPatients}
+        filterListSetter={
+          !allPat
+            ? setFilteredPatientsByAppointmentsList
+            : setFilteredAllPatientsList
+        }
+      />
+      <Table striped>
+        <thead>
+          <tr>
+            {headerList.map((e, i) => {
+              return <th key={i}>{e}</th>;
+            })}
+          </tr>
+        </thead>
+        <tbody>
+          {!allPat
+            ? filteredPatientsByAppointmentsList?.map((e, i) => {
+                return <PatientsRow e={e} key={i} />;
+              })
+            : filteredAllPatientsList?.map((e, i) => {
+                return <PatientsRow e={e} key={i} />;
+              })}
+        </tbody>
+      </Table>
+      <Button onClick={handleClick}>
+        {!allPat ? "Összes Páciens" : "Saját páciensek"}
+      </Button>
+    </div>
+  );
+};
+
+export default Paciensek;

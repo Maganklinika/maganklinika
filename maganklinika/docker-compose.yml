@@ -1,0 +1,60 @@
+services:
+  app:
+    image: pcbackend
+    # build:
+    #   context: ./backend
+    #   dockerfile: Dockerfile
+    volumes:
+      - ./backend:/var/www/html
+      - /var/www/html/storage
+      - /var/www/html/bootstrap/cache
+      - ./backend/php-fpm/www.conf:/usr/local/etc/php-fpm.d/www.conf
+    ports:
+      - 9000:9000
+    depends_on:
+      - db
+    networks:
+      - mysql-phpmyadmin
+
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: privateclinic
+      MYSQL_PASSWORD: root
+      MYSQL_CHARSET: utf8mb4  # Az adatbázis charset-je
+      MYSQL_COLLATION: utf8mb4_hungarian_ci
+    volumes:
+      - ./data:/var/lib/mysql
+      - ./mysql.cnf:/etc/mysql/conf.d/mysql.cnf
+    ports:
+      - 3306:3306
+    networks:
+      - mysql-phpmyadmin
+  nginx:
+    image: pcfrontend
+    ports:
+      - "80:80"
+    networks:
+      - mysql-phpmyadmin
+    depends_on:
+      - app
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    restart: always
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "8080:80"
+    networks:
+      - mysql-phpmyadmin
+
+networks:
+  mysql-phpmyadmin:
+    driver: bridge
+    enable_ipv6: false
+  
+volumes:
+  db_data:

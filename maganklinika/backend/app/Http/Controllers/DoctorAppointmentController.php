@@ -59,16 +59,16 @@ class DoctorAppointmentController extends Controller
     public function getAllAppointmentByDoctor(Request $request)
     {
         $doctorId = $request->input('doctor_id'); // A doktor ID-t a kérésből vesszük
-    
+
         if (!$doctorId) {
             return response()->json(['error' => 'Doctor ID is required'], 400); // Ha nincs doctor_id, visszaadunk egy hibaüzenetet
         }
-    
+
         $appointments = DoctorAppointment::with(['treatment', 'patient'])
-                                         ->where('doctor_id', $doctorId)
-                                         ->get();
-        return response()->json($appointments); 
-    }   
+            ->where('doctor_id', $doctorId)
+            ->get();
+        return response()->json($appointments);
+    }
 
     public function createAppointments(Request $request)
     {
@@ -130,5 +130,31 @@ class DoctorAppointmentController extends Controller
         DoctorAppointment::insert($appointments);
 
         return response()->json(['message' => 'Kezelések sikeresen létrehozva'], 200);
+    }
+
+    public function getAppointmentsCount()
+    {
+        $data = DB::select("
+            select p.user_id as u_id ,count(*) as da_number
+            from doctor_appointments da
+            INNER join patients p on p.user_id=da.patient_id
+            GROUP by p.user_id
+        ");
+        return response()->json($data);
+    }
+
+    public function getAppointmentsByPatients(string $id)
+    {
+        $data = DB::select("
+            select p.user_id as u_id,da.start_time as time, t.treatment_name as t_name, da.status as da_status, u.name as user_name
+            from doctor_appointments as da
+            inner join patients as p on da.patient_id = p.user_id
+            inner join doctors as d on d.user_id = da.doctor_id
+            inner join users as u on u.id=d.user_id
+            inner join treatments as t on t.treatment_id = da.treatment_id
+            where p.user_id=$id
+        ");
+
+        return response()->json($data);
     }
 }
