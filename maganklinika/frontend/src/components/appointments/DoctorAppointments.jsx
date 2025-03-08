@@ -3,10 +3,33 @@ import { Button, Collapse, Table } from 'react-bootstrap';
 import usePatientContext from "../../contexts/PatientsContext";
 import TextFilter from "../filters/text_filter_top/TextFilter";
 import { myAxios } from '../../api/Axios';
+import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
+import { format, parse, startOfWeek, getDay } from 'date-fns';
+import { hu } from 'date-fns/locale';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 const DoctorAppointments = () => {
   const { filteredList, setFilteredList, appointmentsDoctor, setAppointmentsDoctor, fetchDoctorAppointments, fetchPatientData } = usePatientContext(); 
   const [openAppointments, setOpenAppointments] = useState({});
+  const [view, setView] = useState('week');
+
+  const localizer = dateFnsLocalizer({
+    format,
+    parse,
+    startOfWeek,
+    getDay,
+    locales: { 'hu': hu },
+  });
+
+  const messages = {
+    today: 'Ma',
+    previous: 'Előző',
+    next: 'Következő',
+    month: 'Hónap',
+    week: 'Hét',
+    day: 'Nap',
+    agenda: 'Napló',
+  };
 
   const groupAppointmentsByMonth = (appointments) => {
     const grouped = {};
@@ -19,8 +42,6 @@ const DoctorAppointments = () => {
     return grouped;
   };
 
-  
-
   const toggleAppointments = (doctorId, treatmentId) => {
     setOpenAppointments((prevState) => {
       if (prevState[doctorId] === treatmentId) {
@@ -31,6 +52,10 @@ const DoctorAppointments = () => {
       return newState;
     });
     fetchDoctorAppointments(doctorId);
+  };
+
+  const handleViewChange = (view) => {
+    setView(view);
   };
 
   return (
@@ -55,6 +80,12 @@ const DoctorAppointments = () => {
                 );
                 const groupedAppointments = groupAppointmentsByMonth(doctorAppointments);
 
+                const events = doctorAppointments.map((appointment) => ({
+                  start: new Date(appointment.start_time),
+                  end: new Date(appointment.end_time),
+                  title: `${appointment.patient_name} (${appointment.treatment_name})`,
+                }));
+
                 return (
                   <React.Fragment key={i}>
                     <tr>
@@ -76,19 +107,24 @@ const DoctorAppointments = () => {
                           <div>
                             {Object.keys(groupedAppointments).length > 0 ? (
                               Object.entries(groupedAppointments).map(([month, appts]) => (
-                                <div key={month} className="mt-2">
+                                <div key={month}>
                                   <h5>{month}</h5>
-                                  <ul>
-                                    {appts.map((appointment, index) => (
-                                      <li key={index}>
-                                        {new Date(appointment.start_time).toLocaleString("hu-HU", {
-                                          day: "numeric",
-                                          hour: "2-digit",
-                                          minute: "2-digit",
-                                        })}{" "}
-                                      </li>
-                                    ))}
-                                  </ul>
+                                  <Calendar
+                                    localizer={localizer}
+                                    events={events}
+                                    startAccessor="start"
+                                    endAccessor="end"
+                                    views={['month', 'week', 'day']}
+                                    view={view}
+                                    onView={handleViewChange}
+                                    defaultView="week"
+                                    min={new Date(0, 0, 0, 7, 0)}
+                                    max={new Date(0, 0, 0, 18, 0)}
+                                    culture="hu"
+                                    firstDayOfWeek={1}
+                                    style={{ height: 500 }}
+                                    messages={messages}
+                                  />
                                 </div>
                               ))
                             ) : (
