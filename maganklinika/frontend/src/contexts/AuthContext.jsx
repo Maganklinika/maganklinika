@@ -18,6 +18,7 @@ export const AuthProvider = ({ children }) => {
   const [navigation, setNavigation] = useState([]);
   const [isVerified, setIsVerified] = useState(true);
   const [doctorsByRating, setDoctorsByRating] = useState([]);
+  const [isValidLicence, setIsValidLicence] = useState("");
   const [errors, setErrors] = useState({
     name: "",
     email: "",
@@ -48,7 +49,7 @@ export const AuthProvider = ({ children }) => {
       const response = await myAxios.get("/api/specializations");
       setSpecializations(response.data); // A navigációs adatok beállítása
     } catch (error) {
-      console.error("Hiba a navigációs adatok lekérésekor:", error);
+      setErrors("Hiba a navigációs adatok lekérésekor:", error);
     }
   }
 
@@ -116,6 +117,15 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const checkDoctorLicence = async (licence) => {
+    try {
+      const response = await myAxios.get(`/api/checkLicenceById/${licence}`);
+      setIsValidLicence(response);
+    } catch (error) {
+      setErrors("Licence check failed:", error);
+    }
+  }
+
   useEffect(() => {
     const storedIsLoggedIn = JSON.parse(sessionStorage.getItem("isLoggedIn"));
     if (storedIsLoggedIn) {
@@ -177,6 +187,9 @@ export const AuthProvider = ({ children }) => {
         doctorsByRating,
         specializations,
         setSpecializations,
+        checkDoctorLicence,
+        isValidLicence,
+
       }}
     >
       {children}

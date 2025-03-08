@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DoctorLicence;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class DoctorLicenceController extends Controller
@@ -61,5 +62,22 @@ class DoctorLicenceController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function checkLicenceById(string $id): JsonResponse
+    {
+        $licence = DoctorLicence::where('licence_number', $id)->first();
+
+        if (!$licence) {
+            return response()->json([
+                'message' => 'Nincs ilyen licensz a rendszerben',
+                'status' => 'NOK'
+            ], 200);
+        }
+
+        return response()->json([
+            'status' => 'OK',
+            'data' => $licence
+        ], 200);
     }
 }

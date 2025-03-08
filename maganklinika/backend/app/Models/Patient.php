@@ -13,6 +13,7 @@ class Patient extends Model
     protected  $primaryKey = 'user_id';
 
     protected $fillable = [
+        'user_id',
         'taj_number',
         'birth_date',
         'address',

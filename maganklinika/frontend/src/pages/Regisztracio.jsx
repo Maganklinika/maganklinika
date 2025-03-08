@@ -14,12 +14,13 @@ const Regisztracio = () => {
   const [licence, setLicence] = useState("");
   const [address, setAddress] = useState("");
   const [password_confirmation, setPassword_confirmation] = useState("");
+  const [spec_id, setSpec] = useState("");
 
-  const { reg, errors, fetchSpecializations, specializations, setSpecializations } = useAuthContext();
+  const { reg, errors, fetchSpecializations, specializations, checkDoctorLicence, isValidLicence } = useAuthContext();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    await checkDoctorLicence(licence)
     //Összegyűjtjük egyetlen objektumban az űrlap adatokat
     const adat = {
       name: name,
@@ -32,8 +33,22 @@ const Regisztracio = () => {
       address: address,
       birth_date: birthDay,
       selectedValue: selectedValue,
+      specialization_id: spec_id,
     };
-    reg(adat);
+
+    if (selectedValue === "doctor" && isValidLicence.statusText === "OK") {
+      reg(adat);
+    } else if (selectedValue === "doctor" && isValidLicence.statusText === "NOK") {
+      <div>
+        {errors.licence && (
+          <span className="text-danger">{licence.name[0]}</span>
+        )}
+      </div>
+    } else if (selectedValue === "patient") {
+      reg(adat);
+    }
+
+
   };
 
   const radiobuttonClickHandle = (e) => {
@@ -49,6 +64,7 @@ const Regisztracio = () => {
     setSelectedValue(e);
     if (e === "doctor")
       fetchSpecializations();
+    setSpec("");
   }
 
 
@@ -56,7 +72,7 @@ const Regisztracio = () => {
     <div className="m-auto" style={{ maxWidth: "80vw" }}>
       <h1 className="text-center">Regisztráció</h1>
 
-      <Form onSubmit={handleSubmit}>
+      <Form>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Check
             inline
@@ -81,7 +97,7 @@ const Regisztracio = () => {
         </Form.Group>
       </Form >
       {selectedValue === "patient" ? (
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <Container>
             <Row className="mb-3">
               <Col md={6}>
@@ -176,7 +192,7 @@ const Regisztracio = () => {
                     />
                   </div>
                   <div>
-                    {errors.phone && (
+                    {errors.birthDay && (
                       <span className="text-danger">{errors.birthDay[0]}</span>
                     )}
                   </div>
@@ -204,7 +220,7 @@ const Regisztracio = () => {
                     />
                   </div>
                   <div>
-                    {errors.phone && (
+                    {errors.address && (
                       <span className="text-danger">{errors.address[0]}</span>
                     )}
                   </div>
@@ -228,7 +244,7 @@ const Regisztracio = () => {
                     />
                   </div>
                   <div>
-                    {errors.phone && (
+                    {errors.taj && (
                       <span className="text-danger">{errors.taj[0]}</span>
                     )}
                   </div>
@@ -281,7 +297,7 @@ const Regisztracio = () => {
           </div>
         </Form>
       ) : (
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <Container>
             <Row className="mb-3">
               <Col md={6}>
@@ -381,7 +397,7 @@ const Regisztracio = () => {
                     />
                   </div>
                   <div>
-                    {errors.phone && (
+                    {errors.licence && (
                       <span className="text-danger">{errors.licence[0]}</span>
                     )}
                   </div>
@@ -430,13 +446,20 @@ const Regisztracio = () => {
               <label htmlFor="pwd" className="form-label">
                 Specializáció kiválasztása:
               </label>
-              <Form.Select aria-label="select-spec">
+              <Form.Select aria-label="select-spec"
+                onChange={(event) => {
+
+                  setSpec(Number(event.target.value))
+                }}
+              >
+                <option value={"-1"}>Válassz a listából</option>
                 {
                   specializations ?
-                  specializations.map((e) => {
-                    return <option key={e.specialization_id} onSelect={(e) => { setSpecializations(e.target.value) }}>{e.specialization_name}</option>
-                  }):
-                  ""
+                    specializations.map((e) => {
+                      console.log(e.specialization_id)
+                      return <option key={e.specialization_id} value={e.specialization_id}>{e.specialization_name}</option>
+                    }) :
+                    ""
                 }
               </Form.Select>
 
