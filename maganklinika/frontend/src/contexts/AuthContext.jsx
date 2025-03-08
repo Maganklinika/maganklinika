@@ -7,120 +7,130 @@ import usePatientContext from "./PatientsContext";
 
 const AuthContext = createContext();
 
-export const AuthProvider = ( { children } ) => {
+export const AuthProvider = ({ children }) => {
   const { fetchAdminData } = useAdminContext();
   const { fetchPatientData } = usePatientContext();
   const { fetchDoctorData, fetchAppontmentsByDoctor
   } = useDoctorContext();
   const navigate = useNavigate();
-  const [ user, setUser ] = useState( null );
-  const [ navigation, setNavigation ] = useState( [] );
-  const [ isVerified, setIsVerified ] = useState( true );
-  const [ doctorsByRating, setDoctorsByRating ] = useState( [] );
-  const [ errors, setErrors ] = useState( {
+  const [user, setUser] = useState(null);
+  const [specializations, setSpecializations] = useState("");
+  const [navigation, setNavigation] = useState([]);
+  const [isVerified, setIsVerified] = useState(true);
+  const [doctorsByRating, setDoctorsByRating] = useState([]);
+  const [errors, setErrors] = useState({
     name: "",
     email: "",
     password: "",
     password_confirmation: "",
-  } );
+  });
 
-  const csrf = () => myAxios.get( "/sanctum/csrf-cookie" );
+  const csrf = () => myAxios.get("/sanctum/csrf-cookie");
 
   //bejelentkezett felhasználó adatainak lekérdezése
   const getUser = async () => {
-    const { data } = await myAxios.get( "/api/user" );
-    setUser( data );
-    sessionStorage.setItem( "isLoggedIn", JSON.stringify( true ) );
+    const { data } = await myAxios.get("/api/user");
+    setUser(data);
+    sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
   };
 
   const fetchNavigation = async () => {
     try {
-      const navData = await myAxios.get( "/api/nav-items" );
-      setNavigation( navData.data ); // A navigációs adatok beállítása
-    } catch ( error ) {
-      console.error( "Hiba a navigációs adatok lekérésekor:", error );
+      const navData = await myAxios.get("/api/nav-items");
+      setNavigation(navData.data); // A navigációs adatok beállítása
+    } catch (error) {
+      console.error("Hiba a navigációs adatok lekérésekor:", error);
     }
   };
+
+  const fetchSpecializations = async () => {
+    try {
+      const response = await myAxios.get("/api/specializations");
+      setSpecializations(response.data); // A navigációs adatok beállítása
+    } catch (error) {
+      console.error("Hiba a navigációs adatok lekérésekor:", error);
+    }
+  }
 
   const logout = async () => {
     try {
       await csrf(); // CSRF cookie lekérése
 
       // Kijelentkezés az API-ból
-      await myAxios.post( "/logout" );
-      setUser( null );
-      sessionStorage.setItem( "isLoggedIn", JSON.stringify( false ) );
-      setNavigation( [] );
-      navigate( "/" );
-    } catch ( error ) {
-      console.error( "Logout error:", error );
+      await myAxios.post("/logout");
+      setUser(null);
+      sessionStorage.setItem("isLoggedIn", JSON.stringify(false));
+      setNavigation([]);
+      navigate("/");
+    } catch (error) {
+      console.error("Logout error:", error);
     }
   };
 
-  const login = async ( { ...adat } ) => {
+  const login = async ({ ...adat }) => {
     //lekérjük a csrf tokent
     await csrf();
 
     try {
-      const response = await myAxios.post( "/login", adat );
-      console.log( "siker" );
+      const response = await myAxios.post("/login", adat);
+      console.log("siker");
       await getUser();
-      if ( response.data.success ) {
-        navigate( "/" );
+      if (response.data.success) {
+        navigate("/");
       }
-    } catch ( error ) {
-      console.log( error );
-      if ( error.response.status === 422 ) {
-        setErrors( error.response.data.errors );
+    } catch (error) {
+      console.log(error);
+      if (error.response.status === 422) {
+        setErrors(error.response.data.errors);
       }
     }
   };
 
   const fetchAVGDoctorsRatings = async () => {
-    const response = await myAxios.get( "/api/get-avg-ratings-by-doctors" );
-    setDoctorsByRating( response.data );
+    const response = await myAxios.get("/api/get-avg-ratings-by-doctors");
+    setDoctorsByRating(response.data);
   };
 
-  const reg = async ( { ...adat } ) => {
+  const reg = async ({ ...adat }) => {
     await csrf();
-    console.log( adat );
+    console.log(adat);
 
     try {
-      await myAxios.post( "/register", adat );
+      await myAxios.post("/register", adat);
       await getUser();
-      navigate( "/verify-email" );
-    } catch ( error ) {
-      console.log( error );
-      if ( error.response.status === 422 ) {
-        setErrors( error.response.data.errors );
+      navigate("/verify-email");
+    } catch (error) {
+      console.log(error);
+      if (error.response.status === 422) {
+        setErrors(error.response.data.errors);
       }
     }
   };
 
   const fetchEmailStatus = async () => {
     try {
-      const response = await myAxios.get( "/api/user/email-status" );
-      setIsVerified( response.data.email_verified );
-    } catch ( error ) {
-      console.error( "Email verification check failed:", error );
+      const response = await myAxios.get("/api/user/email-status");
+      setIsVerified(response.data.email_verified);
+    } catch (error) {
+      console.error("Email verification check failed:", error);
     }
   };
 
-  useEffect( () => {
-    const storedIsLoggedIn = JSON.parse( sessionStorage.getItem( "isLoggedIn" ) );
-    if ( storedIsLoggedIn ) {
+  useEffect(() => {
+    const storedIsLoggedIn = JSON.parse(sessionStorage.getItem("isLoggedIn"));
+    if (storedIsLoggedIn) {
       const checkUser = async () => {
         await getUser();
         await fetchEmailStatus();
       };
       checkUser();
     }
-  }, [] );
+  }, []);
 
-  useEffect( () => {
-    if ( user ) {
-      if ( !isVerified ) {
-        navigate( "/verify-email" );
+  useEffect(() => {
+    if (user) {
+      if (!isVerified) {
+        navigate("/verify-email");
       }
     }
 
@@ -128,27 +138,27 @@ export const AuthProvider = ( { children } ) => {
       await fetchEmailStatus();
     };
 
-    if ( user ) {
+    if (user) {
       verify();
     }
 
-    if ( user && user.role_id <= 3 && isVerified ) {
+    if (user && user.role_id <= 3 && isVerified) {
       fetchPatientData();
       fetchNavigation();
-      if ( user && user.role_id <= 2 && isVerified ) {
+      if (user && user.role_id <= 2 && isVerified) {
         fetchDoctorData();
-        fetchAppontmentsByDoctor( user.id )
-        if ( user && user.role_id === 1 && isVerified ) {
+        fetchAppontmentsByDoctor(user.id)
+        if (user && user.role_id === 1 && isVerified) {
           fetchAdminData();
         }
       }
-    } else if ( user && !isVerified ) {
-      navigate( "/verify-email" );
+    } else if (user && !isVerified) {
+      navigate("/verify-email");
     } else {
       fetchNavigation();
       fetchAVGDoctorsRatings();
     }
-  }, [ user ] ); // Csak akkor fut le, ha a user változik
+  }, [user]); // Csak akkor fut le, ha a user változik
 
   return (
     <AuthContext.Provider
@@ -163,7 +173,10 @@ export const AuthProvider = ( { children } ) => {
         fetchNavigation,
         isVerified,
         fetchEmailStatus,
+        fetchSpecializations,
         doctorsByRating,
+        specializations,
+        setSpecializations,
       }}
     >
       {children}
@@ -171,5 +184,5 @@ export const AuthProvider = ( { children } ) => {
   );
 };
 export default function useAuthContext() {
-  return useContext( AuthContext );
+  return useContext(AuthContext);
 }

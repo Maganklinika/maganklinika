@@ -64,3 +64,4 @@ Route::middleware(['auth:sanctum', Patient::class])
 Route::get('/nav-items', [NavigationRoleController::class, 'getNavItemsByRole']);
 Route::get('/get-avg-ratings-by-doctors', [DoctorRatingsViewController::class, 'getAVGRatingsByDoctors']);
 Route::get('/treatments', [TreatmentController::class, 'index']);
+Route::get('/specializations', [SpecializationController::class, 'index']);
