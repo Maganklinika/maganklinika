@@ -1,18 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Collapse, Table } from 'react-bootstrap';
 import usePatientContext from "../../contexts/PatientsContext";
 import TextFilter from "../filters/text_filter_top/TextFilter";
-
-import { myAxios } from '../../api/Axios';
 import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
 import { hu } from 'date-fns/locale';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { myAxios } from '../../api/Axios';
+import useAuthContext from '../../contexts/AuthContext';
 
 const DoctorAppointments = () => {
   const { filteredList, setFilteredList, appointmentsDoctor, setAppointmentsDoctor, fetchDoctorAppointments, fetchPatientData } = usePatientContext(); 
   const [openAppointments, setOpenAppointments] = useState({});
   const [view, setView] = useState('week');
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const {user} = useAuthContext();
+
 
   const localizer = dateFnsLocalizer({
     format,
@@ -21,6 +24,7 @@ const DoctorAppointments = () => {
     getDay,
     locales: { 'hu': hu },
   });
+
 
   const messages = {
     today: 'Ma',
@@ -32,16 +36,6 @@ const DoctorAppointments = () => {
     agenda: 'Napló',
   };
 
-  const groupAppointmentsByMonth = (appointments) => {
-    const grouped = {};
-    appointments.forEach((appointment) => {
-      const date = new Date(appointment.start_time); 
-      const monthYear = date.toLocaleString("hu-HU", { year: "numeric", month: "long" });
-      if (!grouped[monthYear]) grouped[monthYear] = [];
-      grouped[monthYear].push(appointment);
-    });
-    return grouped;
-  };
 
   const toggleAppointments = (doctorId, treatmentId) => {
     setOpenAppointments((prevState) => {
@@ -55,9 +49,55 @@ const DoctorAppointments = () => {
     fetchDoctorAppointments(doctorId);
   };
 
+  const generateEvents = (appointments) => {
+    return appointments.map((appointment) => {
+      const start = new Date(appointment.start_time.replace(" ", "T"));
+  
+      const [hours, minutes, seconds] = appointment.treatment.treatment_length.split(":").map(Number);
+      const durationInMinutes = hours * 60 + minutes;
+  
+      const end = new Date(start.getTime() + durationInMinutes * 60000);
+  
+      return {
+        start,
+        end,
+        title: `${appointment.patient ? appointment.patient.name : "Szabad időpont"} (${appointment.treatment.treatment_name})`,
+      };
+    });
+  };
+
+
   const handleViewChange = (view) => {
     setView(view);
   };
+
+  const handleNavigate = (date) => {
+    setCurrentDate(date);
+  };
+
+  const handleEventClick = (event) => {
+    if (window.confirm(`Biztosan le szeretnéd foglalni ezt az időpontot?\n\n${event.title}\n${event.start.toLocaleString()}`)) {
+      bookAppointment(event);
+    }
+  };
+  
+  const bookAppointment = async (event) => {
+    try {
+      const response = await myAxios.post("/api/book-appointment", {
+        doctor_id: event.d_id,
+        start_time: event.start_time.toISOString(), // -----------  Javítani az event elemeit. -> Cannot read properties of undefined (reading 'toISOString') -------------------------
+        patient_id: event.patient_id,
+      });
+  
+      alert("Sikeres foglalás!");
+      fetchDoctorAppointments(event.doctor_id);
+    } catch (error) {
+      console.error("Foglalási hiba:", error);
+      alert("Hiba történt a foglalás során.");
+    }
+  };
+  
+
 
   return (
     <div>
@@ -79,7 +119,6 @@ const DoctorAppointments = () => {
                 const doctorAppointments = appointmentsDoctor.filter(
                   (appointment) => appointment.doctor_id === doctor.d_id
                 );
-                const groupedAppointments = groupAppointmentsByMonth(doctorAppointments);
 
                 const events = doctorAppointments.map((appointment) => ({
                   start: new Date(appointment.start_time),
@@ -106,28 +145,26 @@ const DoctorAppointments = () => {
                       <td colSpan="4">
                         <Collapse in={openAppointments[doctor.d_id] === doctor.t_id}>
                           <div>
-                            {Object.keys(groupedAppointments).length > 0 ? (
-                              Object.entries(groupedAppointments).map(([month, appts]) => (
-                                <div key={month}>
-                                  <h5>{month}</h5>
-                                  <Calendar
-                                    localizer={localizer}
-                                    events={events}
-                                    startAccessor="start"
-                                    endAccessor="end"
-                                    views={['month', 'week', 'day']}
-                                    view={view}
-                                    onView={handleViewChange}
-                                    defaultView="week"
-                                    min={new Date(0, 0, 0, 7, 0)}
-                                    max={new Date(0, 0, 0, 18, 0)}
-                                    culture="hu"
-                                    firstDayOfWeek={1}
-                                    style={{ height: 500 }}
-                                    messages={messages}
-                                  />
-                                </div>
-                              ))
+                            {doctorAppointments.length > 0 ? (
+                              <Calendar
+                              localizer={localizer}
+                              events={generateEvents(doctorAppointments)}
+                              startAccessor="start"
+                              endAccessor="end"
+                              views={['month', 'week', 'day']}
+                              view={view}
+                              onView={handleViewChange}
+                              onNavigate={handleNavigate}
+                              date={currentDate}
+                              defaultView="week"
+                              min={new Date(0, 0, 0, 7, 0)}
+                              max={new Date(0, 0, 0, 18, 0)}
+                              culture="hu"
+                              firstDayOfWeek={1}  
+                              style={{ height: 500 }}
+                              messages={messages}
+                              onSelectEvent={handleEventClick}
+                            />
                             ) : (
                               <p>Nincs elérhető időpont.</p>
                             )}
@@ -151,3 +188,4 @@ const DoctorAppointments = () => {
 };
 
 export default DoctorAppointments;
+
