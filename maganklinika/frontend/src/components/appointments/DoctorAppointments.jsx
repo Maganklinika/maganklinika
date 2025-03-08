@@ -4,16 +4,16 @@ import usePatientContext from "../../contexts/PatientsContext";
 import TextFilter from "../filters/text_filter_top/TextFilter";
 import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
-import { hu } from 'date-fns/locale';  // Magyar lokalizáció importálása
+import { hu } from 'date-fns/locale';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 const DoctorAppointments = () => {
   const { filteredList, setFilteredList, appointmentsDoctor, setAppointmentsDoctor, fetchDoctorAppointments, fetchPatientData } = usePatientContext(); 
   const [openAppointments, setOpenAppointments] = useState({});
-  const [view, setView] = useState('week'); // Nézet alapértelmezetten hét
+  const [view, setView] = useState('week');
   const [currentDate, setCurrentDate] = useState(new Date());
 
-  // Használjuk a dateFnsLocalizer-t a date-fns magyar lokalizációjával
+
   const localizer = dateFnsLocalizer({
     format,
     parse,
@@ -22,7 +22,7 @@ const DoctorAppointments = () => {
     locales: { 'hu': hu },
   });
 
-  // Üzenetek beállítása magyarra
+
   const messages = {
     today: 'Ma',
     previous: 'Előző',
@@ -56,7 +56,7 @@ const DoctorAppointments = () => {
     fetchDoctorAppointments(doctorId);
   };
 
-  // Generáljuk az eseményeket a Calendar komponenshez
+
   const generateEvents = (appointments) => {
     return appointments.map((appointment) => ({
       start: new Date(appointment.start_time),
@@ -69,9 +69,8 @@ const DoctorAppointments = () => {
     setView(view);
   };
 
-  // A dátum navigálásának kezelése
   const handleNavigate = (date) => {
-    setCurrentDate(date); // Frissíti az aktuális dátumot
+    setCurrentDate(date);
   };
 
   return (
@@ -123,20 +122,20 @@ const DoctorAppointments = () => {
                             {doctorAppointments.length > 0 ? (
                               <Calendar
                               localizer={localizer}
-                              events={events} // Itt a helyes events változó
+                              events={events}
                               startAccessor="start"
                               endAccessor="end"
-                              views={['month', 'week', 'day']}  // A nézetek
-                              view={view}  // A kívánt nézet
-                              onView={handleViewChange}  // A nézetváltozás kezelése
-                              onNavigate={handleNavigate}  // A navigálás kezelése
-                              defaultView="week"  // Alapértelmezett nézet
+                              views={['month', 'week', 'day']}
+                              view={view}
+                              onView={handleViewChange}
+                              onNavigate={handleNavigate}
+                              defaultView="week"
                               min={new Date(0, 0, 0, 7, 0)}
                               max={new Date(0, 0, 0, 18, 0)}
                               culture="hu"
                               firstDayOfWeek={1}
                               style={{ height: 500 }}
-                              messages={messages}  // A magyar üzenetek átadása
+                              messages={messages}
                             />
                             ) : (
                               <p>Nincs elérhető időpont.</p>
