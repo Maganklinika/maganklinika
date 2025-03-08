@@ -129,6 +129,7 @@ const DoctorAppointments = () => {
                               view={view}
                               onView={handleViewChange}
                               onNavigate={handleNavigate}
+                              date={currentDate}
                               defaultView="week"
                               min={new Date(0, 0, 0, 7, 0)}
                               max={new Date(0, 0, 0, 18, 0)}
