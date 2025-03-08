@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Collapse, Table } from 'react-bootstrap';
 import usePatientContext from "../../contexts/PatientsContext";
 import TextFilter from "../filters/text_filter_top/TextFilter";
-
-import { myAxios } from '../../api/Axios';
 import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
-import { hu } from 'date-fns/locale';
+import { hu } from 'date-fns/locale';  // Magyar lokalizáció importálása
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 const DoctorAppointments = () => {
   const { filteredList, setFilteredList, appointmentsDoctor, setAppointmentsDoctor, fetchDoctorAppointments, fetchPatientData } = usePatientContext(); 
   const [openAppointments, setOpenAppointments] = useState({});
-  const [view, setView] = useState('week');
+  const [view, setView] = useState('week'); // Nézet alapértelmezetten hét
+  const [currentDate, setCurrentDate] = useState(new Date());
 
+  // Használjuk a dateFnsLocalizer-t a date-fns magyar lokalizációjával
   const localizer = dateFnsLocalizer({
     format,
     parse,
@@ -22,6 +22,7 @@ const DoctorAppointments = () => {
     locales: { 'hu': hu },
   });
 
+  // Üzenetek beállítása magyarra
   const messages = {
     today: 'Ma',
     previous: 'Előző',
@@ -55,8 +56,22 @@ const DoctorAppointments = () => {
     fetchDoctorAppointments(doctorId);
   };
 
+  // Generáljuk az eseményeket a Calendar komponenshez
+  const generateEvents = (appointments) => {
+    return appointments.map((appointment) => ({
+      start: new Date(appointment.start_time),
+      end: new Date(appointment.end_time),
+      title: `${appointment.patient_name} (${appointment.treatment_name})`,
+    }));
+  };
+
   const handleViewChange = (view) => {
     setView(view);
+  };
+
+  // A dátum navigálásának kezelése
+  const handleNavigate = (date) => {
+    setCurrentDate(date); // Frissíti az aktuális dátumot
   };
 
   return (
@@ -79,7 +94,6 @@ const DoctorAppointments = () => {
                 const doctorAppointments = appointmentsDoctor.filter(
                   (appointment) => appointment.doctor_id === doctor.d_id
                 );
-                const groupedAppointments = groupAppointmentsByMonth(doctorAppointments);
 
                 const events = doctorAppointments.map((appointment) => ({
                   start: new Date(appointment.start_time),
@@ -106,28 +120,24 @@ const DoctorAppointments = () => {
                       <td colSpan="4">
                         <Collapse in={openAppointments[doctor.d_id] === doctor.t_id}>
                           <div>
-                            {Object.keys(groupedAppointments).length > 0 ? (
-                              Object.entries(groupedAppointments).map(([month, appts]) => (
-                                <div key={month}>
-                                  <h5>{month}</h5>
-                                  <Calendar
-                                    localizer={localizer}
-                                    events={events}
-                                    startAccessor="start"
-                                    endAccessor="end"
-                                    views={['month', 'week', 'day']}
-                                    view={view}
-                                    onView={handleViewChange}
-                                    defaultView="week"
-                                    min={new Date(0, 0, 0, 7, 0)}
-                                    max={new Date(0, 0, 0, 18, 0)}
-                                    culture="hu"
-                                    firstDayOfWeek={1}
-                                    style={{ height: 500 }}
-                                    messages={messages}
-                                  />
-                                </div>
-                              ))
+                            {doctorAppointments.length > 0 ? (
+                              <Calendar
+                              localizer={localizer}
+                              events={events} // Itt a helyes events változó
+                              startAccessor="start"
+                              endAccessor="end"
+                              views={['month', 'week', 'day']}  // A nézetek
+                              view={view}  // A kívánt nézet
+                              onView={handleViewChange}  // A nézetváltozás kezelése
+                              onNavigate={handleNavigate}  // A navigálás kezelése
+                              defaultView="week"  // Alapértelmezett nézet
+                              min={new Date(0, 0, 0, 7, 0)}
+                              max={new Date(0, 0, 0, 18, 0)}
+                              culture="hu"
+                              firstDayOfWeek={1}
+                              style={{ height: 500 }}
+                              messages={messages}  // A magyar üzenetek átadása
+                            />
                             ) : (
                               <p>Nincs elérhető időpont.</p>
                             )}
@@ -151,3 +161,4 @@ const DoctorAppointments = () => {
 };
 
 export default DoctorAppointments;
+
