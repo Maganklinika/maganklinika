@@ -59,6 +59,7 @@ Route::middleware(['auth:sanctum', Patient::class])
         Route::get('/doctors-with-spec', [DoctorController::class, 'listDoctorsWithSpecialization']);
         Route::get('/get-treatments', [TreatmentController::class, 'index']);
         Route::get('/get-treatment/{id}', [TreatmentController::class, 'show']);
+        Route::post('/book-appointment', [DoctorAppointmentController::class, 'bookAppointment']);
         
     });
 

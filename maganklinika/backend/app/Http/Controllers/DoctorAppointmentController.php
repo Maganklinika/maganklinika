@@ -157,4 +157,32 @@ class DoctorAppointmentController extends Controller
 
         return response()->json($data);
     }
+
+    public function bookAppointment(Request $request)
+{
+
+    $request->validate([
+        'doctor_id' => 'required|exists:doctors,user_id',
+        'start_time' => 'required|date|exists:doctor_appointments,start_time',
+        'patient_id' => 'required|exists:patients,user_id',
+    ]);
+
+
+    $appointment = DoctorAppointment::where('doctor_id', $request->doctor_id)
+        ->where('start_time', $request->start_time)
+        ->where('status', 'v')
+        ->first();
+
+
+    if (!$appointment) {
+        return response()->json(['error' => 'Ez az időpont már foglalt vagy nem létezik'], 400);
+    }
+
+
+    $appointment->status = 'b';
+    $appointment->patient_id = $request->patient_id;
+    $appointment->save();
+
+    return response()->json(['message' => 'Foglalás sikeres!', 'appointment' => $appointment], 200);
+}
 }

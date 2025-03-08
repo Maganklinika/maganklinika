@@ -6,12 +6,15 @@ import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
 import { hu } from 'date-fns/locale';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { myAxios } from '../../api/Axios';
+import useAuthContext from '../../contexts/AuthContext';
 
 const DoctorAppointments = () => {
   const { filteredList, setFilteredList, appointmentsDoctor, setAppointmentsDoctor, fetchDoctorAppointments, fetchPatientData } = usePatientContext(); 
   const [openAppointments, setOpenAppointments] = useState({});
   const [view, setView] = useState('week');
   const [currentDate, setCurrentDate] = useState(new Date());
+  const {user} = useAuthContext();
 
 
   const localizer = dateFnsLocalizer({
@@ -72,7 +75,29 @@ const DoctorAppointments = () => {
     setCurrentDate(date);
   };
 
+  const handleEventClick = (event) => {
+    if (window.confirm(`Biztosan le szeretnéd foglalni ezt az időpontot?\n\n${event.title}\n${event.start.toLocaleString()}`)) {
+      bookAppointment(event);
+    }
+  };
   
+  const bookAppointment = async (event) => {
+    try {
+      const response = await myAxios.post("/api/book-appointment", {
+        doctor_id: event.d_id,
+        start_time: event.start_time.toISOString(), // -----------  Javítani az event elemeit. -> Cannot read properties of undefined (reading 'toISOString') -------------------------
+        patient_id: event.patient_id,
+      });
+  
+      alert("Sikeres foglalás!");
+      fetchDoctorAppointments(event.doctor_id);
+    } catch (error) {
+      console.error("Foglalási hiba:", error);
+      alert("Hiba történt a foglalás során.");
+    }
+  };
+  
+
 
   return (
     <div>
@@ -135,9 +160,10 @@ const DoctorAppointments = () => {
                               min={new Date(0, 0, 0, 7, 0)}
                               max={new Date(0, 0, 0, 18, 0)}
                               culture="hu"
-                              firstDayOfWeek={1}
+                              firstDayOfWeek={1}  
                               style={{ height: 500 }}
                               messages={messages}
+                              onSelectEvent={handleEventClick}
                             />
                             ) : (
                               <p>Nincs elérhető időpont.</p>
