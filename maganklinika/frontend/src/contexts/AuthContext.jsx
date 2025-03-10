@@ -10,12 +10,15 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const { fetchAdminData } = useAdminContext();
   const { fetchPatientData } = usePatientContext();
-  const { fetchDoctorData } = useDoctorContext();
+  const { fetchDoctorData, fetchAppontmentsByDoctor
+  } = useDoctorContext();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [specializations, setSpecializations] = useState("");
   const [navigation, setNavigation] = useState([]);
   const [isVerified, setIsVerified] = useState(true);
   const [doctorsByRating, setDoctorsByRating] = useState([]);
+  const [isValidLicence, setIsValidLicence] = useState("");
   const [errors, setErrors] = useState({
     name: "",
     email: "",
@@ -40,6 +43,15 @@ export const AuthProvider = ({ children }) => {
       console.error("Hiba a navigációs adatok lekérésekor:", error);
     }
   };
+
+  const fetchSpecializations = async () => {
+    try {
+      const response = await myAxios.get("/api/specializations");
+      setSpecializations(response.data); // A navigációs adatok beállítása
+    } catch (error) {
+      setErrors("Hiba a navigációs adatok lekérésekor:", error);
+    }
+  }
 
   const logout = async () => {
     try {
@@ -105,6 +117,15 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const checkDoctorLicence = async (licence) => {
+    try {
+      const response = await myAxios.get(`/api/checkLicenceById/${licence}`);
+      setIsValidLicence(response);
+    } catch (error) {
+      setErrors("Licence check failed:", error);
+    }
+  }
+
   useEffect(() => {
     const storedIsLoggedIn = JSON.parse(sessionStorage.getItem("isLoggedIn"));
     if (storedIsLoggedIn) {
@@ -136,6 +157,7 @@ export const AuthProvider = ({ children }) => {
       fetchNavigation();
       if (user && user.role_id <= 2 && isVerified) {
         fetchDoctorData();
+        fetchAppontmentsByDoctor(user.id)
         if (user && user.role_id === 1 && isVerified) {
           fetchAdminData();
         }
@@ -161,7 +183,13 @@ export const AuthProvider = ({ children }) => {
         fetchNavigation,
         isVerified,
         fetchEmailStatus,
+        fetchSpecializations,
         doctorsByRating,
+        specializations,
+        setSpecializations,
+        checkDoctorLicence,
+        isValidLicence,
+
       }}
     >
       {children}

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DoctorAppointmentController;
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\DoctorLicenceController;
 use App\Http\Controllers\DoctorRatingsViewController;
 use App\Http\Controllers\GetTreatmentBySpecializationController;
 use App\Http\Controllers\NavigationController;
@@ -59,8 +60,12 @@ Route::middleware(['auth:sanctum', Patient::class])
         Route::get('/doctors-with-spec', [DoctorController::class, 'listDoctorsWithSpecialization']);
         Route::get('/get-treatments', [TreatmentController::class, 'index']);
         Route::get('/get-treatment/{id}', [TreatmentController::class, 'show']);
+        Route::post('/book-appointment', [DoctorAppointmentController::class, 'bookAppointment']);
+        
     });
 
 Route::get('/nav-items', [NavigationRoleController::class, 'getNavItemsByRole']);
 Route::get('/get-avg-ratings-by-doctors', [DoctorRatingsViewController::class, 'getAVGRatingsByDoctors']);
 Route::get('/treatments', [TreatmentController::class, 'index']);
+Route::get('/specializations', [SpecializationController::class, 'index']);
+Route::get('/checkLicenceById/{id}', [DoctorLicenceController::class, 'checkLicenceById']);

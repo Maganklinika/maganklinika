@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\doctor;
+use App\Models\DoctorLicence;
 use App\Models\patient;
 use App\Models\Specialization;
 use App\Models\User;
@@ -58,6 +59,7 @@ class DatabaseSeeder extends Seeder
             NavigationSeeder::class,
             NavigationRoleSeeder::class,
             DoctorAppointmentSeeder::class,
+            DoctorLicenceSeeder::class,
         ]);
     }
 }
