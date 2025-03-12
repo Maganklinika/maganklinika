@@ -27,7 +27,6 @@ const Appointments = () => {
           title="Időpont keresése kezelések alapján"
           className="tab"
         >
-          Tab content for Profile
           <ReservationAppointments />
         </Tab>
       </Tabs>

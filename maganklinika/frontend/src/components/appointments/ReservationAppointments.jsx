@@ -1,57 +1,53 @@
-import React, { useState, useEffect } from "react";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
-import { Modal, Button, ListGroup, Form } from "react-bootstrap";
-import "./ReservationAppointments.css";
+import React, { useState } from "react";
+import { Button, Table, ListGroup, Form } from "react-bootstrap";
 import usePatientContext from "../../contexts/PatientsContext";
+import { myAxios } from "../../api/Axios";
+import useAuthContext from "../../contexts/AuthContext";
 
-
-
-const ReservationAppointments = () => {
-  const { appointmentsByDate, appointmentsDoctor, treatmentOptions } = usePatientContext();
-  const [date, setDate] = useState(new Date());
-  const [show, setShow] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
+const TreatmentAppointments = () => {
+  const { appointmentsDoctor, treatmentOptions, fetchDoctorAppointments } = usePatientContext();
+  const { user } = useAuthContext();
   const [selectedTreatment, setSelectedTreatment] = useState(null);
-
-  const handleDateClick = (value) => {
-    const formattedDate = value.toLocaleDateString("sv-SE");
-    setSelectedDate(formattedDate);
-    setShow(true);
-  };
+  const [availableDoctors, setAvailableDoctors] = useState([]);
 
   const handleTreatmentChange = (event) => {
-    setSelectedTreatment(event.target.value);
+    const selectedTreatmentName = event.target.value;
+    setSelectedTreatment(selectedTreatmentName);
+
+    const filteredDoctors = appointmentsDoctor.filter(
+      (appointment) => appointment.treatment_name === selectedTreatmentName
+    );
+
+    const uniqueDoctors = Array.from(
+      new Map(filteredDoctors.map((doc) => [doc.doctor_id, doc])).values()
+    );
+
+    setAvailableDoctors(uniqueDoctors);
   };
 
-  const getHighlightedDates = () => {
-    const highlightedDates = [];
-
-    if (selectedTreatment) {
-      appointmentsDoctor.forEach((doctor) => {
-        if (doctor.treatment_name === selectedTreatment) {
-          const date = doctor.start_time.split(" ")[0]; 
-          if (!highlightedDates.includes(date)) {
-            highlightedDates.push(date);
-          }
-        }
+  const bookAppointment = async (appointment) => {
+    try {
+      await myAxios.post("/api/book-appointment", {
+        doctor_id: appointment.doctor_id,
+        start_time: appointment.start_time,
+        patient_id: user.id,
       });
-    }
 
-    return highlightedDates;
+      alert("Sikeres foglalás!");
+      fetchDoctorAppointments(appointment.doctor_id);
+    } catch (error) {
+      console.error("Foglalási hiba:", error);
+      alert("Hiba történt a foglalás során.");
+    }
   };
 
   return (
-    <div className="container mt-4 calendarParent">
-      <h2>Foglalási Naptár</h2>
+    <div className="container mt-4">
+      <h2>Foglalás kezelések alapján</h2>
 
       <Form.Group controlId="treatmentSelect">
         <Form.Label>Válasszon kezelést</Form.Label>
-        <Form.Control
-          as="select"
-          value={selectedTreatment || ""}
-          onChange={handleTreatmentChange}
-        >
+        <Form.Control as="select" value={selectedTreatment || ""} onChange={handleTreatmentChange}>
           <option value="">Kérem válasszon kezelést</option>
           {treatmentOptions.map((treatment, index) => (
             <option key={index} value={treatment.treatment_name}>
@@ -61,49 +57,61 @@ const ReservationAppointments = () => {
         </Form.Control>
       </Form.Group>
 
-      <Calendar
-        className="calendar"
-        onClickDay={handleDateClick}
-        value={date}
-        tileClassName={({ date, view }) => {
-          const formattedDate = date.toLocaleDateString("sv-SE");
-          if (getHighlightedDates().includes(formattedDate)) {
-            return "highlighted";
-          }
-        }}
-      />
+      {selectedTreatment && (
+        <div className="mt-4">
+          <h3>Elérhető orvosok</h3>
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>Orvos neve</th>
+                <th>Értékelés</th>
+                <th>Szabad időpontok</th>
+              </tr>
+            </thead>
+            <tbody>
+              {availableDoctors.length > 0 ? (
+                availableDoctors.map((doctor) => {
+                  const availableAppointments = appointmentsDoctor.filter(
+                    (appointment) =>
+                      appointment.doctor_id === doctor.doctor_id &&
+                      appointment.treatment_name === selectedTreatment
+                  );
 
-
-      <Modal show={show} onHide={() => setShow(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Időpontok: {selectedDate}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {appointmentsByDate[selectedDate] &&
-          appointmentsByDate[selectedDate].length > 0 ? (
-            <ListGroup>
-              {appointmentsByDate[selectedDate].map((appointment, index) => (
-                <ListGroup.Item key={index}>
-                  {`
-                  Doctor ID: ${appointment.doctor_id}, 
-                  Treatment ID: ${appointment.treatment_id}, 
-                  Start Time: ${appointment.start_time}
-                  `}
-                </ListGroup.Item>
-              ))}
-            </ListGroup>
-          ) : (
-            <p>Nincs foglalás erre a napra.</p>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShow(false)}>
-            Bezárás
-          </Button>
-        </Modal.Footer>
-      </Modal>
+                  return (
+                    <tr key={doctor.doctor_id}>
+                      <td>{doctor.doctor_name}</td>
+                      <td>{doctor.rating ? `${doctor.rating}⭐` : "Nincs értékelés"}</td>
+                      <td>
+                        {availableAppointments.length > 0 ? (
+                          <ListGroup>
+                            {availableAppointments.map((appointment, index) => (
+                              <ListGroup.Item key={index} className="d-flex justify-content-between">
+                                {new Date(appointment.start_time).toLocaleString("hu-HU")}
+                                <Button
+                                  variant="success">
+                                  Foglalok
+                                </Button>
+                              </ListGroup.Item>
+                            ))}
+                          </ListGroup>
+                        ) : (
+                          <p>Nincs elérhető időpont.</p>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })
+              ) : (
+                <tr>
+                  <td colSpan="3">Nincs elérhető orvos erre a kezelésre.</td>
+                </tr>
+              )}
+            </tbody>
+          </Table>
+        </div>
+      )}
     </div>
   );
 };
 
-export default ReservationAppointments;
+export default TreatmentAppointments;
