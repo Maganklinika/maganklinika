@@ -69,3 +69,4 @@ Route::get('/get-avg-ratings-by-doctors', [DoctorRatingsViewController::class, '
 Route::get('/treatments', [TreatmentController::class, 'index']);
 Route::get('/specializations', [SpecializationController::class, 'index']);
 Route::get('/checkLicenceById/{id}', [DoctorLicenceController::class, 'checkLicenceById']);
+Route::get('/get-available-appointments', [DoctorAppointmentController::class, 'getAvailableAppointmentsByTreatment']);

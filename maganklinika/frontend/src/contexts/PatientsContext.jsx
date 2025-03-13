@@ -3,6 +3,7 @@ import { myAxios } from "../api/Axios";
 
 const PatientContext = createContext();
 
+
 export const PatientProvider = ({ children }) => {
   const [appointments, setAppointments] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
@@ -18,6 +19,21 @@ export const PatientProvider = ({ children }) => {
       console.error("Failed to fetch appointments:", error);
     }
   };
+
+  const fetchAvailableAppointments = async (treatmentId) => {
+  
+    try {
+      const response = await fetch(`http://localhost:8000/api/get-available-appointments?treatment_id=${treatmentId}`);
+      if (!response.ok) {
+        throw new Error(`Hiba az API hívásban: ${response.status}`);
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return undefined; // Ezen még változtatni
+    }
+  };
+  
 
   const fetchAppointmentstoDoctor = async () => {
     try {
@@ -96,6 +112,7 @@ export const PatientProvider = ({ children }) => {
         fetchDoctorAppointments,
         setTreatmentOptions,
         treatmentOptions,
+        fetchAvailableAppointments
       }}
     >
       {children}

@@ -185,4 +185,20 @@ class DoctorAppointmentController extends Controller
 
     return response()->json(['message' => 'Foglalás sikeres!', 'appointment' => $appointment], 200);
 }
+
+public function getAvailableAppointmentsByTreatment(Request $request)
+{
+    $treatmentId = $request->input('treatment_id');
+
+    if (!$treatmentId) {
+        return response()->json(['error' => 'Treatment ID is required'], 400);
+    }
+
+    $availableAppointments = DoctorAppointment::where('treatment_id', $treatmentId)
+        ->where('status', 'v')
+        ->orderBy('start_time', 'asc')
+        ->get();
+
+    return response()->json($availableAppointments);
+}
 }
