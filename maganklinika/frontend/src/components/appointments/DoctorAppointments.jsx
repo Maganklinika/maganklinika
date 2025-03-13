@@ -39,31 +39,37 @@ const DoctorAppointments = () => {
 
   const toggleAppointments = (doctorId, treatmentId) => {
     setOpenAppointments((prevState) => {
-      if (prevState[doctorId] === treatmentId) {
-        return { ...prevState, [doctorId]: null };
+      if (prevState.doctorId === doctorId && prevState.treatmentId === treatmentId) {
+        return { doctorId: null, treatmentId: null };
       }
-      const newState = {};
-      newState[doctorId] = treatmentId;
-      return newState;
+
+      return { doctorId, treatmentId };
     });
+
     fetchDoctorAppointments(doctorId);
   };
 
   const generateEvents = (appointments) => {
-    return appointments.map((appointment) => {
-      const start = new Date(appointment.start_time.replace(" ", "T"));
+    return appointments
+      .filter(
+        (appointment) =>
+          appointment.doctor_id === openAppointments.doctorId &&
+          appointment.treatment_id === openAppointments.treatmentId
+      )
+      .map((appointment) => {
+        const start = new Date(appointment.start_time.replace(" ", "T"));
   
-      const [hours, minutes, seconds] = appointment.treatment.treatment_length.split(":").map(Number);
-      const durationInMinutes = hours * 60 + minutes;
+        const [hours, minutes] = appointment.treatment.treatment_length.split(":").map(Number);
+        const durationInMinutes = hours * 60 + minutes;
   
-      const end = new Date(start.getTime() + durationInMinutes * 60000);
+        const end = new Date(start.getTime() + durationInMinutes * 60000);
   
-      return {
-        start,
-        end,
-        title: `${appointment.patient ? appointment.patient.name : "Szabad időpont"} (${appointment.treatment.treatment_name})`,
-      };
-    });
+        return {
+          start,
+          end,
+          title: `${appointment.patient ? appointment.patient.name : "Szabad időpont"} (${appointment.treatment.treatment_name})`,
+        };
+      });
   };
 
 
@@ -76,7 +82,7 @@ const DoctorAppointments = () => {
   };
 
   const handleEventClick = (event) => {
-    if (window.confirm(`Biztosan le szeretnéd foglalni ezt az időpontot?\n\n${event.title}\n${event.start.toLocaleString()}`)) {
+    if (window.confirm(`Biztosan le szeretné foglalni ezt az időpontot?\n\n${event.title}\n${event.start.toLocaleString()}`)) {
       bookAppointment(event);
     }
   };
@@ -143,7 +149,7 @@ const DoctorAppointments = () => {
                     </tr>
                     <tr>
                       <td colSpan="4">
-                        <Collapse in={openAppointments[doctor.d_id] === doctor.t_id}>
+                      <Collapse in={openAppointments.doctorId === doctor.d_id && openAppointments.treatmentId === doctor.t_id}>
                           <div>
                             {doctorAppointments.length > 0 ? (
                               <Calendar

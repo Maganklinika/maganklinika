@@ -3,26 +3,51 @@ import axios from "axios";
 const PRIMARY_BASE_URL = "http://localhost:8000";
 const SECONDARY_BASE_URL = "http://localhost:9000";
 
-// Létrehozzuk az Axios példányt
+// Axios példány létrehozása
 export const myAxios = axios.create({
   baseURL: PRIMARY_BASE_URL,
   withCredentials: true,
 });
 
+// Interceptorok
 myAxios.interceptors.response.use(
-  (response) => response, // Ha nincs hiba, térjen vissza a válasszal
+  (response) => response,
   async (error) => {
-    if (!error.config._retry && error.response && error.response.status >= 500) {
-      error.config._retry = true; // Megjelöljük, hogy már próbáltuk újra
-      console.warn(`Primary backend failed, retrying with secondary: ${SECONDARY_BASE_URL}`);
-      error.config.baseURL = SECONDARY_BASE_URL; // Másodlagos backend beállítása
-      return myAxios(error.config); // Újrapróbáljuk a kérést
+    const originalRequest = error.config;
+
+    // 🔴 Hálózati hiba esetén (`ERR_NETWORK`) ne ellenőrizzük a `response.status`-t, mert `response` nincs!
+    if (
+      !originalRequest._retry &&
+      (error.code === "ERR_NETWORK" ||
+        (error.response && error.response.status >= 500))
+    ) {
+      originalRequest._retry = true;
+
+      console.warn(
+        `⚠️ Primary backend failed (${PRIMARY_BASE_URL}), switching to secondary backend (${SECONDARY_BASE_URL})`
+      );
+
+      // 🔵 Ellenőrizzük, hogy a másodlagos szerver elérhető-e
+      try {
+        const secondaryCheck = await axios.get(SECONDARY_BASE_URL);
+        if (secondaryCheck.status === 200) {
+          console.warn(
+            `✅ Switching to secondary backend: ${SECONDARY_BASE_URL}`
+          );
+          originalRequest.baseURL = SECONDARY_BASE_URL; // Új alap URL
+          return myAxios(originalRequest); // Újrapróbálkozás
+        }
+      } catch (secondaryError) {
+        console.error("❌ Secondary backend is also unreachable.");
+        return Promise.reject(secondaryError);
+      }
     }
-    return Promise.reject(error); // Ha más hiba, dobja vissza
+
+    return Promise.reject(error);
   }
 );
 
-// Interceptorok hozzáadása
+// Kérések interceptorai
 myAxios.interceptors.request.use(
   (config) => {
     const token = document.cookie
@@ -32,8 +57,8 @@ myAxios.interceptors.request.use(
     if (token) {
       config.headers["X-XSRF-TOKEN"] = decodeURIComponent(token);
     }
+
     const user = localStorage.getItem("user");
-    // Ha van bejelentkezett felhasználó, állítsuk be az Authorization tokent
     if (user) {
       const parsedUser = JSON.parse(user);
       if (parsedUser.token) {
@@ -46,6 +71,7 @@ myAxios.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+// Hibakezelő interceptor
 myAxios.interceptors.response.use(
   (response) => response,
   (error) => {
