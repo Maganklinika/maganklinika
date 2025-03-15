@@ -38,7 +38,7 @@ COPY --chown=www:www . /var/www/html
 
 
 # PHP-FPM felhasználó beállítása
-USER root
+USER www
 
 # Composer telepítése és szükséges csomagok telepítése
 RUN composer install

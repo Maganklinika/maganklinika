@@ -1,8 +1,6 @@
 import React from "react";
-import useAuthContext from "../contexts/AuthContext";
 
 const Fooldal = () => {
-  const { user } = useAuthContext();
 
   return (
     <div>

@@ -71,12 +71,22 @@ class DoctorLicenceController extends Controller
         if (!$licence) {
             return response()->json([
                 'message' => 'Nincs ilyen licensz a rendszerben',
-                'status' => 'NOK'
+                'statusText' => 'NOK'
             ], 200);
         }
 
+        if ($licence->isUsed) {
+            return response()->json([
+                'message' => 'A licenszet már felhasználták.',
+                'statusText' => 'NOK'
+            ], 200);
+        }
+
+        $licence->isUsed = true;
+        $licence->save();
+
         return response()->json([
-            'status' => 'OK',
+            'statusText' => 'OK',
             'data' => $licence
         ], 200);
     }

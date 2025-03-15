@@ -4,24 +4,30 @@ import { Button, Col, Container, Form, Row } from "react-bootstrap";
 
 
 const Regisztracio = () => {
-  const [selectedValue, setSelectedValue] = useState("patient");
-  const [name, setName] = useState("");
-  const [birthDay, setBirthDay] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [phone, setPhone] = useState("");
-  const [taj, setTaj] = useState("");
-  const [licence, setLicence] = useState("");
-  const [address, setAddress] = useState("");
-  const [password_confirmation, setPassword_confirmation] = useState("");
-  const [spec_id, setSpec] = useState("");
+  const [ selectedValue, setSelectedValue ] = useState( "patient" );
+  const [ name, setName ] = useState( "" );
+  const [ birthDay, setBirthDay ] = useState( "" );
+  const [ email, setEmail ] = useState( "" );
+  const [ password, setPassword ] = useState( "" );
+  const [ phone, setPhone ] = useState( "" );
+  const [ taj, setTaj ] = useState( "" );
+  const [ licence, setLicence ] = useState( "" );
+  const [ address, setAddress ] = useState( "" );
+  const [ password_confirmation, setPassword_confirmation ] = useState( "" );
+  const [ spec_id, setSpec ] = useState( "" );
+  const [ localErrors, setLocalErrors ] = useState( {} ); // Lokális hibaállapot
 
   const { reg, errors, fetchSpecializations, specializations, checkDoctorLicence, isValidLicence } = useAuthContext();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async ( e ) => {
     e.preventDefault();
-    await checkDoctorLicence(licence)
-    //Összegyűjtjük egyetlen objektumban az űrlap adatokat
+
+    let licenceResponse = "";
+
+    if ( selectedValue === "doctor" ) {
+      licenceResponse = await checkDoctorLicence( licence );
+    }
+
     const adat = {
       name: name,
       email: email,
@@ -34,37 +40,38 @@ const Regisztracio = () => {
       birth_date: birthDay,
       selectedValue: selectedValue,
       specialization_id: spec_id,
-    };
-
-    if (selectedValue === "doctor" && isValidLicence.statusText === "OK") {
-      reg(adat);
-    } else if (selectedValue === "doctor" && isValidLicence.statusText === "NOK") {
-      <div>
-        {errors.licence && (
-          <span className="text-danger">{licence.name[0]}</span>
-        )}
-      </div>
-    } else if (selectedValue === "patient") {
-      reg(adat);
     }
 
+    console.log( licenceResponse.statusText )
+    if ( selectedValue === "doctor" ) {
+      if ( licenceResponse.statusText === "OK" ) {
+        reg( adat );
+      } else {
+        setLocalErrors( ( prev ) => ( {
+          ...prev,
+          licence: licenceResponse.message,
+        } ) );
+      }
+    } else if ( selectedValue === "patient" ) {
+      reg( adat );
+    }
 
   };
 
-  const radiobuttonClickHandle = (e) => {
-    setName("");
-    setBirthDay("");
-    setAddress("");
-    setEmail("");
-    setLicence("");
-    setPassword("");
-    setPassword_confirmation("");
-    setTaj("");
-    setPhone("");
-    setSelectedValue(e);
-    if (e === "doctor")
+  const radiobuttonClickHandle = ( e ) => {
+    setName( "" );
+    setBirthDay( "" );
+    setAddress( "" );
+    setEmail( "" );
+    setLicence( "" );
+    setPassword( "" );
+    setPassword_confirmation( "" );
+    setTaj( "" );
+    setPhone( "" );
+    setSelectedValue( e );
+    if ( e === "doctor" )
       fetchSpecializations();
-    setSpec("");
+    setSpec( "" );
   }
 
 
@@ -82,7 +89,7 @@ const Regisztracio = () => {
             id="patient"
             value="patient"
             checked={selectedValue === "patient"}
-            onChange={(e) => radiobuttonClickHandle(e.target.value)}
+            onChange={( e ) => radiobuttonClickHandle( e.target.value )}
           />
           <Form.Check
             inline
@@ -92,7 +99,7 @@ const Regisztracio = () => {
             id="doctor"
             value="doctor"
             checked={selectedValue === "doctor"}
-            onChange={(e) => radiobuttonClickHandle(e.target.value)}
+            onChange={( e ) => radiobuttonClickHandle( e.target.value )}
           />
         </Form.Group>
       </Form >
@@ -111,8 +118,8 @@ const Regisztracio = () => {
                       // value beállítása a state értékére
                       value={name}
                       // state értékének módosítása ha változik a beviteli mező tartalma
-                      onChange={(e) => {
-                        setName(e.target.value);
+                      onChange={( e ) => {
+                        setName( e.target.value );
                       }}
                       className="form-control"
                       id="name"
@@ -122,7 +129,7 @@ const Regisztracio = () => {
                   </div>
                   <div>
                     {errors.name && (
-                      <span className="text-danger">{errors.name[0]}</span>
+                      <span className="text-danger">{errors.name[ 0 ]}</span>
                     )}
                   </div>
 
@@ -135,8 +142,8 @@ const Regisztracio = () => {
                       // value beállítása a state értékére
                       value={phone}
                       // state értékének módosítása ha változik a beviteli mező tartalma
-                      onChange={(e) => {
-                        setPhone(e.target.value);
+                      onChange={( e ) => {
+                        setPhone( e.target.value );
                       }}
                       className="form-control"
                       id="phone"
@@ -146,7 +153,7 @@ const Regisztracio = () => {
                   </div>
                   <div>
                     {errors.phone && (
-                      <span className="text-danger">{errors.phone[0]}</span>
+                      <span className="text-danger">{errors.phone[ 0 ]}</span>
                     )}
                   </div>
 
@@ -159,8 +166,8 @@ const Regisztracio = () => {
                       // value beállítása a state értékére
                       value={email}
                       // state értékének módosítása ha változik a beviteli mező tartalma
-                      onChange={(e) => {
-                        setEmail(e.target.value);
+                      onChange={( e ) => {
+                        setEmail( e.target.value );
                       }}
                       className="form-control"
                       id="email"
@@ -170,7 +177,7 @@ const Regisztracio = () => {
                   </div>
                   <div>
                     {errors.email && (
-                      <span className="text-danger">{errors.email[0]}</span>
+                      <span className="text-danger">{errors.email[ 0 ]}</span>
                     )}
                   </div>
 
@@ -183,8 +190,8 @@ const Regisztracio = () => {
                       // value beállítása a state értékére
                       value={birthDay}
                       // state értékének módosítása ha változik a beviteli mező tartalma
-                      onChange={(e) => {
-                        setBirthDay(e.target.value);
+                      onChange={( e ) => {
+                        setBirthDay( e.target.value );
                       }}
                       className="form-control"
                       id="birthDay"
@@ -193,7 +200,7 @@ const Regisztracio = () => {
                   </div>
                   <div>
                     {errors.birthDay && (
-                      <span className="text-danger">{errors.birthDay[0]}</span>
+                      <span className="text-danger">{errors.birthDay[ 0 ]}</span>
                     )}
                   </div>
                 </Form.Group>
@@ -210,8 +217,8 @@ const Regisztracio = () => {
                       // value beállítása a state értékére
                       value={address}
                       // state értékének módosítása ha változik a beviteli mező tartalma
-                      onChange={(e) => {
-                        setAddress(e.target.value);
+                      onChange={( e ) => {
+                        setAddress( e.target.value );
                       }}
                       className="form-control"
                       id="address"
@@ -221,7 +228,7 @@ const Regisztracio = () => {
                   </div>
                   <div>
                     {errors.address && (
-                      <span className="text-danger">{errors.address[0]}</span>
+                      <span className="text-danger">{errors.address[ 0 ]}</span>
                     )}
                   </div>
 
@@ -234,8 +241,8 @@ const Regisztracio = () => {
                       // value beállítása a state értékére
                       value={taj}
                       // state értékének módosítása ha változik a beviteli mező tartalma
-                      onChange={(e) => {
-                        setTaj(e.target.value);
+                      onChange={( e ) => {
+                        setTaj( e.target.value );
                       }}
                       className="form-control"
                       id="taj"
@@ -245,7 +252,7 @@ const Regisztracio = () => {
                   </div>
                   <div>
                     {errors.taj && (
-                      <span className="text-danger">{errors.taj[0]}</span>
+                      <span className="text-danger">{errors.taj[ 0 ]}</span>
                     )}
                   </div>
 
@@ -256,8 +263,8 @@ const Regisztracio = () => {
                     <input
                       type="password"
                       value={password}
-                      onChange={(e) => {
-                        setPassword(e.target.value);
+                      onChange={( e ) => {
+                        setPassword( e.target.value );
                       }}
                       className="form-control"
                       id="pwd"
@@ -266,7 +273,7 @@ const Regisztracio = () => {
                     />
                     <div>
                       {errors.password && (
-                        <span className="text-danger">{errors.password[0]}</span>
+                        <span className="text-danger">{errors.password[ 0 ]}</span>
                       )}
                     </div>
                   </div>
@@ -277,8 +284,8 @@ const Regisztracio = () => {
                     <input
                       type="password"
                       value={password_confirmation}
-                      onChange={(e) => {
-                        setPassword_confirmation(e.target.value);
+                      onChange={( e ) => {
+                        setPassword_confirmation( e.target.value );
                       }}
                       className="form-control"
                       id="pwdcmn"
@@ -292,7 +299,7 @@ const Regisztracio = () => {
           </Container>
           <div className=" text-center">
             <Button type="submit" className="btn btn-primary w-50">
-              Login
+              Regisztráció
             </Button>
           </div>
         </Form>
@@ -311,8 +318,8 @@ const Regisztracio = () => {
                       // value beállítása a state értékére
                       value={name}
                       // state értékének módosítása ha változik a beviteli mező tartalma
-                      onChange={(e) => {
-                        setName(e.target.value);
+                      onChange={( e ) => {
+                        setName( e.target.value );
                       }}
                       className="form-control"
                       id="name"
@@ -322,7 +329,7 @@ const Regisztracio = () => {
                   </div>
                   <div>
                     {errors.name && (
-                      <span className="text-danger">{errors.name[0]}</span>
+                      <span className="text-danger">{errors.name[ 0 ]}</span>
                     )}
                   </div>
 
@@ -335,8 +342,8 @@ const Regisztracio = () => {
                       // value beállítása a state értékére
                       value={phone}
                       // state értékének módosítása ha változik a beviteli mező tartalma
-                      onChange={(e) => {
-                        setPhone(e.target.value);
+                      onChange={( e ) => {
+                        setPhone( e.target.value );
                       }}
                       className="form-control"
                       id="phone"
@@ -346,7 +353,7 @@ const Regisztracio = () => {
                   </div>
                   <div>
                     {errors.phone && (
-                      <span className="text-danger">{errors.phone[0]}</span>
+                      <span className="text-danger">{errors.phone[ 0 ]}</span>
                     )}
                   </div>
 
@@ -359,8 +366,8 @@ const Regisztracio = () => {
                       // value beállítása a state értékére
                       value={email}
                       // state értékének módosítása ha változik a beviteli mező tartalma
-                      onChange={(e) => {
-                        setEmail(e.target.value);
+                      onChange={( e ) => {
+                        setEmail( e.target.value );
                       }}
                       className="form-control"
                       id="email"
@@ -370,7 +377,7 @@ const Regisztracio = () => {
                   </div>
                   <div>
                     {errors.email && (
-                      <span className="text-danger">{errors.email[0]}</span>
+                      <span className="text-danger">{errors.email[ 0 ]}</span>
                     )}
                   </div>
                 </Form.Group>
@@ -387,8 +394,8 @@ const Regisztracio = () => {
                       // value beállítása a state értékére
                       value={licence}
                       // state értékének módosítása ha változik a beviteli mező tartalma
-                      onChange={(e) => {
-                        setLicence(e.target.value);
+                      onChange={( e ) => {
+                        setLicence( e.target.value );
                       }}
                       className="form-control"
                       id="licence"
@@ -398,7 +405,7 @@ const Regisztracio = () => {
                   </div>
                   <div>
                     {errors.licence && (
-                      <span className="text-danger">{errors.licence[0]}</span>
+                      <span className="text-danger">{errors.licence[ 0 ]}</span>
                     )}
                   </div>
 
@@ -409,8 +416,8 @@ const Regisztracio = () => {
                     <input
                       type="password"
                       value={password}
-                      onChange={(e) => {
-                        setPassword(e.target.value);
+                      onChange={( e ) => {
+                        setPassword( e.target.value );
                       }}
                       className="form-control"
                       id="pwd"
@@ -419,7 +426,7 @@ const Regisztracio = () => {
                     />
                     <div>
                       {errors.password && (
-                        <span className="text-danger">{errors.password[0]}</span>
+                        <span className="text-danger">{errors.password[ 0 ]}</span>
                       )}
                     </div>
                   </div>
@@ -430,8 +437,8 @@ const Regisztracio = () => {
                     <input
                       type="password"
                       value={password_confirmation}
-                      onChange={(e) => {
-                        setPassword_confirmation(e.target.value);
+                      onChange={( e ) => {
+                        setPassword_confirmation( e.target.value );
                       }}
                       className="form-control"
                       id="pwdcmn"
@@ -447,27 +454,29 @@ const Regisztracio = () => {
                 Specializáció kiválasztása:
               </label>
               <Form.Select aria-label="select-spec"
-                onChange={(event) => {
+                onChange={( event ) => {
 
-                  setSpec(Number(event.target.value))
+                  setSpec( Number( event.target.value ) )
                 }}
               >
                 <option value={"-1"}>Válassz a listából</option>
                 {
                   specializations ?
-                    specializations.map((e) => {
-                      console.log(e.specialization_id)
+                    specializations.map( ( e ) => {
                       return <option key={e.specialization_id} value={e.specialization_id}>{e.specialization_name}</option>
-                    }) :
+                    } ) :
                     ""
                 }
               </Form.Select>
 
             </div>
           </Container>
+          {localErrors.licence && (
+            <span className="text-danger">{localErrors.licence}</span>
+          )}
           <div className=" text-center">
             <Button type="submit" className="btn btn-primary w-50">
-              Login
+              Regisztráció
             </Button>
           </div>
         </Form>

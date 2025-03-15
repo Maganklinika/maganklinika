@@ -35,11 +35,11 @@ export const PatientProvider = ({ children }) => {
   };
   
 
-  const fetchAppointmentstoDoctor = async () => {
+  const fetchAppointmentstoDoctor = async (id) => {
     try {
       const doctorId = "id_a_doktortól";
       const response = await myAxios.get("/api/get-appointments-by-doctor", {
-        params: { doctor_id: 2 },
+        params: { doctor_id: id },
       });
       setAppointmentsDoctor(response.data);
     } catch (error) {
