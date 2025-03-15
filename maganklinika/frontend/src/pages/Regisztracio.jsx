@@ -80,7 +80,7 @@ const Regisztracio = () => {
       <h1 className="text-center">Regisztráció</h1>
 
       <Form>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Group className="mb-3 text-center" controlId="formBasicEmail">
           <Form.Check
             inline
             label="Páciens"
@@ -297,11 +297,6 @@ const Regisztracio = () => {
               </Col>
             </Row>
           </Container>
-          <div className=" text-center">
-            <Button type="submit" className="btn btn-primary w-50">
-              Regisztráció
-            </Button>
-          </div>
         </Form>
       ) : (
         <Form onSubmit={handleSubmit}>
@@ -474,14 +469,14 @@ const Regisztracio = () => {
           {localErrors.licence && (
             <span className="text-danger">{localErrors.licence}</span>
           )}
-          <div className=" text-center">
-            <Button type="submit" className="btn btn-primary w-50">
-              Regisztráció
-            </Button>
-          </div>
         </Form>
       )
       }
+      <div className="text-center">
+        <Button type="submit" className="btn btn-primary w-50">
+          Regisztráció
+        </Button>
+      </div>
     </div >
   );
 };
