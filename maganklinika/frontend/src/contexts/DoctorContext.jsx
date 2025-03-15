@@ -18,6 +18,24 @@ export const DoctorProvider = ( { children } ) => {
   const [ appointmentsByPatients, setAppointmentsByPatients ] = useState( [] );
   const [ appointmentCount, setAppointmentCount ] = useState( [] );
 
+
+  const appointmentDeleteByDoctor = async ( id ) => {
+    try {
+      await myAxios.put( `/api/appointment-delete-by-doctor/${ id }` )
+    } catch ( error ) {
+      console.log( error )
+    }
+  }
+
+  const appointmentCancelDeleteByDoctor = async ( id ) => {
+    try {
+      await myAxios.put( `/api/appointment-cancel-delete-by-doctor/${ id }` )
+    } catch ( error ) {
+      console.log( error )
+    }
+  }
+
+
   const fetchAllPatients = async () => {
     const response = await myAxios.get( "/api/get-all-patients-with-name" );
     setAllPatients( response.data );
@@ -101,6 +119,8 @@ export const DoctorProvider = ( { children } ) => {
         fetchAppointmentByPatients,
         appointmentsByPatients,
         appointmentCount,
+        appointmentDeleteByDoctor,
+        appointmentCancelDeleteByDoctor,
       }}
     >
       {children}

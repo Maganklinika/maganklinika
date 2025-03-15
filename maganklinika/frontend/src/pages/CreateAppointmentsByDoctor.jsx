@@ -6,9 +6,10 @@ import "./appointment.css";
 import usePatientContext from "../contexts/PatientsContext";
 import useAuthContext from "../contexts/AuthContext";
 import { myAxios } from "../api/Axios";
+import ListGroupRow from "../components/listgroup/ListGroupRow";
 
 const CreateAppointmentsByDoctor = () => {
-  const { appointmentsByDoctor, appointmentsByDate, fetchAppontmentsByDoctor } = useDoctorContext();
+  const { appointmentsByDoctor, appointmentsByDate, fetchAppontmentsByDoctor} = useDoctorContext();
   const { appointments } = usePatientContext();
   const { user } = useAuthContext();
   const [ date, setDate ] = useState( new Date() );
@@ -18,11 +19,14 @@ const CreateAppointmentsByDoctor = () => {
   const [ startTime, setStartTime ] = useState( "7:00" );
   const [ endTime, setEndTime ] = useState( "18:00" );
 
+
   const handleDateClick = ( value ) => {
     const formattedDate = value.toLocaleDateString( "sv-SE" );
     setSelectedDate( formattedDate );
     setShow( true );
   };
+
+
 
   // Az időpontok generálása 7:00 és 14:00 között, 30 perces lépésekben
   const createStartTimes = () => {
@@ -152,7 +156,7 @@ const CreateAppointmentsByDoctor = () => {
         tileClassName={tileClassName}
       />
 
-      <Modal show={show} onHide={() => setShow( false )}>
+      <Modal size="lg" show={show} onHide={() => setShow( false )}>
         <Modal.Header closeButton>
           <Modal.Title>Nap: {selectedDate}</Modal.Title>
         </Modal.Header>
@@ -162,12 +166,17 @@ const CreateAppointmentsByDoctor = () => {
             <div>
               <ListGroup>
                 {appointmentsByDate[ selectedDate ].map(
-                  ( appointmentsByDate, index ) => (
-                    <ListGroup.Item key={index}>
-                      {`
-                    Treatment ID: ${ appointmentsByDate.treatment_id }, 
-                    Start Time: ${ appointmentsByDate.start_time },
-                    `}
+                  ( e, index ) => (
+                    <ListGroup.Item key={index} className={`${ 
+                      e.status === "v"
+                        ? "bg-success text-white"
+                        : e.status === "c"
+                          ? "bg-danger text-white"
+                          : e.status === "b"
+                            ? "bg-warning text-dark"
+                            : "bg-light"
+                      }`}>
+                      <ListGroupRow appointmentsByDate={e} />
                     </ListGroup.Item>
                   )
                 )}
