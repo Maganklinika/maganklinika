@@ -73,11 +73,13 @@ const Bejelentkezes = () => {
           <button type="submit" className="btn btn-primary w-100">
             Login
           </button>
-
+            
           <p>
+          <span><em>Még nincs fiókja? Az alábbi linken regisztráljon:</em></span>
             <Link className="nav-link text-info" to="/register">
               Regisztráció
             </Link>
+            <span><em>Efelejtett jelszó esetén kattintson az alábbira:</em></span>
             <Link className="nav-link text-info" to="/forgot-password">
               Jelszó resetelése
             </Link>
