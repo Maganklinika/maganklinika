@@ -48,7 +48,6 @@ Route::middleware(['auth:sanctum', Doctor::class])
         Route::get('/get-all-patients-with-name', [PatientController::class, 'getAllPatientsWithName']);
         Route::get('/get-patients-to-auth-doctor', [PatientController::class, 'getPatientsToAuthDoctor']);
         Route::get('/get-appointments-count', [DoctorAppointmentController::class, 'getAppointmentsCount']);
-        Route::get('/get-appointments-by-patients/{id}', [DoctorAppointmentController::class, 'getAppointmentsByPatients']);
         Route::put('/appointment-delete-by-doctor/{id}', [DoctorAppointmentController::class, 'appointmentDeleteByDoctor']);
         Route::put('/appointment-cancel-delete-by-doctor/{id}', [DoctorAppointmentController::class, 'appointmentCancelDeleteByDoctor']);
     });
@@ -63,6 +62,8 @@ Route::middleware(['auth:sanctum', Patient::class])
         Route::get('/get-treatments', [TreatmentController::class, 'index']);
         Route::get('/get-treatment/{id}', [TreatmentController::class, 'show']);
         Route::post('/book-appointment', [DoctorAppointmentController::class, 'bookAppointment']);
+        Route::get('/user-data', [UserController:: class, 'userData']);
+        Route::get('/get-appointments-by-patients/{id}', [DoctorAppointmentController::class, 'getAppointmentsByPatients']);
     });
 
 Route::get('/nav-items', [NavigationRoleController::class, 'getNavItemsByRole']);

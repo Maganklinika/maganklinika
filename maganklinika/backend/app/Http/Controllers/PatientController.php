@@ -75,4 +75,6 @@ class PatientController extends Controller
         return response()->json($data);
 
     }
+
+    
 }

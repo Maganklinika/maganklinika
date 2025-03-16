@@ -24,13 +24,15 @@ export const AuthProvider = ( { children } ) => {
     password: "",
     password_confirmation: "",
   } );
-
+  const [ userData, setUserData] = useState({});
+  
   const csrf = () => myAxios.get( "/sanctum/csrf-cookie" );
 
   //bejelentkezett felhasználó adatainak lekérdezése
   const getUser = async () => {
-    const { data } = await myAxios.get( "/api/user" );
-    setUser( data );
+    const response = await myAxios.get( "/api/user-data" );
+    setUser( response.data[0] );
+    setUserData(response.data);
     sessionStorage.setItem( "isLoggedIn", JSON.stringify( true ) );
   };
 
@@ -176,7 +178,7 @@ export const AuthProvider = ( { children } ) => {
         specializations,
         setSpecializations,
         checkDoctorLicence,
-
+        userData,
       }}
     >
       {children}

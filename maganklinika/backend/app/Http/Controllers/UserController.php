@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Doctor;
+use App\Models\Patient;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
@@ -82,5 +85,27 @@ class UserController extends Controller
         $user->save();
 
         return response()->json(['message' => 'Sikeres módosítás', 'user' => $user], 200);
+    }
+
+    public function userData()
+    {
+        $user = Auth::user();
+        if ($user->role_id === 2) {
+            $doctor = Doctor::find($user->id);
+            $data = DB::select(
+                "SELECT * FROM `users` u 
+                INNER JOIN doctors d on d.user_id = u.id
+                where u.id = {$doctor->user_id};"
+            );
+            return response()->json($data);
+        } elseif ($user->role_id === 3) {
+            $patient = Patient::find($user->id);
+            $data = DB::select(
+                "SELECT * FROM `users` u 
+                INNER JOIN patients p on p.user_id = u.id
+                where u.id = {$patient->user_id}"
+            );
+            return response()->json($data);
+        }
     }
 }

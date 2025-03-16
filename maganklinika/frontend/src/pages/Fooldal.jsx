@@ -10,7 +10,7 @@ const Fooldal = () => {
   const [ specializations, setSpecializations ] = useState( [] );
   const navigate = useNavigate();
 
-
+  console.log(user)
   const fetchAllSpecializations = async () => {
     try {
       const response = await myAxios.get( "/api/specializations" );
