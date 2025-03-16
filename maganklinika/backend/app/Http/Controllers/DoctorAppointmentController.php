@@ -159,46 +159,114 @@ class DoctorAppointmentController extends Controller
     }
 
     public function bookAppointment(Request $request)
-{
+    {
 
-    $request->validate([
-        'doctor_id' => 'required|exists:doctors,user_id',
-        'start_time' => 'required|date|exists:doctor_appointments,start_time',
-        'patient_id' => 'required|exists:patients,user_id',
-    ]);
-
-
-    $appointment = DoctorAppointment::where('doctor_id', $request->doctor_id)
-        ->where('start_time', $request->start_time)
-        ->where('status', 'v')
-        ->first();
+        $request->validate([
+            'doctor_id' => 'required|exists:doctors,user_id',
+            'start_time' => 'required|date|exists:doctor_appointments,start_time',
+            'patient_id' => 'required|exists:patients,user_id',
+        ]);
 
 
-    if (!$appointment) {
-        return response()->json(['error' => 'Ez az időpont már foglalt vagy nem létezik'], 400);
+        $appointment = DoctorAppointment::where('doctor_id', $request->doctor_id)
+            ->where('start_time', $request->start_time)
+            ->where('status', 'v')
+            ->first();
+
+
+        if (!$appointment) {
+            return response()->json(['error' => 'Ez az időpont már foglalt vagy nem létezik'], 400);
+        }
+
+
+        $appointment->status = 'b';
+        $appointment->patient_id = $request->patient_id;
+        $appointment->save();
+
+        return response()->json(['message' => 'Foglalás sikeres!', 'appointment' => $appointment], 200);
     }
 
+    public function getAvailableAppointmentsByTreatment(Request $request)
+    {
+        $treatmentId = $request->input('treatment_id');
 
-    $appointment->status = 'b';
-    $appointment->patient_id = $request->patient_id;
-    $appointment->save();
+        if (!$treatmentId) {
+            return response()->json(['error' => 'Treatment ID is required'], 400);
+        }
 
-    return response()->json(['message' => 'Foglalás sikeres!', 'appointment' => $appointment], 200);
-}
+        $availableAppointments = DoctorAppointment::where('treatment_id', $treatmentId)
+            ->where('status', 'v')
+            ->orderBy('start_time', 'asc')
+            ->get();
 
-public function getAvailableAppointmentsByTreatment(Request $request)
-{
-    $treatmentId = $request->input('treatment_id');
-
-    if (!$treatmentId) {
-        return response()->json(['error' => 'Treatment ID is required'], 400);
+        return response()->json($availableAppointments);
     }
 
-    $availableAppointments = DoctorAppointment::where('treatment_id', $treatmentId)
-        ->where('status', 'v')
-        ->orderBy('start_time', 'asc')
-        ->get();
+    public function appointmentDeleteByDoctor(string $id)
+    {
 
-    return response()->json($availableAppointments);
-}
+        // Keresd ki a rekordot
+        $record = DoctorAppointment::find($id);
+
+        // Ha nem található, térj vissza hibával
+        if (!$record) {
+            return response()->json([
+                'message' => 'Nem található ilyen időpont.',
+                'status' => 'error'
+            ], 404);
+        }
+
+        // Ha már törölték, ne frissítsük újra
+        if ($record->status === 'c') {
+            return response()->json([
+                'message' => 'Ez az időpont már törölve lett.',
+                'status' => 'error'
+            ], 400);
+        }
+
+        // Status frissítése
+        $record->status = 'c';
+        $record->save();
+
+        // Sikeres válasz visszaadása
+        return response()->json([
+            'message' => 'Az időpont törölve lett az orvos által.',
+            'status' => 'success',
+            'data' => $record
+        ], 200);
+    }
+
+    public function appointmentCancelDeleteByDoctor(string $id)
+    {
+
+        // Keresd ki a rekordot
+        $record = DoctorAppointment::find($id);
+
+        // Ha nem található, térj vissza hibával
+        if (!$record) {
+            return response()->json([
+                'message' => 'Nem található ilyen időpont.',
+                'status' => 'error'
+            ], 404);
+        }
+
+        // Ha már törölték, ne frissítsük újra
+        if ($record->status === 'v') {
+            return response()->json([
+                'message' => 'Ez az időpont szabad.',
+                'status' => 'error'
+            ], 400);
+        }
+
+        // Status frissítése
+        $record->status = 'v';
+        $record->save();
+
+        // Sikeres válasz visszaadása
+        return response()->json([
+            'message' => 'Az időpont vissza lett állítva szabadra.',
+            'status' => 'success',
+            'data' => $record
+        ], 200);
+    }
 }

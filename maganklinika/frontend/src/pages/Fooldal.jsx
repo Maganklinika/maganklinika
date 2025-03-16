@@ -1,26 +1,36 @@
 import React, { useState, useEffect } from "react";
 import { myAxios } from "../api/Axios";
 import './Fooldal.css';
-import { useNavigate } from "react-router-dom";
+import { UNSAFE_RemixErrorBoundary, useNavigate } from "react-router-dom";
 import Carousel from 'react-bootstrap/Carousel';
+import useAuthContext from "../contexts/AuthContext";
 
 const Fooldal = () => {
-  const [specializations, setSpecializations] = useState([]);
+  const { user } = useAuthContext();
+  const [ specializations, setSpecializations ] = useState( [] );
   const navigate = useNavigate();
 
- 
+
   const fetchAllSpecializations = async () => {
     try {
-      const response = await myAxios.get("/api/specializations");
-      setSpecializations(response.data);
-    } catch (error) {
-      console.error("Hiba történt a specializációk lekérésekor:", error);
+      const response = await myAxios.get( "/api/specializations" );
+      setSpecializations( response.data );
+    } catch ( error ) {
+      console.error( "Hiba történt a specializációk lekérésekor:", error );
     }
   };
 
-  useEffect(() => {
+  const handleClick = () => {
+    if ( user && user.role_id === 3 ) {
+      navigate( "/appointments" )
+    } else { 
+      navigate( "/login" )
+    }
+  }
+
+  useEffect( () => {
     fetchAllSpecializations();
-  }, []);
+  }, [] );
 
   // Carousel
   const UncontrolledExample = () => {
@@ -87,15 +97,15 @@ const Fooldal = () => {
         <h3>Az alábbi témákban fordulhatnak hozzánk:</h3>
         <ul>
           {specializations.length > 0 ? (
-            specializations.map((spec, index) => (
+            specializations.map( ( spec, index ) => (
               <li key={index}>{spec.specialization_name}</li>
-            ))
+            ) )
           ) : (
             <li>Loading...</li>
           )}
         </ul>
       </div>
-      <button className="appointment-button" onClick={() => navigate("/login")}>
+      <button className="appointment-button" onClick={()=>handleClick()}>
         Időpontfoglalás
       </button>
 

@@ -10,10 +10,6 @@ class DoctorAppointment extends Model
     /** @use HasFactory<\Database\Factories\DoctorAppointmentFactory> */
     use HasFactory;
 
-    protected $primaryKey = null; // Nincs egyetlen elsődleges kulcs
-    public $incrementing = false; // Mivel nem auto-increment, így ezt false-ra állítjuk
-    protected $keyType = 'string'; // Az elsődleges kulcs típusa, ha nem integer
-
     protected $fillable = [
         'doctor_id',
         'start_time',
