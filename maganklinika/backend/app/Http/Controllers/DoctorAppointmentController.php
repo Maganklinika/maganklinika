@@ -269,4 +269,30 @@ class DoctorAppointmentController extends Controller
             'data' => $record
         ], 200);
     }
+
+    
+    public function appointmentRating(Request $request)
+    {
+        $validated = $request->validate([
+            'doctor_id' => 'required|exists:doctors,user_id',
+            'start_time' => 'required|date_format:Y-m-d H:i:s',
+            'rating' => 'required|integer|min:1|max:5',
+        ]);
+
+        $appointment = DoctorAppointment::where('doctor_id', $validated['doctor_id'])
+            ->where('start_time', $validated['start_time'])
+            ->first();
+
+        if (!$appointment) {
+            return response()->json(['message' => 'A megadott időpont nem található'], 404);
+        }
+
+        $appointment->rating = $validated['rating'];
+        $appointment->save();
+
+        return response()->json([
+            'message' => 'Értékelés mentve!',
+            'appointment' => $appointment
+        ]);
+    }
 }
