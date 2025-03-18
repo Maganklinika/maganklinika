@@ -10,6 +10,7 @@ export const PatientProvider = ({ children }) => {
   const [appointmentsByDate, setAppointmentsByDate] = useState({});
   const [appointmentsDoctor, setAppointmentsDoctor] = useState([]);
   const [treatmentOptions, setTreatmentOptions] = useState([]);
+  const [bookingStatusChange, setBookingStatusChange] = useState({});
 
   const fetchAppointments = async () => {
     try {
@@ -34,18 +35,6 @@ export const PatientProvider = ({ children }) => {
     }
   };
   
-
-  const fetchAppointmentstoDoctor = async (id) => {
-    try {
-      const doctorId = "id_a_doktortól";
-      const response = await myAxios.get("/api/get-appointments-by-doctor", {
-        params: { doctor_id: id },
-      });
-      setAppointmentsDoctor(response.data);
-    } catch (error) {
-      console.error("Hiba az időpontok lekérésekor:", error);
-    }
-  };
 
   const fetchDoctorAppointments = async (doctorId) => {
     try {
@@ -96,9 +85,23 @@ export const PatientProvider = ({ children }) => {
   const fetchPatientData = () => {
     fetchTreatmentsBySpecialization();
     fetchAppointments();
-    fetchAppointmentstoDoctor();
     fetchTreatments();
   };
+
+  const bookingAppointment = async (id) => {
+    const response = await myAxios.put(`/api/booking-appointment/${id}`)
+    setBookingStatusChange(response.data)
+  }
+
+  const fetchAppointmentRating = async (id, rating) => {
+    try {
+        const response = await myAxios.put(`/api/profile/rate/${id}`, { rating });
+        console.log("Sikeres mentés:", response.data);
+    } catch (error) {
+        console.error("Hiba az értékelés mentésekor:", error.response?.data || error.message);
+    }
+};
+
 
   return (
     <PatientContext.Provider
@@ -112,7 +115,10 @@ export const PatientProvider = ({ children }) => {
         fetchDoctorAppointments,
         setTreatmentOptions,
         treatmentOptions,
-        fetchAvailableAppointments
+        fetchAvailableAppointments,
+        bookingAppointment,
+        bookingStatusChange,
+        fetchAppointmentRating,
       }}
     >
       {children}

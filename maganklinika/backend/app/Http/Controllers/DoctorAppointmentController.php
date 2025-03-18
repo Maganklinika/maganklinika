@@ -64,8 +64,9 @@ class DoctorAppointmentController extends Controller
             return response()->json(['error' => 'Doctor ID is required'], 400); // Ha nincs doctor_id, visszaadunk egy hibaüzenetet
         }
 
-        $appointments = DoctorAppointment::with(['treatment', 'patient'])
+        $appointments = DoctorAppointment::with('treatment')
             ->where('doctor_id', $doctorId)
+            ->where('status', 'v')
             ->get();
         return response()->json($appointments);
     }
@@ -146,7 +147,7 @@ class DoctorAppointmentController extends Controller
     public function getAppointmentsByPatients(string $id)
     {
         $data = DB::select("
-            select p.user_id as u_id,da.start_time as time, t.treatment_name as t_name, da.status as da_status, u.name as user_name
+            select p.user_id as u_id,da.start_time as time, t.treatment_name as t_name, da.status as da_status, u.name as user_name, da.rating as rating, da.id as id
             from doctor_appointments as da
             inner join patients as p on da.patient_id = p.user_id
             inner join doctors as d on d.user_id = da.doctor_id
@@ -271,28 +272,54 @@ class DoctorAppointmentController extends Controller
     }
 
     
-    public function appointmentRating(Request $request)
+    public function appointmentRating(string $id, Request $request)
     {
-        $validated = $request->validate([
-            'doctor_id' => 'required|exists:doctors,user_id',
-            'start_time' => 'required|date_format:Y-m-d H:i:s',
-            'rating' => 'required|integer|min:1|max:5',
-        ]);
+        $appointment = DoctorAppointment::find($id);
+        if ($appointment->status === 'd' && $appointment->rating === null) {
+            $appointment->rating = $request->rating;
+            $appointment->save();
+            return response()->json([
+                'message' => 'Rögzült jee.',
+                'status' => 'success',
+                'data' => $appointment
+            ], 200);
 
-        $appointment = DoctorAppointment::where('doctor_id', $validated['doctor_id'])
-            ->where('start_time', $validated['start_time'])
-            ->first();
+        } else {return response()->json([
+            'message' => 'Nem értékelhető foglalás.',
+            'status' => 'error',
+        ], 400);}
 
-        if (!$appointment) {
-            return response()->json(['message' => 'A megadott időpont nem található'], 404);
+    }
+
+    public function bookingAppointment(string $id){
+        $appointment = DoctorAppointment::find($id);
+        if($appointment -> status === 'b') {
+            return response()->json([
+                'message' => 'Az időpont már foglalt.',
+                'status' => 'error',
+            ], 400);
         }
 
-        $appointment->rating = $validated['rating'];
-        $appointment->save();
+        if($appointment -> status === 'd') {
+            return response()->json([
+                'message' => 'A vizsgálat már lezajlott.',
+                'status' => 'error',
+            ], 400);
+        }
 
+        if($appointment -> status === 'c') {
+            return response()->json([
+                'message' => 'Orvos által törölt vizsgálat.',
+                'status' => 'error',
+            ], 400);
+        }
+
+        $appointment->status = 'b';
+        $appointment->save();
         return response()->json([
-            'message' => 'Értékelés mentve!',
-            'appointment' => $appointment
-        ]);
+            'message' => 'Az időpont sikeresen lefoglalva.',
+            'status' => 'success',
+            'data' => $appointment
+        ], 200);
     }
 }

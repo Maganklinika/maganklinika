@@ -28,12 +28,17 @@ export const AuthProvider = ( { children } ) => {
   
   const csrf = () => myAxios.get( "/sanctum/csrf-cookie" );
 
+  const getUserData = async() => {
+    const response = await myAxios.get( "/api/user-data" ); 
+    setUserData(response.data);
+  }
+
   //bejelentkezett felhasználó adatainak lekérdezése
   const getUser = async () => {
-    const response = await myAxios.get( "/api/user-data" );
-    setUser( response.data[0] );
-    setUserData(response.data);
+    const response = await myAxios.get( "/api/user" );
+    setUser( response.data );
     sessionStorage.setItem( "isLoggedIn", JSON.stringify( true ) );
+    getUserData();
   };
 
   const fetchNavigation = async () => {

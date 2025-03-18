@@ -64,7 +64,8 @@ Route::middleware(['auth:sanctum', Patient::class])
         Route::post('/book-appointment', [DoctorAppointmentController::class, 'bookAppointment']);
         Route::get('/user-data', [UserController:: class, 'userData']);
         Route::get('/get-appointments-by-patients/{id}', [DoctorAppointmentController::class, 'getAppointmentsByPatients']);
-        Route::post('/profile/rate', [DoctorAppointmentController::class, 'appointmentRating']);
+        Route::put('/profile/rate/{id}', [DoctorAppointmentController::class, 'appointmentRating']);
+        Route::put('/booking-appointment/{id}', [DoctorAppointmentController::class, 'bookingAppointment']);
     });
 
 Route::get('/nav-items', [NavigationRoleController::class, 'getNavItemsByRole']);

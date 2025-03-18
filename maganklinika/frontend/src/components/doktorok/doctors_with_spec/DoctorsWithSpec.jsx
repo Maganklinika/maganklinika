@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
+import ReactStars from "react-stars";
 
 const DoctorsWithSpec = (props) => {
   const [show, setShow] = useState(false);
@@ -12,7 +13,15 @@ const DoctorsWithSpec = (props) => {
       .map((e) => {
         if (props.e.d_name === e.doctor_name) {
           // Csillagok kiírása a kerekített pontszám alapján
-          return "⭐".repeat(Math.round(parseFloat(e.rating)));
+          //return "⭐".repeat(Math.round(parseFloat(e.rating)))
+          return <ReactStars
+          count={5}
+          size={24}
+          value={e.rating}
+          edit={false}
+          activeColor="gold"
+          half={true}
+        />;
         }
         return ""; // Ha nincs megfelelő találat, üres stringet adunk vissza
       })
@@ -62,7 +71,7 @@ const DoctorsWithSpec = (props) => {
                 </div>
                 <div>
                   <h6>Értékelés:</h6>
-                  <p>{getStarCount()}</p>
+                    {getStarCount()}
                 </div>
               </Modal.Body>
               <Modal.Footer>

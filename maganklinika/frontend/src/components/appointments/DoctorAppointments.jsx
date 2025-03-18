@@ -8,9 +8,10 @@ import { hu } from 'date-fns/locale';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { myAxios } from '../../api/Axios';
 import useAuthContext from '../../contexts/AuthContext';
+import useDoctorContext from '../../contexts/DoctorContext';
 
 const DoctorAppointments = () => {
-  const { filteredList, setFilteredList, appointmentsDoctor, setAppointmentsDoctor, fetchDoctorAppointments, fetchPatientData } = usePatientContext(); 
+  const { filteredList, setFilteredList, appointmentsDoctor, setAppointmentsDoctor, fetchDoctorAppointments, fetchPatientData, bookingAppointment } = usePatientContext(); 
   const [openAppointments, setOpenAppointments] = useState({});
   const [view, setView] = useState('week');
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -57,6 +58,7 @@ const DoctorAppointments = () => {
           appointment.treatment_id === openAppointments.treatmentId
       )
       .map((appointment) => {
+        const id = appointment.id
         const start = new Date(appointment.start_time.replace(" ", "T"));
   
         const [hours, minutes] = appointment.treatment.treatment_length.split(":").map(Number);
@@ -65,6 +67,7 @@ const DoctorAppointments = () => {
         const end = new Date(start.getTime() + durationInMinutes * 60000);
   
         return {
+          id,
           start,
           end,
           title: `${appointment.patient ? appointment.patient.name : "Szabad időpont"} (${appointment.treatment.treatment_name})`,
@@ -83,25 +86,11 @@ const DoctorAppointments = () => {
 
   const handleEventClick = (event) => {
     if (window.confirm(`Biztosan le szeretné foglalni ezt az időpontot?\n\n${event.title}\n${event.start.toLocaleString()}`)) {
-      bookAppointment(event);
+      console.log(event)
+      bookingAppointment(event.id);
     }
   };
   
-  const bookAppointment = async (event) => {
-    try {
-      const response = await myAxios.post("/api/book-appointment", {
-        doctor_id: event.d_id,
-        start_time: event.start_time.toISOString(), // -----------  Javítani az event elemeit. -> Cannot read properties of undefined (reading 'toISOString') -------------------------
-        patient_id: event.patient_id,
-      });
-  
-      alert("Sikeres foglalás!");
-      fetchDoctorAppointments(event.doctor_id);
-    } catch (error) {
-      console.error("Foglalási hiba:", error);
-      alert("Hiba történt a foglalás során.");
-    }
-  };
   
 
 
@@ -127,6 +116,7 @@ const DoctorAppointments = () => {
                 );
 
                 const events = doctorAppointments.map((appointment) => ({
+                  id: appointment.doctor_id,
                   start: new Date(appointment.start_time),
                   end: new Date(appointment.end_time),
                   title: `${appointment.patient_name} (${appointment.treatment_name})`,

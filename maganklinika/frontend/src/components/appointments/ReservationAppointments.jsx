@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { ListGroup, Form, Button } from "react-bootstrap";
 import usePatientContext from "../../contexts/PatientsContext";
 import "./ReservationAppointments.css";
+import { useNavigate } from "react-router-dom";
 
 const ReservationAppointments = () => {
-  const { fetchAvailableAppointments, treatmentOptions } = usePatientContext();
+  const { fetchAvailableAppointments, treatmentOptions, bookingAppointment } = usePatientContext();
   const [selectedTreatment, setSelectedTreatment] = useState("");
   const [availableAppointments, setAvailableAppointments] = useState([]);
+  const navigate = useNavigate()
 
   const handleTreatmentChange = async (event) => {
     const treatmentName = event.target.value;
@@ -30,8 +32,8 @@ const ReservationAppointments = () => {
   };
 
   const handleBooking = (appointmentId) => {
-    console.log(`Foglalás kérése az alábbi időpontra: ${appointmentId}`);
-    // foglaláshoz API-t ide még be kell majd rakni
+    bookingAppointment(appointmentId);
+    navigate('/profile')
   };
 
   return (
