@@ -15,6 +15,7 @@ class DoctorAppointment extends Model
         'start_time',
         'taj_number',
         'treatment_id',
+        'description',
         'status',
         'rating'
     ];

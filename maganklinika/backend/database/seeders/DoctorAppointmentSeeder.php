@@ -33,6 +33,7 @@ class DoctorAppointmentSeeder extends Seeder
                 'start_time' => now()->subDays(rand(1, 30))->setTime(rand(8, 17), rand(0, 59), 0),
                 'patient_id' => $patientIds[array_rand($patientIds)], // Patients táblából a user_id alapján
                 'treatment_id' => $treatmentIds[array_rand($treatmentIds)],
+                'description' => "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Explicabo repellendus tempore fugit praesentium quis repellat, eos cum cupiditate quibusdam earum consequatur ducimus omnis recusandae voluptatibus harum soluta numquam ex iste.",
                 'status' => $statuses[array_rand($statuses)],
                 'rating' => rand(1, 5),
                 'created_at' => now(),

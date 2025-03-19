@@ -66,6 +66,12 @@ class NavigationRoleSeeder extends Seeder
             'role_id' => 2,
             'navigation_id' => 6,
         ]);
+
+        DB::table('navigation_roles')->insert([
+            'ranking' => $ranking++,
+            'role_id' => 2,
+            'navigation_id' => 12,
+        ]);
         // Admin szerepkör menüpontjai (role_id = 1) - MINDEN MENÜPONT HOZZÁADÁSA
         $adminRoleId = 1; // Admin szerepkör ID-ja
 
