@@ -50,11 +50,14 @@ Route::middleware(['auth:sanctum', Doctor::class])
         Route::get('/get-appointments-count', [DoctorAppointmentController::class, 'getAppointmentsCount']);
         Route::put('/appointment-delete-by-doctor/{id}', [DoctorAppointmentController::class, 'appointmentDeleteByDoctor']);
         Route::put('/appointment-cancel-delete-by-doctor/{id}', [DoctorAppointmentController::class, 'appointmentCancelDeleteByDoctor']);
+        Route::get('/get-today-appointments/{id}', [DoctorAppointmentController::class, 'getTodayAppointments']);
+        Route::get('/get-patient-data/{id}', [PatientController::class, 'getPatientData']);
+        Route::put('/finish-appointment/{id}', [DoctorAppointmentController::class, 'finishAppointment']);
     });
 
 Route::middleware(['auth:sanctum', Patient::class])
     ->group(function () {
-        Route::get('/get-appointments-by-doctor', [DoctorAppointmentController::class, 'getAllAppointmentByDoctor']);
+        Route::get('/get-appointments-by-doctor', [DoctorAppointmentController::class, 'getAppointmentByDoctor']);
         Route::get('/get-treatments-by-specialization', [GetTreatmentBySpecializationController::class, 'index']);
         Route::get('/test-get-tbs', [SpecializationController::class, 'testGetTBS']);
         Route::get('/appointments', [DoctorAppointmentController::class, 'index']);
@@ -62,10 +65,11 @@ Route::middleware(['auth:sanctum', Patient::class])
         Route::get('/get-treatments', [TreatmentController::class, 'index']);
         Route::get('/get-treatment/{id}', [TreatmentController::class, 'show']);
         Route::post('/book-appointment', [DoctorAppointmentController::class, 'bookAppointment']);
-        Route::get('/user-data', [UserController:: class, 'userData']);
+        Route::get('/user-data', [UserController::class, 'userData']);
         Route::get('/get-appointments-by-patients/{id}', [DoctorAppointmentController::class, 'getAppointmentsByPatients']);
         Route::put('/profile/rate/{id}', [DoctorAppointmentController::class, 'appointmentRating']);
         Route::put('/booking-appointment/{id}', [DoctorAppointmentController::class, 'bookingAppointment']);
+        Route::get('/get-all-appointment-by-doctor', [DoctorAppointmentController::class, 'getAllAppointmentByDoctor']);
     });
 
 Route::get('/nav-items', [NavigationRoleController::class, 'getNavItemsByRole']);

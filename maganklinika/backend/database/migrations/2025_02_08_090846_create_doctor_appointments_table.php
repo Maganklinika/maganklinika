@@ -17,7 +17,7 @@ return new class extends Migration
             $table->datetime('start_time'); //key
             $table->foreignId('patient_id')->nullable()->references('user_id')->on('patients');
             $table->foreignId('treatment_id')->references('treatment_id')->on('treatments');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->enum('status', ['v', 'b', 'd', 'c', 'p']); //v - 'vacant', b - 'booked', d - 'done', c - 'deleted_by_doctor',  p - 'cancelled_by_patient'
             $table->integer('rating')->nullable();
             $table->timestamps();

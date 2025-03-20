@@ -9,7 +9,7 @@ import Felhasznalok from "../../pages/Felhasznalok";
 import Kapcsolat from "../../pages/Kapcsolat";
 import Appointments from "../../pages/Appointments";
 import CreateAppointmentsByDoctor from "../../pages/CreateAppointmentsByDoctor";
-import Treatment from "../../pages/Treatment";
+import Treatment from "../../pages/treatment/Treatment";
 
 export const ComponentsMap = {
   Doktorok,

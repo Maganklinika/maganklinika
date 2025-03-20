@@ -73,8 +73,15 @@ class PatientController extends Controller
             where da.doctor_id = $doctor
         ");
         return response()->json($data);
-
     }
-
-    
+    public function getPatientData(string $id)
+    {
+        $data = DB::select(
+            "SELECT u.name as name, u.phone_number as phone, u.email as email, p.taj_number as taj, p.birth_date as bd
+                FROM `users` u 
+                INNER JOIN patients p on p.user_id = u.id
+                where u.id = {$id}"
+        );
+        return response()->json($data);
+    }
 }

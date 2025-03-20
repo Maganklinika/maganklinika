@@ -15,7 +15,6 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreignId('specialization_id')->references('specialization_id')->on('specializations');
             $table->timestamps();
-
             $table->primary('user_id'); // A user_id lesz az elsődleges kulcs
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unique('user_id');

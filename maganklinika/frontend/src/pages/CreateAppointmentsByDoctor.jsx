@@ -8,8 +8,8 @@ import useAuthContext from "../contexts/AuthContext";
 import { myAxios } from "../api/Axios";
 import ListGroupRow from "../components/listgroup/ListGroupRow";
 
-const CreateAppointmentsByDoctor = () => {
-  const { appointmentsByDoctor, appointmentsByDate, fetchAppontmentsByDoctor} = useDoctorContext();
+const CreateallAppointmentsByDoctor = () => {
+  const { allAppointmentsByDoctor, allAppointmentsByDate, fetchAllAppontmentsByDoctor } = useDoctorContext();
   const { appointments } = usePatientContext();
   const { user } = useAuthContext();
   const [ date, setDate ] = useState( new Date() );
@@ -61,7 +61,7 @@ const CreateAppointmentsByDoctor = () => {
         treatment_name: treatment, // kezelés neve
       } )
     console.log( response.message )
-    fetchAppontmentsByDoctor( user.id )
+    fetchAllAppontmentsByDoctor( user.id )
 
   };
 
@@ -122,15 +122,15 @@ const CreateAppointmentsByDoctor = () => {
 
     // Ha van foglalás az adott napon, akkor azt is kezelhetjük
     if (
-      appointmentsByDate[ formattedDate ] &&
-      appointmentsByDate[ formattedDate ].length > 0
+      allAppointmentsByDate[ formattedDate ] &&
+      allAppointmentsByDate[ formattedDate ].length > 0
     ) {
       return "has-appointments"; // Ha van foglalás, külön osztály
     }
 
     return null;
   };
-  console.log( "appointmentsByDoctor:", appointmentsByDoctor );
+  console.log( "allAppointmentsByDoctor:", allAppointmentsByDoctor );
   console.log( selectedDate );
 
 
@@ -161,22 +161,21 @@ const CreateAppointmentsByDoctor = () => {
           <Modal.Title>Nap: {selectedDate}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {appointmentsByDate[ selectedDate ] &&
-            appointmentsByDate[ selectedDate ].length > 0 ? (
+          {allAppointmentsByDate[ selectedDate ] &&
+            allAppointmentsByDate[ selectedDate ].length > 0 ? (
             <div>
               <ListGroup>
-                {appointmentsByDate[ selectedDate ].map(
+                {allAppointmentsByDate[ selectedDate ].map(
                   ( e, index ) => (
-                    <ListGroup.Item key={index} className={`${ 
-                      e.status === "v"
-                        ? "bg-success text-white"
-                        : e.status === "c"
-                          ? "bg-danger text-white"
-                          : e.status === "b"
-                            ? "bg-warning text-dark"
-                            : "bg-light"
+                    <ListGroup.Item key={index} className={`${ e.status === "v"
+                      ? "bg-success text-white"
+                      : e.status === "c"
+                        ? "bg-danger text-white"
+                        : e.status === "b"
+                          ? "bg-warning text-dark"
+                          : "bg-light"
                       }`}>
-                      <ListGroupRow appointmentsByDate={e} />
+                      <ListGroupRow allAppointmentsByDate={e} />
                     </ListGroup.Item>
                   )
                 )}
@@ -184,11 +183,24 @@ const CreateAppointmentsByDoctor = () => {
               <form className="select-time-form book">
                 <label htmlFor="kezeles">Kezelés: </label>
                 <select value={treatment} onChange={handleChange}>
-                  {getTreatmentsByDoctor()?.map( ( e, i ) => (
-                    <option value={e} key={i}>
-                      {e}
-                    </option>
-                  ) )}
+                  {
+                    treatment !== "" ? (
+                      getTreatmentsByDoctor()?.map( ( e, i ) => (
+                        <option value={e} key={i}>
+                          {e}
+                        </option>
+                      ) )
+                    ) : (
+                      <>
+                        <option value="-1">Válassz kezelést</option>
+                        {getTreatmentsByDoctor()?.map( ( e, i ) => (
+                          <option value={e} key={i}>
+                            {e}
+                          </option>
+                        ) )}
+                      </>
+                    )
+                  }
                 </select>
                 <p>
                   <label htmlFor="start">Kezdés: </label>
@@ -218,11 +230,24 @@ const CreateAppointmentsByDoctor = () => {
               < form className="select-time-form">
                 <label htmlFor="kezeles">Kezelés:</label>
                 <select value={treatment} onChange={handleChange}>
-                  {getTreatmentsByDoctor()?.map( ( e, i ) => (
-                    <option value={e} key={i}>
-                      {e}
-                    </option>
-                  ) )}
+                  {
+                    treatment !== "" ? (
+                      getTreatmentsByDoctor()?.map( ( e, i ) => (
+                        <option value={e} key={i}>
+                          {e}
+                        </option>
+                      ) )
+                    ) : (
+                      <>
+                        <option value="-1">Válassz kezelést</option>
+                        {getTreatmentsByDoctor()?.map( ( e, i ) => (
+                          <option value={e} key={i}>
+                            {e}
+                          </option>
+                        ) )}
+                      </>
+                    )
+                  }
                 </select>
 
                 <label htmlFor="start">Kezdés:</label>
@@ -268,4 +293,4 @@ const CreateAppointmentsByDoctor = () => {
   );
 };
 
-export default CreateAppointmentsByDoctor;
+export default CreateallAppointmentsByDoctor;

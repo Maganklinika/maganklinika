@@ -10,7 +10,7 @@ const AuthContext = createContext();
 export const AuthProvider = ( { children } ) => {
   const { fetchAdminData } = useAdminContext();
   const { fetchPatientData } = usePatientContext();
-  const { fetchDoctorData, fetchAppontmentsByDoctor
+  const { fetchDoctorData, fetchAppontmentsByDoctor,fetchAllAppontmentsByDoctor
   } = useDoctorContext();
   const navigate = useNavigate();
   const [ user, setUser ] = useState( null );
@@ -24,13 +24,13 @@ export const AuthProvider = ( { children } ) => {
     password: "",
     password_confirmation: "",
   } );
-  const [ userData, setUserData] = useState({});
-  
+  const [ userData, setUserData ] = useState( {} );
+
   const csrf = () => myAxios.get( "/sanctum/csrf-cookie" );
 
-  const getUserData = async() => {
-    const response = await myAxios.get( "/api/user-data" ); 
-    setUserData(response.data);
+  const getUserData = async () => {
+    const response = await myAxios.get( "/api/user-data" );
+    setUserData( response.data );
   }
 
   //bejelentkezett felhasználó adatainak lekérdezése
@@ -153,6 +153,7 @@ export const AuthProvider = ( { children } ) => {
       if ( user && user.role_id <= 2 && isVerified ) {
         fetchDoctorData();
         fetchAppontmentsByDoctor( user.id )
+        fetchAllAppontmentsByDoctor( user.id )
         if ( user && user.role_id === 1 && isVerified ) {
           fetchAdminData();
         }

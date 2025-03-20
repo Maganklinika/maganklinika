@@ -1,13 +1,21 @@
 .infobar {
-    display: flex;
-    justify-content: space-between;
-    background-color: var(--infobar-bg-color);
+	display: flex;
+	justify-content: space-between;
+	background-color: var(--infobar-bg-color);
 }
 
 .infobar p {
-    margin: 0;
+	margin: 0;
 }
 
 .user-info {
-    margin-right: 1rem;
+	margin-right: 1rem;
+}
+
+.bread-crum {
+	margin-left: 1rem;
+}
+
+.custom-breadcrumb ol{
+  margin: 0 !important;
 }
