@@ -1,27 +1,61 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useDoctorContext from "../contexts/DoctorContext";
-import Calendar from "react-calendar";
 import { Button, ListGroup, Modal } from "react-bootstrap";
 import "./appointment.css";
 import usePatientContext from "../contexts/PatientsContext";
 import useAuthContext from "../contexts/AuthContext";
 import { myAxios } from "../api/Axios";
+import { hu } from 'date-fns/locale';
 import ListGroupRow from "../components/listgroup/ListGroupRow";
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
+import { format, parse, startOfWeek, getDay } from 'date-fns';
 
 const CreateallAppointmentsByDoctor = () => {
   const { allAppointmentsByDoctor, allAppointmentsByDate, fetchAllAppontmentsByDoctor } = useDoctorContext();
   const { appointments } = usePatientContext();
   const { user } = useAuthContext();
   const [ date, setDate ] = useState( new Date() );
+  const [ currentDate, setCurrentDate ] = useState( new Date() );
   const [ show, setShow ] = useState( false );
+  const [ view, setView ] = useState( 'week' );
   const [ selectedDate, setSelectedDate ] = useState( null );
   const [ treatment, setTreatment ] = useState( "" );
   const [ startTime, setStartTime ] = useState( "7:00" );
   const [ endTime, setEndTime ] = useState( "18:00" );
+  const [ openAppointments, setOpenAppointments ] = useState( {} );
+  const localizer = dateFnsLocalizer( {
+    format,
+    parse,
+    startOfWeek,
+    getDay,
+    locales: { 'hu': hu },
+  } );
 
+  const messages = {
+    today: 'Ma',
+    previous: 'Előző',
+    next: 'Következő',
+    month: 'Hónap',
+    week: 'Hét',
+    day: 'Nap',
+    agenda: 'Napló',
+  };
+
+  /*useEffect( () => {
+    fetchAllAppontmentsByDoctor( user.id )
+  }, [] )*/
+
+  const handleViewChange = ( view ) => {
+    setView( view );
+  };
+
+  const handleNavigate = ( date ) => {
+    setCurrentDate( date );
+  };
 
   const handleDateClick = ( value ) => {
-    const formattedDate = value.toLocaleDateString( "sv-SE" );
+    const formattedDate = value.start.toLocaleDateString( "sv-SE" );
     setSelectedDate( formattedDate );
     setShow( true );
   };
@@ -130,8 +164,7 @@ const CreateallAppointmentsByDoctor = () => {
 
     return null;
   };
-  console.log( "allAppointmentsByDoctor:", allAppointmentsByDoctor );
-  console.log( selectedDate );
+
 
 
   const getTreatmentsByDoctor = () => {
@@ -146,16 +179,55 @@ const CreateallAppointmentsByDoctor = () => {
     return result;
   };
 
+  const generateEvents = ( appointments ) => {
+    console.log( appointments )
+    return appointments
+      .map( ( appointment ) => {
+        const id = appointment.id
+        const start = new Date( appointment.start_time.replace( " ", "T" ) );
+
+        const [ hours, minutes ] = appointment.treatment.treatment_length.split( ":" ).map( Number );
+        const durationInMinutes = hours * 60 + minutes;
+
+        const end = new Date( start.getTime() + durationInMinutes * 60000 );
+
+        return {
+          id,
+          start,
+          end,
+          title: `${ appointment.patient ? appointment.patient.name : "Szabad időpont" } (${ appointment.treatment.treatment_name })`,
+        };
+      } );
+  };
+
   return (
     <div className="container mt-4 calendarParent">
       <h2 className="h2book">Időpont létrehozása</h2>
-      <Calendar
-        className="calendar"
-        onClickDay={handleDateClick}
-        value={date}
-        tileClassName={tileClassName}
-      />
-
+      {
+        allAppointmentsByDoctor.length > 0 ?
+          <Calendar
+            localizer={localizer}
+            events={generateEvents( allAppointmentsByDoctor )}
+            startAccessor="start"
+            onSelectSlot={handleDateClick}
+            selectable
+            endAccessor="end"
+            views={[ 'month', 'week', 'day' ]}
+            view={view}
+            onView={handleViewChange}
+            onNavigate={handleNavigate}
+            date={currentDate}
+            defaultView="month"
+            min={new Date( 0, 0, 0, 7, 0 )}
+            max={new Date( 0, 0, 0, 18, 0 )}
+            culture="hu"
+            firstDayOfWeek={1}
+            style={{ height: 500 }}
+            messages={messages}
+            onSelectEvent={handleDateClick}
+          /> :
+          <p>Nincs adat</p>
+      }
       <Modal size="lg" show={show} onHide={() => setShow( false )}>
         <Modal.Header closeButton>
           <Modal.Title>Nap: {selectedDate}</Modal.Title>

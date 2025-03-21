@@ -274,7 +274,11 @@ class DoctorAppointmentController extends Controller
         }
 
         // Status frissítése
-        $record->status = 'v';
+        if ($record->patient_id !== null) {
+            $record->status = 'b';
+        } else {
+            $record->status = 'v';
+        }
         $record->save();
 
         // Sikeres válasz visszaadása
@@ -308,6 +312,7 @@ class DoctorAppointmentController extends Controller
     public function bookingAppointment(string $id)
     {
         $appointment = DoctorAppointment::find($id);
+        $patient = Auth::user();
         if ($appointment->status === 'b') {
             return response()->json([
                 'message' => 'Az időpont már foglalt.',
@@ -330,6 +335,7 @@ class DoctorAppointmentController extends Controller
         }
 
         $appointment->status = 'b';
+        $appointment->patient_id = $patient->id;
         $appointment->save();
         return response()->json([
             'message' => 'Az időpont sikeresen lefoglalva.',

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { myAxios } from "../api/Axios";
 import './Fooldal.css';
-import { UNSAFE_RemixErrorBoundary, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Carousel from 'react-bootstrap/Carousel';
 import useAuthContext from "../contexts/AuthContext";
 
@@ -10,7 +10,7 @@ const Fooldal = () => {
   const [ specializations, setSpecializations ] = useState( [] );
   const navigate = useNavigate();
 
-  console.log(user)
+  console.log( user )
   const fetchAllSpecializations = async () => {
     try {
       const response = await myAxios.get( "/api/specializations" );
@@ -23,7 +23,7 @@ const Fooldal = () => {
   const handleClick = () => {
     if ( user && user.role_id === 3 ) {
       navigate( "/appointments" )
-    } else { 
+    } else {
       navigate( "/login" )
     }
   }
@@ -76,6 +76,16 @@ const Fooldal = () => {
             <h3>Új szárny</h3>
           </Carousel.Caption>
         </Carousel.Item>
+        <Carousel.Item>
+          <img
+            className="d-block w-100"
+            src="/images/clinic5.jpg"
+            alt="Fourth slide"
+          />
+          <Carousel.Caption>
+            <h3>Új szárny</h3>
+          </Carousel.Caption>
+        </Carousel.Item>
       </Carousel>
     );
   };
@@ -105,7 +115,7 @@ const Fooldal = () => {
           )}
         </ul>
       </div>
-      <button className="appointment-button" onClick={()=>handleClick()}>
+      <button className="appointment-button" onClick={() => handleClick()}>
         Időpontfoglalás
       </button>
     </div>

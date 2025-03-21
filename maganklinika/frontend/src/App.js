@@ -7,7 +7,7 @@ import {ComponentsMap} from "./components/componentsmap/ComponentsMap"
 import VerifyEmailPage from "./pages/VerifyEmailPage"
 import ForgotPassword from "./pages/ForgotPassword"
 import ResetPassword from "./pages/ResetPassword"
-import PatientProfile from "./pages/profiles/PatientProfile"
+import Profile from "./pages/profiles/Profile"
 import SelectedTreatment from "./pages/treatment/SelectedTreatment"
 
 function App() {
@@ -25,7 +25,7 @@ function App() {
 				<Route path="/forgot-password" element={<ForgotPassword />} />
 				<Route path="/password-reset/*" element={<ResetPassword />} />
 				<Route path="/selected-treatment" element={<SelectedTreatment />} />
-				<Route path="/profile" element={<PatientProfile />} />
+				<Route path="/profile" element={<Profile />} />
 				<Route index element={<Fooldal />} />
 				{navigation ? (
 					navigation.map((e, index) => {

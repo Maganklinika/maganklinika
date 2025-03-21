@@ -78,7 +78,6 @@ export const DoctorProvider = ( { children } ) => {
   };
 
   const fetchAppontmentsByDoctor = async ( doctor_id ) => {
-    console.log( doctor_id )
     const response = await myAxios.get( "/api/get-appointments-by-doctor", {
       params: {
         doctor_id: doctor_id, // A doctor_id értéke, amit át akarsz adni
@@ -89,7 +88,6 @@ export const DoctorProvider = ( { children } ) => {
   };
 
   const fetchAllAppontmentsByDoctor = async ( doctor_id ) => {
-    console.log( doctor_id )
     const response = await myAxios.get( "/api/get-all-appointment-by-doctor", {
       params: {
         doctor_id: doctor_id, // A doctor_id értéke, amit át akarsz adni

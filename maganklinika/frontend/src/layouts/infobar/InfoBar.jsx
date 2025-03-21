@@ -9,7 +9,6 @@ const InfoBar = () => {
   const { user, navigation } = useAuthContext();
   const location = useLocation();
   const pathnames = location.pathname
-  console.log( pathnames )
 
   const elements = navigation.map( ( e ) => (
     e.url === pathnames ? e : null
