@@ -1,0 +1,7 @@
+.contact-info {
+	background-color: var(--nav-and-border-color);
+	text-align: center;
+	padding: 20px;
+	width: 100%;
+    margin-top: auto;
+}

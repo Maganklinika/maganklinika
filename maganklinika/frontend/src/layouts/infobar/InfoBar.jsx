@@ -16,7 +16,7 @@ const InfoBar = () => {
   ) ).filter( ( e ) => e )
 
   return (
-    <div className="infobar">
+    <div className="infobar fixed-top">
       <div className="bread-crum">
         <Breadcrumb className="custom-breadcrumb">
           {

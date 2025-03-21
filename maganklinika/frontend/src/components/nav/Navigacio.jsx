@@ -7,7 +7,7 @@ const Navigacio = () => {
   const { navigation } = useAuthContext(); // getNavItems lekérése az AuthContextből
 
   return (
-    <nav className="navbar navbar-expand-sm">
+    <nav className="navbar navbar-expand-sm fixed-top">
       <div className="container-fluid">
         <ul className="navbar-nav">
           {navigation ? (
