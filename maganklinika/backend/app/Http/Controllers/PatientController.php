@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DoctorAppointment;
 use App\Models\Patient;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -83,5 +84,32 @@ class PatientController extends Controller
                 where u.id = {$id}"
         );
         return response()->json($data);
+    }
+
+    public function cancelAppointmentByPatient(string $id){
+        $appointment = DoctorAppointment::find($id);
+
+        if($appointment->status === "d"){
+            return response()->json([
+                'message' => 'A kezelést már végbement.',
+                'status' => 'error',
+            ], 400);
+        }
+
+        if($appointment->status === "v") {
+            return response()->json([
+                'message' => 'A vizsgálat nem tartozik a pácienshez.',
+                'status' => 'error',
+            ], 400);
+        }
+
+        $appointment->patient_id = null;
+        $appointment->status = "v";
+        $appointment->save();
+        return response()->json([
+            'message' => 'A kezelés sikeresen törölve.',
+            'status' => 'success',
+            'data' => $appointment
+        ], 200);
     }
 }

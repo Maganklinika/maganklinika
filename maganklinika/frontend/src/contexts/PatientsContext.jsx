@@ -103,6 +103,10 @@ export const PatientProvider = ({ children }) => {
 };
 
 
+  const fetchCancelAppointmentByPatient = async (id) => {
+    await myAxios.put(`/api/cancel-appointment-by-patient/${id}`)
+  }
+
   return (
     <PatientContext.Provider
       value={{
@@ -119,6 +123,7 @@ export const PatientProvider = ({ children }) => {
         bookingAppointment,
         bookingStatusChange,
         fetchAppointmentRating,
+        fetchCancelAppointmentByPatient,
       }}
     >
       {children}

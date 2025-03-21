@@ -160,6 +160,7 @@ const Profile = () => {
                     <th className="border border-gray-300 p-2">Időpont: </th>
                     <th className="border border-gray-300 p-2">Orvos</th>
                     <th className="border border-gray-300 p-2">Kezelés</th>
+                    <th className="border border-gray-300 p-2">Törlés</th>
                     <th className="border border-gray-300 p-2">Értékelés</th>
                   </tr>
                 </thead>
