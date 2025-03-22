@@ -70,7 +70,7 @@ class PatientController extends Controller
         $doctor = Auth::user()->id;
 
         $data = DB::select("
-            select u.id as user_id, u.name as user_name,p.taj_number as tn ,u.phone_number as u_phone
+            select DISTINCT u.id as user_id, u.name as user_name,p.taj_number as tn ,u.phone_number as u_phone
             from doctor_appointments da
             INNER JOIN users u on u.id = da.patient_id
             INNER JOIN patients p on u.id = p.user_id
