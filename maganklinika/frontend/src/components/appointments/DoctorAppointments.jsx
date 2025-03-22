@@ -6,17 +6,12 @@ import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
 import { hu } from 'date-fns/locale';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { myAxios } from '../../api/Axios';
-import useAuthContext from '../../contexts/AuthContext';
-import useDoctorContext from '../../contexts/DoctorContext';
 
 const DoctorAppointments = () => {
-  const { filteredList, setFilteredList, appointmentsDoctor, setAppointmentsDoctor, fetchDoctorAppointments, fetchPatientData, bookingAppointment } = usePatientContext(); 
+  const { filteredList, setFilteredList, appointmentsDoctor,appointments , fetchDoctorAppointments, bookingAppointment } = usePatientContext(); 
   const [openAppointments, setOpenAppointments] = useState({});
   const [view, setView] = useState('week');
   const [currentDate, setCurrentDate] = useState(new Date());
-  const {user} = useAuthContext();
-
 
   const localizer = dateFnsLocalizer({
     format,
@@ -96,7 +91,7 @@ const DoctorAppointments = () => {
 
   return (
     <div>
-      <TextFilter list={appointmentsDoctor} filterListSetter={setFilteredList} />
+      <TextFilter list={appointments} filterListSetter={setFilteredList} />
       <h2>Doktoraink</h2>
       <div className="container mt-4">
         <Table striped bordered hover>

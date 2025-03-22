@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\AppointmentStatusUpdated;
 use App\Models\DoctorAppointment;
 use App\Models\Patient;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Request;
 
 class PatientController extends Controller
@@ -86,26 +89,36 @@ class PatientController extends Controller
         return response()->json($data);
     }
 
-    public function cancelAppointmentByPatient(string $id){
+    public function cancelAppointmentByPatient(string $id)
+    {
         $appointment = DoctorAppointment::find($id);
-
-        if($appointment->status === "d"){
+        $previousStatus = $appointment->status;
+        if ($appointment->status === "d") {
             return response()->json([
                 'message' => 'A kezelést már végbement.',
                 'status' => 'error',
             ], 400);
         }
 
-        if($appointment->status === "v") {
+        if ($appointment->status === "v") {
             return response()->json([
                 'message' => 'A vizsgálat nem tartozik a pácienshez.',
                 'status' => 'error',
             ], 400);
         }
 
-        $appointment->patient_id = null;
+
+
         $appointment->status = "v";
+
+        if ($appointment->status !== $previousStatus) {
+            // E-mail küldése a páciensnek
+            $user = User::find($appointment->patient_id);
+            Mail::to($user->email)->send(new AppointmentStatusUpdated($appointment, $appointment->status));
+        }
+        $appointment->patient_id = null;
         $appointment->save();
+
         return response()->json([
             'message' => 'A kezelés sikeresen törölve.',
             'status' => 'success',

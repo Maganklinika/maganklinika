@@ -3,6 +3,7 @@
 namespace App\Mail;
 
 use App\Models\DoctorAppointment;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -25,7 +26,10 @@ class AppointmentStatusUpdated extends Mailable
     {
         $this->appointment = $appointment;
         $this->status = $status;
-        $this->patient = $appointment->patient; // Pácienst is hozzárendeljük
+        $user = User::find($appointment->patient_id);
+        $this->patient = $user;
+        
+        
     }
 
     /**
@@ -34,7 +38,7 @@ class AppointmentStatusUpdated extends Mailable
     public function build()
     {
         return $this->subject('Időpont státusz változás')
-            ->view('emails.appointment-status-updated')
+            ->view('appointment-status-updated')
             ->with([
                 'appointment' => $this->appointment,
                 'status' => $this->status,

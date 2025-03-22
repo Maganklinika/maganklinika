@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\AppointmentStatusUpdated;
 use App\Models\DoctorAppointment;
 use App\Models\Treatment;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -228,6 +229,7 @@ class DoctorAppointmentController extends Controller
 
         // Keresd ki a rekordot
         $record = DoctorAppointment::find($id);
+        $previousStatus = $record->status;
 
         // Ha nem található, térj vissza hibával
         if (!$record) {
@@ -249,6 +251,12 @@ class DoctorAppointmentController extends Controller
         $record->status = 'c';
         $record->save();
 
+        if ($record->status !== $previousStatus) {
+            // E-mail küldése a páciensnek
+            $user = User::find($record->patient_id);
+            Mail::to($user->email)->send(new AppointmentStatusUpdated($record, $record->status));
+        }
+
         // Sikeres válasz visszaadása
         return response()->json([
             'message' => 'Az időpont törölve lett az orvos által.',
@@ -262,6 +270,7 @@ class DoctorAppointmentController extends Controller
 
         // Keresd ki a rekordot
         $record = DoctorAppointment::find($id);
+        $previousStatus = $record->status;
 
         // Ha nem található, térj vissza hibával
         if (!$record) {
@@ -282,6 +291,13 @@ class DoctorAppointmentController extends Controller
         // Status frissítése
         if ($record->patient_id !== null) {
             $record->status = 'b';
+
+            if ($record->status !== $previousStatus) {
+                // E-mail küldése a páciensnek
+                $user = User::find($record->patient_id);
+                Mail::to($user->email)->send(new AppointmentStatusUpdated($record, $record->status));
+            }
+
         } else {
             $record->status = 'v';
         }
@@ -319,6 +335,7 @@ class DoctorAppointmentController extends Controller
     {
         $appointment = DoctorAppointment::find($id);
         $patient = Auth::user();
+        $previousStatus = $appointment->status;
         if ($appointment->status === 'b') {
             return response()->json([
                 'message' => 'Az időpont már foglalt.',
@@ -343,6 +360,13 @@ class DoctorAppointmentController extends Controller
         $appointment->status = 'b';
         $appointment->patient_id = $patient->id;
         $appointment->save();
+
+        if ($appointment->status !== $previousStatus) {
+            // E-mail küldése a páciensnek
+            $user = User::find($appointment->patient_id);
+            Mail::to($user->email)->send(new AppointmentStatusUpdated($appointment, $appointment->status));
+        }
+
         return response()->json([
             'message' => 'Az időpont sikeresen lefoglalva.',
             'status' => 'success',
@@ -370,6 +394,7 @@ class DoctorAppointmentController extends Controller
     public function finishAppointment(string $id, Request $request)
     {
         $appointment = DoctorAppointment::find($id);
+        $previousStatus = $appointment->status;
 
         if ($appointment->patient_id === null) {
             return response()->json([
@@ -388,6 +413,13 @@ class DoctorAppointmentController extends Controller
         $appointment->status = 'd';
         $appointment->description = $request->description;
         $appointment->save();
+
+        if ($appointment->status !== $previousStatus) {
+            // E-mail küldése a páciensnek
+            $user = User::find($appointment->patient_id);
+            Mail::to($user->email)->send(new AppointmentStatusUpdated($appointment, $appointment->status));
+        }
+
 
         return response()->json([
             'message' => 'A kezelés sikeresen el lett végezve',

@@ -19,14 +19,12 @@
         @case('c')
             Törölve orvos által
             @break
-        @case('p')
-            Törölve páciens által
-            @break
         @case('d')
             Kezelés lezárva
+            <p><strong>Leírás: </strong>{{ $appointment->description}}</p>
             @break
         @default
-            Ismeretlen státusz
+            Visszamondva
     @endswitch
     </p>
 
