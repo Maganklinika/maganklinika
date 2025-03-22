@@ -9,8 +9,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
+use Tests\TestCaseWithSeed;
 
-class UserTest extends TestCase
+class UserTest extends TestCaseWithSeed
 {
     /**
      * A basic feature test example.
@@ -33,7 +34,6 @@ class UserTest extends TestCase
 
     public function test_users_auth(): void
     {
-        RoleSeeder::run();
         $adminRoleId = 1;
         $admin = User::factory()->create([
             'role_id' => $adminRoleId,

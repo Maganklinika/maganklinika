@@ -9,8 +9,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
+use Tests\TestCaseWithSeed;
 
-class RoleTest extends TestCase
+class RoleTest extends TestCaseWithSeed
 {
     use RefreshDatabase;
 
@@ -27,7 +28,6 @@ class RoleTest extends TestCase
      */
     public function test_example(): void
     {
-        RoleSeeder::run();
         $admin = User::factory()->create([
             'role_id' => 1,
         ]);

@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\AppointmentStatusUpdated;
 use App\Models\DoctorAppointment;
 use App\Models\Treatment;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Mail;
 
 class DoctorAppointmentController extends Controller
 {
@@ -188,7 +189,7 @@ class DoctorAppointmentController extends Controller
             ->where('status', 'v')
             ->first();
 
-
+        $previousStatus = $appointment->status;
         if (!$appointment) {
             return response()->json(['error' => 'Ez az időpont már foglalt vagy nem létezik'], 400);
         }
@@ -197,6 +198,11 @@ class DoctorAppointmentController extends Controller
         $appointment->status = 'b';
         $appointment->patient_id = $request->patient_id;
         $appointment->save();
+
+        if ($appointment->status !== $previousStatus) {
+            // E-mail küldése a páciensnek
+            Mail::to($appointment->patient->email)->send(new AppointmentStatusUpdated($appointment, $appointment->status));
+        }
 
         return response()->json(['message' => 'Foglalás sikeres!', 'appointment' => $appointment], 200);
     }

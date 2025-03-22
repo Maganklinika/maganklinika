@@ -204,7 +204,7 @@ const CreateallAppointmentsByDoctor = () => {
     <div className="container mt-4 calendarParent">
       <h2 className="h2book">Időpont létrehozása</h2>
       {
-        allAppointmentsByDoctor.length > 0 ?
+        allAppointmentsByDoctor ?
           <Calendar
             localizer={localizer}
             events={generateEvents( allAppointmentsByDoctor )}

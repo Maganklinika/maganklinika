@@ -8,8 +8,9 @@ use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
+use Tests\TestCaseWithSeed;
 
-class PasswordResetTest extends TestCase
+class PasswordResetTest extends TestCaseWithSeed
 {
     use RefreshDatabase;
 
@@ -17,7 +18,6 @@ class PasswordResetTest extends TestCase
     {
         Notification::fake();
 
-        RoleSeeder::run();
         $user = User::factory()->create();
 
         $this->post('/forgot-password', ['email' => $user->email]);
@@ -29,7 +29,6 @@ class PasswordResetTest extends TestCase
     {
         Notification::fake();
 
-        RoleSeeder::run();
         $user = User::factory()->create();
 
         $this->post('/forgot-password', ['email' => $user->email]);
