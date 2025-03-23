@@ -72,6 +72,7 @@ Route::middleware(['auth:sanctum', Patient::class])
         Route::put('/booking-appointment/{id}', [DoctorAppointmentController::class, 'bookingAppointment']);
         Route::get('/get-all-appointment-by-doctor', [DoctorAppointmentController::class, 'getAllAppointmentByDoctor']);
         Route::put('/cancel-appointment-by-patient/{id}', [PatientController::class, 'cancelAppointmentByPatient']);
+        Route::put('/change-user-info/{id}', [UserController::class, 'changeUserInfo']);
         Route::post('/file-upload', [FileController::class, 'store'])->name('file.store');
     });
 

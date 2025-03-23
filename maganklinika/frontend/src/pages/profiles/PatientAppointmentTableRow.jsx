@@ -38,7 +38,7 @@ const PatientAppointmentTableRow = (props) => {
         <td className="border border-gray-300 p-2">{props.e.user_name}</td>
         <td className="border border-gray-300 p-2">{props.e.t_name}</td>
         <td className="border border-gray-300 p-2">
-          <Button onClick={handleShow}>Törlés</Button>
+          {props.e.da_status === "b" ? (<Button onClick={handleShow}>Törlés</Button>): ("Már nem törölhető")}
         </td>
         <td className="border border-gray-300 p-2">
           {props.e.rating === null && props.e.da_status === "d" ? (

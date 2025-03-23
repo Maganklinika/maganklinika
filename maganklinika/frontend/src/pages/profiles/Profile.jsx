@@ -6,7 +6,7 @@ import Button from "react-bootstrap/esm/Button";
 import "./profile.css"
 
 const Profile = () => {
-  const { userData, setSelectedFile, setPreview, uploadMessage, getUserData, preview, fetchHandleUpload } = useAuthContext();
+  const { userData, setSelectedFile, setPreview, uploadMessage, getUserData, preview, fetchHandleUpload, changeUserInfo } = useAuthContext();
   const [ isEditing, setIsEditing ] = useState( false );
   const [ isUploadSelected, setIsUploadSelected ] = useState( false );
   const [ formData, setFormData ] = useState( {
@@ -53,6 +53,7 @@ const Profile = () => {
   const handleEdit = () => setIsEditing( true );
   const handleSave = () => {
     console.log( "Mentett adatok:", formData );
+    changeUserInfo(userData[0].id, formData);
     setIsEditing( false );
   };
 
@@ -188,10 +189,12 @@ const Profile = () => {
                 </div>
               </>
             ) :
-              <>
-                {/* Doktor role profil */}
-                <p>Doktor adatok</p>
-              </>
+            <div>
+            <span className="font-semibold">
+              <b>specializáció</b>
+            </span>
+            <p>{userData[ 0 ]?.specialization_name}</p>
+          </div>
           }
         </div>
         {isEditing ? (
