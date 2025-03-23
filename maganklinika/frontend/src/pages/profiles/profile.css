@@ -1,0 +1,27 @@
+.profile-picture {
+	display: flex;
+	flex-direction: column;
+}
+.profile-picture button {
+	margin-block: 1rem;
+	width: fit-content;
+}
+.upload-image {
+	width: 475px;
+	display: grid;
+	grid-template-columns: 1fr;
+	justify-content: center;
+	align-items: center;
+
+}
+.upload-image-buttons {
+	display: flex;
+    gap: 2rem;
+}
+
+.image-selection-to-upload{
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    align-items: center;
+}

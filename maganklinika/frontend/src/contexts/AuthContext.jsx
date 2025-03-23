@@ -10,11 +10,14 @@ const AuthContext = createContext();
 export const AuthProvider = ( { children } ) => {
   const { fetchAdminData } = useAdminContext();
   const { fetchPatientData } = usePatientContext();
-  const { fetchDoctorData, fetchAppontmentsByDoctor,fetchAllAppontmentsByDoctor
+  const { fetchDoctorData, fetchAppontmentsByDoctor, fetchAllAppontmentsByDoctor
   } = useDoctorContext();
   const navigate = useNavigate();
   const [ user, setUser ] = useState( null );
   const [ specializations, setSpecializations ] = useState( "" );
+  const [ selectedFile, setSelectedFile ] = useState( null );
+  const [ uploadMessage, setUploadMessage ] = useState( '' );
+  const [ preview, setPreview ] = useState( null );
   const [ navigation, setNavigation ] = useState( [] );
   const [ isVerified, setIsVerified ] = useState( true );
   const [ doctorsByRating, setDoctorsByRating ] = useState( [] );
@@ -132,6 +135,35 @@ export const AuthProvider = ( { children } ) => {
     }
   }
 
+  const fetchUploadProfilePicture = async () => {
+    await myAxios.get( '/api/file-upload' );
+  }
+
+  const fetchHandleUpload = async () => {
+    if ( !selectedFile ) {
+      setUploadMessage( 'Válassz ki egy képet!' );
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append( 'profile_picture', selectedFile );
+
+    try {
+      const response = await myAxios.post( 'http://localhost:8000/api/file-upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      } );
+
+      setUploadMessage( response.data.message );
+      setPreview( response.data.url ); // Frissíti a profilképet az új URL-re
+
+    } catch ( error ) {
+      setUploadMessage( 'Feltöltés sikertelen!' );
+      console.error( error );
+    }
+  };
+
   useEffect( () => {
     const storedIsLoggedIn = JSON.parse( sessionStorage.getItem( "isLoggedIn" ) );
     if ( storedIsLoggedIn ) {
@@ -164,7 +196,7 @@ export const AuthProvider = ( { children } ) => {
       fetchNavigation();
       fetchAVGDoctorsRatings();
     }
-  }, [ user ] ); // Csak akkor fut le, ha a user változik
+  }, [ user ] );
 
   return (
     <AuthContext.Provider
@@ -184,7 +216,14 @@ export const AuthProvider = ( { children } ) => {
         specializations,
         setSpecializations,
         checkDoctorLicence,
+        fetchUploadProfilePicture,
         userData,
+        setSelectedFile,
+        uploadMessage,
+        preview,
+        setPreview,
+        fetchHandleUpload,
+        getUserData,
       }}
     >
       {children}
