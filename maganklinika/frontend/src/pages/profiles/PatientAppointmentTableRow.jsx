@@ -45,8 +45,8 @@ const PatientAppointmentTableRow = (props) => {
             <ReactStars
               count={5}
               size={24}
-              value={ratings[props.e.id] ?? props.e.rating ?? 0} // Ha van már állított érték, azt mutatja
-              edit={true} // Engedélyezzük a módosítást
+              value={ratings[props.e.id] ?? props.e.rating ?? 0}
+              edit={true}
               activeColor="gold"
               onChange={(newRating) =>
                 handleRatingChange(props.e.id, newRating)
@@ -60,8 +60,8 @@ const PatientAppointmentTableRow = (props) => {
                 <ReactStars
                   count={5}
                   size={24}
-                  value={ratings[props.e.id] ?? props.e.rating ?? 0} // Ha van már állított érték, azt mutatja
-                  edit={false} // Nem engedélyezi a módosítást
+                  value={ratings[props.e.id] ?? props.e.rating ?? 0}
+                  edit={false}
                   activeColor="gold"
                   half={false}
                 />

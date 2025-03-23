@@ -1,41 +1,55 @@
-import React, { useState } from 'react';
-import { Button, Collapse, Table } from 'react-bootstrap';
+import React, { useState } from "react";
+import { Button, Collapse, Modal, Table } from "react-bootstrap";
 import usePatientContext from "../../contexts/PatientsContext";
 import TextFilter from "../filters/text_filter_top/TextFilter";
-import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
-import { format, parse, startOfWeek, getDay } from 'date-fns';
-import { hu } from 'date-fns/locale';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { Calendar, dateFnsLocalizer } from "react-big-calendar";
+import { format, parse, startOfWeek, getDay } from "date-fns";
+import { hu } from "date-fns/locale";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import { useNavigate } from "react-router-dom";
 
 const DoctorAppointments = () => {
-  const { filteredList, setFilteredList, appointmentsDoctor,appointments , fetchDoctorAppointments, bookingAppointment } = usePatientContext(); 
+  const {
+    filteredList,
+    setFilteredList,
+    appointmentsDoctor,
+    appointments,
+    fetchDoctorAppointments,
+    bookingAppointment,
+  } = usePatientContext();
   const [openAppointments, setOpenAppointments] = useState({});
-  const [view, setView] = useState('week');
+  const [view, setView] = useState("week");
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [show, setShow] = useState(false);
+  const navigate = useNavigate();
 
   const localizer = dateFnsLocalizer({
     format,
     parse,
     startOfWeek,
     getDay,
-    locales: { 'hu': hu },
+    locales: { hu: hu },
   });
 
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const messages = {
-    today: 'Ma',
-    previous: 'Előző',
-    next: 'Következő',
-    month: 'Hónap',
-    week: 'Hét',
-    day: 'Nap',
-    agenda: 'Napló',
+    today: "Ma",
+    previous: "Előző",
+    next: "Következő",
+    month: "Hónap",
+    week: "Hét",
+    day: "Nap",
+    agenda: "Napló",
   };
-
 
   const toggleAppointments = (doctorId, treatmentId) => {
     setOpenAppointments((prevState) => {
-      if (prevState.doctorId === doctorId && prevState.treatmentId === treatmentId) {
+      if (
+        prevState.doctorId === doctorId &&
+        prevState.treatmentId === treatmentId
+      ) {
         return { doctorId: null, treatmentId: null };
       }
 
@@ -53,23 +67,26 @@ const DoctorAppointments = () => {
           appointment.treatment_id === openAppointments.treatmentId
       )
       .map((appointment) => {
-        const id = appointment.id
+        const id = appointment.id;
         const start = new Date(appointment.start_time.replace(" ", "T"));
-  
-        const [hours, minutes] = appointment.treatment.treatment_length.split(":").map(Number);
+
+        const [hours, minutes] = appointment.treatment.treatment_length
+          .split(":")
+          .map(Number);
         const durationInMinutes = hours * 60 + minutes;
-  
+
         const end = new Date(start.getTime() + durationInMinutes * 60000);
-  
+
         return {
           id,
           start,
           end,
-          title: `${appointment.patient ? appointment.patient.name : "Szabad időpont"} (${appointment.treatment.treatment_name})`,
+          title: `${
+            appointment.patient ? appointment.patient.name : "Szabad időpont"
+          } (${appointment.treatment.treatment_name})`,
         };
       });
   };
-
 
   const handleViewChange = (view) => {
     setView(view);
@@ -80,14 +97,13 @@ const DoctorAppointments = () => {
   };
 
   const handleEventClick = (event) => {
-    if (window.confirm(`Biztosan le szeretné foglalni ezt az időpontot?\n\n${event.title}\n${event.start.toLocaleString()}`)) {
-      console.log(event)
-      bookingAppointment(event.id);
-    }
-  };
-  
-  
+      handleShow();
+    };
 
+  const bookAppointmentClick = (events) => {
+    bookingAppointment(events[0].da_id);
+    navigate('/profile');
+  }
 
   return (
     <div>
@@ -115,6 +131,8 @@ const DoctorAppointments = () => {
                   start: new Date(appointment.start_time),
                   end: new Date(appointment.end_time),
                   title: `${appointment.patient_name} (${appointment.treatment_name})`,
+                  da_id: appointment.id,
+                  d_name: appointment.d_name
                 }));
 
                 return (
@@ -126,7 +144,9 @@ const DoctorAppointments = () => {
                       <td>
                         <Button
                           variant="primary"
-                          onClick={() => toggleAppointments(doctor.d_id, doctor.t_id)}
+                          onClick={() =>
+                            toggleAppointments(doctor.d_id, doctor.t_id)
+                          }
                         >
                           Időpontok
                         </Button>
@@ -134,28 +154,33 @@ const DoctorAppointments = () => {
                     </tr>
                     <tr>
                       <td colSpan="4">
-                      <Collapse in={openAppointments.doctorId === doctor.d_id && openAppointments.treatmentId === doctor.t_id}>
+                        <Collapse
+                          in={
+                            openAppointments.doctorId === doctor.d_id &&
+                            openAppointments.treatmentId === doctor.t_id
+                          }
+                        >
                           <div>
                             {doctorAppointments.length > 0 ? (
                               <Calendar
-                              localizer={localizer}
-                              events={generateEvents(doctorAppointments)}
-                              startAccessor="start"
-                              endAccessor="end"
-                              views={['month', 'week', 'day']}
-                              view={view}
-                              onView={handleViewChange}
-                              onNavigate={handleNavigate}
-                              date={currentDate}
-                              defaultView="week"
-                              min={new Date(0, 0, 0, 7, 0)}
-                              max={new Date(0, 0, 0, 18, 0)}
-                              culture="hu"
-                              firstDayOfWeek={1}  
-                              style={{ height: 500 }}
-                              messages={messages}
-                              onSelectEvent={handleEventClick}
-                            />
+                                localizer={localizer}
+                                events={generateEvents(doctorAppointments)}
+                                startAccessor="start"
+                                endAccessor="end"
+                                views={["month", "week", "day"]}
+                                view={view}
+                                onView={handleViewChange}
+                                onNavigate={handleNavigate}
+                                date={currentDate}
+                                defaultView="week"
+                                min={new Date(0, 0, 0, 7, 0)}
+                                max={new Date(0, 0, 0, 18, 0)}
+                                culture="hu"
+                                firstDayOfWeek={1}
+                                style={{ height: 500 }}
+                                messages={messages}
+                                onSelectEvent={handleEventClick}
+                              />
                             ) : (
                               <p>Nincs elérhető időpont.</p>
                             )}
@@ -163,6 +188,37 @@ const DoctorAppointments = () => {
                         </Collapse>
                       </td>
                     </tr>
+                    <Modal
+                      show={show}
+                      onHide={handleClose}
+                      backdrop="static"
+                      keyboard={false}
+                    >
+                      <Modal.Header closeButton>
+                        <Modal.Title>Biztosan le szeretné foglalni az időpontot?</Modal.Title>
+                      </Modal.Header>
+
+                      <Modal.Body>
+                        <p><b>Kezelés neve: </b>{doctorAppointments[0]?.treatment.treatment_name}</p>
+                        <p><b>Kezelés kezdése: </b>{doctorAppointments[0]?.start_time.toString()}</p>
+                        <p><b>Kezelés hossza: </b>{doctorAppointments[0]?.treatment.treatment_length}</p>
+                        <p><b>Kezelés ára: </b>{doctorAppointments[0]?.treatment.price} Ft</p>
+                      </Modal.Body>
+
+                      <Modal.Footer>
+                        <Button
+                          variant="primary"
+                          onClick={() => {
+                            bookAppointmentClick(events);
+                          }}
+                        >
+                          Igen
+                        </Button>
+                        <Button variant="secondary" onClick={handleClose}>
+                          Mégse
+                        </Button>
+                      </Modal.Footer>
+                    </Modal>
                   </React.Fragment>
                 );
               })
@@ -179,4 +235,3 @@ const DoctorAppointments = () => {
 };
 
 export default DoctorAppointments;
-
