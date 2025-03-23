@@ -11,7 +11,6 @@ const ResetPassword = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // A URL-ból kinyerjük a token-t
   const queryParams = new URLSearchParams(location.search);
   console.log(queryParams);
   const token = queryParams.get("token");
@@ -25,7 +24,6 @@ const ResetPassword = () => {
       return;
     }
 
-    // Ellenőrizzük, hogy mindkét paraméter létezik
     if (!token || !email) {
       setError("A token vagy email cím hiányzik.");
       return;
@@ -35,7 +33,6 @@ const ResetPassword = () => {
       setError("");
       setSuccess("");
 
-      // Küldjük el az új jelszót és a token-t a backendnek
       const response = await myAxios.post("/reset-password", {
         email,
         token,
@@ -44,10 +41,9 @@ const ResetPassword = () => {
       });
       if (response.data.status === "PASSWORD_RESET") {
         setSuccess("Sikeresen megváltoztatta a jelszavát.");
-        navigate("/bejelentkezes"); // Ha sikeres, átirányíthatjuk a bejelentkezés oldalra
+        navigate("/bejelentkezes"); 
       }
     } catch (err) {
-      // Ha hibát kaptunk a backendtől
       setError(
         "Hiba történt: " + (err.response?.data?.message || "Ismeretlen hiba.")
       );

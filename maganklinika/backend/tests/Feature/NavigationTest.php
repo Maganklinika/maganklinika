@@ -2,13 +2,9 @@
 
 namespace Tests\Feature;
 
-use App\Models\Navigation;
-use App\Models\Role;
 use App\Models\User;
-use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
-use Tests\TestCase;
 use Tests\TestCaseWithSeed;
 
 class NavigationTest extends TestCaseWithSeed
@@ -18,7 +14,6 @@ class NavigationTest extends TestCaseWithSeed
     {
         parent::setUp();
 
-        // Reseteljük az auto-increment számlálót minden teszt előtt, ha szükséges
         DB::statement('ALTER TABLE roles AUTO_INCREMENT = 1');
     }
     public function test_example(): void

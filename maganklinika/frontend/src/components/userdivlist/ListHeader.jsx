@@ -1,6 +1,5 @@
 import React from 'react'
 
-
 const ListHeader = (props) => {
     return (
         <div className='list-headers d-flex align-item-center'>

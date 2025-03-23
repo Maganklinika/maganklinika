@@ -17,10 +17,8 @@ abstract class TestCaseWithSeed extends BaseTestCase
     {
         parent::setUp();
 
-        // Migrációk törlése és újraépítése minden teszt előtt
         $this->artisan('migrate:fresh');
 
-        // Alapértelmezett adatok seedelése (például roles)
         $this->seed(RoleSeeder::class);
     }
 }

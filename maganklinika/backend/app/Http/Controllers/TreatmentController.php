@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Treatment;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
 
 class TreatmentController extends Controller

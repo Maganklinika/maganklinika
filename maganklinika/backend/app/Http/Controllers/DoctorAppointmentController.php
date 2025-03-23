@@ -14,17 +14,11 @@ use Illuminate\Support\Facades\Mail;
 
 class DoctorAppointmentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         return response()->json(DoctorAppointment::all());
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $data = new DoctorAppointment();
@@ -32,17 +26,11 @@ class DoctorAppointmentController extends Controller
         $data->save();
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         return response()->json(DoctorAppointment::find($id));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $data = new DoctorAppointment();
@@ -50,9 +38,6 @@ class DoctorAppointmentController extends Controller
         $data->save();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         DoctorAppointment::find($id)->delete();
@@ -60,10 +45,10 @@ class DoctorAppointmentController extends Controller
 
     public function getAppointmentByDoctor(Request $request)
     {
-        $doctorId = $request->input('doctor_id'); // A doktor ID-t a kérésből vesszük
+        $doctorId = $request->input('doctor_id');
 
         if (!$doctorId) {
-            return response()->json(['error' => 'Doctor ID is required'], 400); // Ha nincs doctor_id, visszaadunk egy hibaüzenetet
+            return response()->json(['error' => 'Doctor ID is required'], 400);
         }
 
         $appointments = DoctorAppointment::with('treatment')
@@ -75,10 +60,10 @@ class DoctorAppointmentController extends Controller
 
     public function getAllAppointmentByDoctor(Request $request)
     {
-        $doctorId = $request->input('doctor_id'); // A doktor ID-t a kérésből vesszük
+        $doctorId = $request->input('doctor_id');
 
         if (!$doctorId) {
-            return response()->json(['error' => 'Doctor ID is required'], 400); // Ha nincs doctor_id, visszaadunk egy hibaüzenetet
+            return response()->json(['error' => 'Doctor ID is required'], 400);
         }
 
         $appointments = DoctorAppointment::with('treatment')
@@ -89,7 +74,6 @@ class DoctorAppointmentController extends Controller
 
     public function createAppointments(Request $request)
     {
-        // Adatok validálása
         $request->validate([
             'start_time' => 'required|date',
             'end_time' => 'required|date',
@@ -98,52 +82,42 @@ class DoctorAppointmentController extends Controller
 
         $doctor = Auth::user()->id;
 
-        // Kezelés kiválasztása a kezelés nevéből
         $treatment = Treatment::where('treatment_name', $request->treatment_name)->first();
         if (!$treatment) {
             return response()->json(['error' => 'Kezelés nem található'], 404);
         }
 
-        // Kezdő és befejező időpont
         $startTime = Carbon::parse($request->start_time);
         $endTime = Carbon::parse($request->end_time);
 
-        // Kezelés hossza (time típusú, pl.: 01:00:00)
-        $treatmentLength = Carbon::parse($treatment->treatment_length); // 01:00:00 -> Carbon objektum
-        $treatmentLengthMinutes = $treatmentLength->hour * 60 + $treatmentLength->minute; // átalakítjuk percbe
+        $treatmentLength = Carbon::parse($treatment->treatment_length);
+        $treatmentLengthMinutes = $treatmentLength->hour * 60 + $treatmentLength->minute; 
 
-        // Kezelések generálása
         $appointments = [];
         $currentStartTime = $startTime;
 
-        // Kezelés időpontok generálása az orvosi rendelési idő alapján
         while (true) {
-            $currentEndTime = $currentStartTime->copy()->addMinutes($treatmentLengthMinutes); // Kezelés időpontja
+            $currentEndTime = $currentStartTime->copy()->addMinutes($treatmentLengthMinutes);
 
-            // Ha a kezelés vége nem lépi túl az endTime-ot
             if ($currentEndTime->greaterThan($endTime)) {
                 break;
             }
 
-            // Kezelés hozzáadása
             $appointments[] = [
-                'doctor_id' => $doctor, // Bejelentkezett orvos ID-ja
+                'doctor_id' => $doctor,
                 'start_time' => $currentStartTime,
                 'treatment_id' => $treatment->treatment_id,
                 'patient_id' => null,
-                'status' => 'v', // vacant státusz
+                'status' => 'v',
             ];
 
-            // Kezelés utáni szünet: 10 perc
-            $currentStartTime = $currentEndTime->addMinutes(10); // Kezelés utáni 10 perces szünet
+            $currentStartTime = $currentEndTime->addMinutes(10);
         }
 
-        // Az utolsó kezelés, ha túlcsúszik, eltávolítása
         if ($currentStartTime->greaterThan($endTime)) {
-            array_pop($appointments); // Az utolsó kezelést eltávolítjuk, ha már nem fér bele
+            array_pop($appointments);
         }
 
-        // Adatok mentése az appointments táblába
         DoctorAppointment::insert($appointments);
 
         return response()->json(['message' => 'Kezelések sikeresen létrehozva'], 200);
@@ -201,7 +175,6 @@ class DoctorAppointmentController extends Controller
         $appointment->save();
 
         if ($appointment->status !== $previousStatus) {
-            // E-mail küldése a páciensnek
             Mail::to($appointment->patient->email)->send(new AppointmentStatusUpdated($appointment, $appointment->status));
         }
 
@@ -226,12 +199,9 @@ class DoctorAppointmentController extends Controller
 
     public function appointmentDeleteByDoctor(string $id)
     {
-
-        // Keresd ki a rekordot
         $record = DoctorAppointment::find($id);
         $previousStatus = $record->status;
 
-        // Ha nem található, térj vissza hibával
         if (!$record) {
             return response()->json([
                 'message' => 'Nem található ilyen időpont.',
@@ -239,7 +209,6 @@ class DoctorAppointmentController extends Controller
             ], 404);
         }
 
-        // Ha már törölték, ne frissítsük újra
         if ($record->status === 'c') {
             return response()->json([
                 'message' => 'Ez az időpont már törölve lett.',
@@ -247,17 +216,14 @@ class DoctorAppointmentController extends Controller
             ], 400);
         }
 
-        // Status frissítése
         $record->status = 'c';
         $record->save();
 
         if ($record->status !== $previousStatus) {
-            // E-mail küldése a páciensnek
             $user = User::find($record->patient_id);
             Mail::to($user->email)->send(new AppointmentStatusUpdated($record, $record->status));
         }
 
-        // Sikeres válasz visszaadása
         return response()->json([
             'message' => 'Az időpont törölve lett az orvos által.',
             'status' => 'success',
@@ -268,11 +234,9 @@ class DoctorAppointmentController extends Controller
     public function appointmentCancelDeleteByDoctor(string $id)
     {
 
-        // Keresd ki a rekordot
         $record = DoctorAppointment::find($id);
         $previousStatus = $record->status;
 
-        // Ha nem található, térj vissza hibával
         if (!$record) {
             return response()->json([
                 'message' => 'Nem található ilyen időpont.',
@@ -280,7 +244,6 @@ class DoctorAppointmentController extends Controller
             ], 404);
         }
 
-        // Ha már törölték, ne frissítsük újra
         if ($record->status === 'v') {
             return response()->json([
                 'message' => 'Ez az időpont szabad.',
@@ -288,12 +251,10 @@ class DoctorAppointmentController extends Controller
             ], 400);
         }
 
-        // Status frissítése
         if ($record->patient_id !== null) {
             $record->status = 'b';
 
             if ($record->status !== $previousStatus) {
-                // E-mail küldése a páciensnek
                 $user = User::find($record->patient_id);
                 Mail::to($user->email)->send(new AppointmentStatusUpdated($record, $record->status));
             }
@@ -303,7 +264,6 @@ class DoctorAppointmentController extends Controller
         }
         $record->save();
 
-        // Sikeres válasz visszaadása
         return response()->json([
             'message' => 'Az időpont vissza lett állítva szabadra.',
             'status' => 'success',
@@ -362,7 +322,6 @@ class DoctorAppointmentController extends Controller
         $appointment->save();
 
         if ($appointment->status !== $previousStatus) {
-            // E-mail küldése a páciensnek
             $user = User::find($appointment->patient_id);
             Mail::to($user->email)->send(new AppointmentStatusUpdated($appointment, $appointment->status));
         }
@@ -415,7 +374,6 @@ class DoctorAppointmentController extends Controller
         $appointment->save();
 
         if ($appointment->status !== $previousStatus) {
-            // E-mail küldése a páciensnek
             $user = User::find($appointment->patient_id);
             Mail::to($user->email)->send(new AppointmentStatusUpdated($appointment, $appointment->status));
         }

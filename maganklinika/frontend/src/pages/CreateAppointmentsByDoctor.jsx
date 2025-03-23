@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import useDoctorContext from "../contexts/DoctorContext";
 import { Button, ListGroup, Modal } from "react-bootstrap";
 import "./appointment.css";
@@ -42,10 +42,6 @@ const CreateallAppointmentsByDoctor = () => {
     agenda: 'Napló',
   };
 
-  /*useEffect( () => {
-    fetchAllAppontmentsByDoctor( user.id )
-  }, [] )*/
-
   const handleViewChange = ( view ) => {
     setView( view );
   };
@@ -60,19 +56,14 @@ const CreateallAppointmentsByDoctor = () => {
     setShow( true );
   };
 
-
-
-  // Az időpontok generálása 7:00 és 14:00 között, 30 perces lépésekben
   const createStartTimes = () => {
     const times = [];
-    const startHour = 7; // Kezdési idő 7:00
-    const endHour = 14; // Maximális kezdési idő 14:00
+    const startHour = 7;
+    const endHour = 14;
 
-    // 30 perces lépések generálása, 14:30 nem szerepel
     for ( let h = startHour; h <= endHour; h++ ) {
       for ( let m = 0; m < 60; m += 30 ) {
         if ( !( h === 14 && m === 30 ) ) {
-          // 14:30 nem jelenhet meg
           const hour = String( h ).padStart( 2, "0" );
           const minute = String( m ).padStart( 2, "0" );
           times.push( `${ hour }:${ minute }` );
@@ -84,15 +75,14 @@ const CreateallAppointmentsByDoctor = () => {
   };
 
   const handleSubmit = async () => {
-    const startDateTime = `${ selectedDate }T${ startTime }:00`; // dátum + időformátum
-    const endDateTime = `${ selectedDate }T${ endTime }:00`; // dátum + időformátum
+    const startDateTime = `${ selectedDate }T${ startTime }:00`;
+    const endDateTime = `${ selectedDate }T${ endTime }:00`;
 
-    // POST kérés küldése a backend felé
     const response = await myAxios
       .post( "/api/create-appointments", {
         start_time: startDateTime,
         end_time: endDateTime,
-        treatment_name: treatment, // kezelés neve
+        treatment_name: treatment,
       } )
     console.log( response.message )
     fetchAllAppontmentsByDoctor( user.id )
@@ -102,22 +92,18 @@ const CreateallAppointmentsByDoctor = () => {
   const createEndTimes = ( startTime ) => {
     const endTimes = [];
     const [ startHour, startMinute ] = startTime.split( ":" );
-    let startInMinutes = parseInt( startHour ) * 60 + parseInt( startMinute ); // Kezdés időpontja percben
+    let startInMinutes = parseInt( startHour ) * 60 + parseInt( startMinute );
 
-    // Ha a kezdés 12:00 vagy később, akkor a zárás legkorábban 14:00
-    let displayTime = startInMinutes + 120; // Alapértelmezett 2 órás eltolás, ha 12:00 vagy későbbi kezdés
+    let displayTime = startInMinutes + 120;
 
-    // A legkorábbi zárás 12:00, ha még nem érjük el
     if ( startInMinutes < 12 * 60 ) {
-      displayTime = 12 * 60; // Zárás legkorábban 12:00
+      displayTime = 12 * 60;
     }
 
-    // Ha a kezdés 12:00 után van, akkor a legkorábbi zárás 14:00
     if ( startInMinutes >= 12 * 60 ) {
-      displayTime = Math.max( startInMinutes + 120, 14 * 60 ); // 2 órás eltolás vagy minimum 14:00
+      displayTime = Math.max( startInMinutes + 120, 14 * 60 ); 
     }
 
-    // 30 perces lépésekben hozzuk létre a zárási időpontokat, de ne zárjuk le előre, hogy csak 8 órás legyen
     for ( let t = displayTime; t <= 18 * 60; t += 30 ) {
       let hours = Math.floor( t / 60 );
       let minutes = t % 60;
@@ -129,37 +115,32 @@ const CreateallAppointmentsByDoctor = () => {
     return endTimes;
   };
 
-  // Kezdés időpont változása, zárás automatikus frissítése
   const handleStartTimeChange = ( event ) => {
     const selectedStartTime = event.target.value;
     setStartTime( selectedStartTime );
 
-    // Zárás beállítása az új kezdéshez
     const newEndTimes = createEndTimes( selectedStartTime );
-    setEndTime( newEndTimes[ 0 ] ); // Az első elérhető zárás
+    setEndTime( newEndTimes[ 0 ] );
   };
 
   const handleChange = ( event ) => {
     setTreatment( event.target.value );
   };
 
-  // Ellenőrizni, hogy egy adott nap hétvége vagy múltbeli dátum
   const tileClassName = ( { date, view } ) => {
-    const isWeekend = date.getDay() === 6 || date.getDay() === 0; // Szombat vagy vasárnap
-    const isPastDate = date < new Date(); // Ha a nap a múltban van
+    const isWeekend = date.getDay() === 6 || date.getDay() === 0;
+    const isPastDate = date < new Date();
     const formattedDate = date.toLocaleDateString( "sv-SE" );
 
-    // Ha múltbeli vagy hétvégi dátum, pirosra színezzük és nem lehet kattintani
     if ( isWeekend ) {
-      return "red-tile"; // Osztály, amit a CSS-ben kezelhetünk
+      return "red-tile"; 
     }
 
-    // Ha van foglalás az adott napon, akkor azt is kezelhetjük
     if (
       allAppointmentsByDate[ formattedDate ] &&
       allAppointmentsByDate[ formattedDate ].length > 0
     ) {
-      return "has-appointments"; // Ha van foglalás, külön osztály
+      return "has-appointments";
     }
 
     return null;

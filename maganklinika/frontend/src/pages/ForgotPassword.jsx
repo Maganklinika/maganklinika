@@ -13,7 +13,6 @@ const ForgotPassword = () => {
       setMessage("");
       setError("");
 
-      // Küldjük a jelszó-visszaállító emailt
       const response = await myAxios.post("/forgot-password", { email });
 
       if (response.statusText === "OK") {

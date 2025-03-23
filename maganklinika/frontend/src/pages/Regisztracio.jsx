@@ -15,7 +15,7 @@ const Regisztracio = () => {
   const [address, setAddress] = useState("");
   const [password_confirmation, setPassword_confirmation] = useState("");
   const [spec_id, setSpec] = useState("");
-  const [localErrors, setLocalErrors] = useState({}); // Lokális hibaállapot
+  const [localErrors, setLocalErrors] = useState({});
 
   const { reg, errors, fetchSpecializations, specializations, checkDoctorLicence, isValidLicence } = useAuthContext();
 

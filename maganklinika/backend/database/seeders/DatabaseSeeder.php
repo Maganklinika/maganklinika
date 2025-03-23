@@ -3,11 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\doctor;
-use App\Models\DoctorLicence;
 use App\Models\patient;
 use App\Models\Specialization;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -18,7 +16,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Szerepkörök létrehozása
         RoleSeeder::run();
 
         $this->call([
@@ -29,21 +26,18 @@ class DatabaseSeeder extends Seeder
         $doctorRoleId = 2;
         $patientRoleId = 3;
 
-        // Létrehozunk 20 orvost és 20 pácienst
         User::factory(40)->create()->each(function ($user) use ($doctorRoleId, $patientRoleId) {
             if ($user->role_id === $doctorRoleId) {
-                // Orvos rekord létrehozása
                 Doctor::create([
                     'user_id' => $user->id,
-                    'specialization_id' => Specialization::inRandomOrder()->first()->specialization_id, // Random specializáció
+                    'specialization_id' => Specialization::inRandomOrder()->first()->specialization_id,
                 ]);
             } elseif ($user->role_id === $patientRoleId) {
-                // Páciens rekord létrehozása
                 Patient::create([
                     'user_id' => $user->id,
-                    'taj_number' => fake()->unique()->randomNumber(8, true), // Véletlenszerű 8 számjegyű TAJ szám
-                    'birth_date' => fake()->date(), // Véletlenszerű születési dátum
-                    'address' => fake()->address(), // Véletlenszerű cím
+                    'taj_number' => fake()->unique()->randomNumber(8, true),
+                    'birth_date' => fake()->date(),
+                    'address' => fake()->address(),
                 ]);
             }
         });

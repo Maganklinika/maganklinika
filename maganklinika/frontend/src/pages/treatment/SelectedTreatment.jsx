@@ -8,7 +8,7 @@ const SelectedTreatment = () => {
     const { fetchGetPatientData, patientData, fetchFinishAppointment } = useDoctorContext()
     const [ description, setDescription ] = useState( "" )
     const location = useLocation();
-    const data = location.state; // Itt érjük el az
+    const data = location.state; 
 
     useEffect( () => {
         if ( data?.p_id ) {

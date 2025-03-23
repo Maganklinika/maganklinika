@@ -2,13 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\Models\Role;
 use App\Models\User;
-use Database\Seeders\RoleSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\DB;
-use Tests\TestCase;
 use Tests\TestCaseWithSeed;
 
 class UserTest extends TestCaseWithSeed

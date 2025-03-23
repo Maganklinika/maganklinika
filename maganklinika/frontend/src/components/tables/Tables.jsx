@@ -1,14 +1,14 @@
 import { Table } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { Droppable, Draggable } from "@hello-pangea/dnd";
-import TableRow from "./TableRow"; // A táblázat sorait kezeljük
-import "./roletables.css"; // Stílusok
+import TableRow from "./TableRow";
+import "./roletables.css";
 
 const Tables = (props) => {
   const [items, setItems] = useState(props.lista);
 
   useEffect(() => {
-    setItems(props.lista); // Frissítjük a lista tartalmát, amikor a props változik
+    setItems(props.lista); 
   }, [props.lista]);
 
   return (
@@ -19,8 +19,8 @@ const Tables = (props) => {
           striped
           bordered
           hover
-          {...provided.droppableProps} // Az átrendezést biztosító props
-          ref={provided.innerRef} // Hivatkozás a DOM elemre
+          {...provided.droppableProps} 
+          ref={provided.innerRef} 
         >
           <thead>
             <tr>
@@ -30,7 +30,6 @@ const Tables = (props) => {
           <tbody>
             {items.map((e, i) => {
               if (props.nev === e.role_name) {
-                // Ha a szerepkör neve egyezik a menüpontok nevével
                 return (
                   <Draggable key={e.navRole_id} draggableId={String(e.navRole_id)} index={i} >
                     {(provided) => (

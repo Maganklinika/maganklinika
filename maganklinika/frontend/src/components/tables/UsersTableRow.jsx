@@ -5,11 +5,11 @@ const UsersTableRow = (props) => {
   const [role, setRole] = useState(props.role?.name);
 
   const handleChange = async (event) => {
-    const newRole = event.target.value; // Az új szerepkör
+    const newRole = event.target.value;
 
-    setRole(newRole); // Frissítjük a helyi állapotot
+    setRole(newRole);
     console.log(role);
-    await fetchUserRoleData(newRole); // Elküldjük az új szerepkört a backendnek
+    await fetchUserRoleData(newRole);
   };
 
   const fetchUserRoleData = async (newRole) => {
@@ -18,11 +18,10 @@ const UsersTableRow = (props) => {
     const roleId = roleData?.role_id;
     if (roleId) {
       try {
-        // Frissítjük a felhasználó szerepkörét a backend-en
         const response = await myAxios.put(
           `/api/update-user-role/${props.e.user_id}`,
           {
-            role_id: roleId, // Az új szerepkör id
+            role_id: roleId,
           }
         );
         console.log("Role updated:", response.data);

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('doctor_appointments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('doctor_id')->references('user_id')->on('doctors'); //key
-            $table->datetime('start_time'); //key
+            $table->foreignId('doctor_id')->references('user_id')->on('doctors');
+            $table->datetime('start_time');
             $table->foreignId('patient_id')->nullable()->references('user_id')->on('patients');
             $table->foreignId('treatment_id')->references('treatment_id')->on('treatments');
             $table->string('description')->nullable();

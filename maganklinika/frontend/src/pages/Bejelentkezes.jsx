@@ -11,7 +11,6 @@ const Bejelentkezes = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    //Összegyűjtjük egyetlen objektumban az űrlap adatokat
     const adat = {
       email: email,
       password: password,
@@ -30,9 +29,7 @@ const Bejelentkezes = () => {
           </label>
           <input
             type="email"
-            // value beállítása a state értékére
             value={email}
-            // state értékének módosítása ha változik a beviteli mező tartalma
             onChange={(e) => {
               setEmail(e.target.value);
             }}

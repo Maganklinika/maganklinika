@@ -68,19 +68,16 @@ class UserController extends Controller
 
     public function userRoleUpdate(Request $request, $id)
     {
-        // Ellenőrizzük, hogy a felhasználó létezik-e
-        $user = User::find($id);  // Itt az $id a felhasználó azonosítója az URL-ből
+        $user = User::find($id);
         if (!$user) {
             return response()->json(['error' => 'Felhasználó nem található.'], 404);
         }
 
-        // Ellenőrizzük, hogy létezik-e a szerepkör id, amit a body-ban kaptunk
-        $role = Role::find($request->role_id);  // Itt az $request->id a role_id-t reprezentálja
+        $role = Role::find($request->role_id);
         if (!$role) {
             return response()->json(['error' => 'Szerepkör nem található.'], 404);
         }
 
-        // Módosítjuk a felhasználó szerepkörét
         $user->role_id = $request->role_id;
         $user->save();
 

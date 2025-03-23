@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -13,29 +12,25 @@ class NavigationRoleSeeder extends Seeder
      */
     public function run()
     {
-        // Guest szerepkör (role_id = 4) alap menüpontok
-        $guestRoleId = 4; // Vendég szerepkör ID-ja
+        $guestRoleId = 4;
         $ranking = 1;
 
-        // Főoldal menüpont (id: 1)
         DB::table('navigation_roles')->insert([
             'ranking' => $ranking++,
             'role_id' => $guestRoleId,
-            'navigation_id' => 1, // Főoldal menüpont id-je
+            'navigation_id' => 1,
         ]);
 
-        // Bejelentkezés menüpont (id: 2)
         DB::table('navigation_roles')->insert([
             'ranking' => $ranking++,
             'role_id' => $guestRoleId,
-            'navigation_id' => 2, // Bejelentkezés menüpont id-je
+            'navigation_id' => 2,
         ]);
 
-        // Regisztráció menüpont (id: 3)
         DB::table('navigation_roles')->insert([
             'ranking' => $ranking++,
             'role_id' => $guestRoleId,
-            'navigation_id' => 3, // Regisztráció menüpont id-je
+            'navigation_id' => 3,
         ]);
         $ranking = 1;
         DB::table('navigation_roles')->insert([
@@ -52,7 +47,7 @@ class NavigationRoleSeeder extends Seeder
         DB::table('navigation_roles')->insert([
             'ranking' => $ranking++,
             'role_id' => 2,
-            'navigation_id' => 9, // Regisztráció menüpont id-je
+            'navigation_id' => 9,
         ]);
 
         DB::table('navigation_roles')->insert([
@@ -72,19 +67,16 @@ class NavigationRoleSeeder extends Seeder
             'role_id' => 2,
             'navigation_id' => 12,
         ]);
-        // Admin szerepkör menüpontjai (role_id = 1) - MINDEN MENÜPONT HOZZÁADÁSA
-        $adminRoleId = 1; // Admin szerepkör ID-ja
+        $adminRoleId = 1;
 
-        // Lekérjük az összes menüpontot a nav táblából
         $navItems = DB::table('navigations')->get();
         $ranking = 1;
-        // Iterálunk a menüpontokon és hozzárendeljük őket az admin szerepkörhöz
         foreach ($navItems as $navItem) {
             if ($navItem->name !== "Bejelentkezés" && $navItem->name !== "Regisztráció") {
                 DB::table('navigation_roles')->insert([
                     'ranking' => $ranking++,
                     'role_id' => $adminRoleId,
-                    'navigation_id' => $navItem->navigation_id, // Menüpont ID-ja
+                    'navigation_id' => $navItem->navigation_id,
                 ]);
             }
         }

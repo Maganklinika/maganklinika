@@ -5,19 +5,16 @@ namespace App\Mail;
 use App\Models\DoctorAppointment;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
 class AppointmentStatusUpdated extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $appointment; // Az időpont információi
-    public $status; // Az új státusz
-    public $patient; // A páciens információi
+    public $appointment;
+    public $status;
+    public $patient;
 
     /**
      * Create a new message instance.
