@@ -6,6 +6,7 @@ use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -92,6 +93,7 @@ class UserController extends Controller
             $data = DB::select(
                 "SELECT * FROM `users` u 
                 INNER JOIN doctors d on d.user_id = u.id
+                INNER JOIN specializations s on s.specialization_id = d.specialization_id
                 where u.id = {$doctor->user_id};"
             );
             return response()->json($data);
@@ -105,4 +107,36 @@ class UserController extends Controller
             return response()->json($data);
         }
     }
+
+    public function changeUserInfo(Request $request, string $id){
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+
+    if ($user->role_id === 2) {
+        $user->name = $request->name;
+        $user->phone_number = $request->phone;
+        $user->email = $request->email;
+        $user->save();
+        return response()->json($user);
+
+    } elseif($user->role_id === 3) {
+        $patient = Patient::find($user->id);
+        $user->name = $request->name;
+        $user->phone_number = $request->phone;
+        $user->email = $request->email;
+        $patient->address = $request->address;
+        $user->save();
+        $patient->save();
+        return response()->json([
+            'user' => $user,
+            'patient' => $patient,
+        ]);
+    }
+
+    }
+
+
 }

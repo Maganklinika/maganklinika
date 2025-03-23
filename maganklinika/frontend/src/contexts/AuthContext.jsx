@@ -198,6 +198,10 @@ export const AuthProvider = ( { children } ) => {
     }
   }, [ user ] );
 
+  const changeUserInfo = async(id, formData) => {
+    await myAxios.put(`/api/change-user-info/${id}`, formData);
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -224,6 +228,7 @@ export const AuthProvider = ( { children } ) => {
         setPreview,
         fetchHandleUpload,
         getUserData,
+        changeUserInfo,
       }}
     >
       {children}
