@@ -1,15 +1,22 @@
-.role-tables {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  width: 50vh;
-  gap: 2rem;
-  padding: 1rem;
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-  border-radius: 7px;
+.all-role-table {
+	padding: 1rem;
+	box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+	border-radius: 7px;
 }
 
-.role-tables td{
-  width: 210px;
+.all-role-table h3 {
+	margin-bottom: 2rem;
+}
+
+.role-tables {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	width: 50vh;
+	gap: 2rem;
+}
+
+.role-tables td {
+	width: 210px;
 }
 /*
 .table_roles{
@@ -33,13 +40,15 @@ height: max-content;
 }
   */
 .menu-management {
-  display: flex;
-  flex-direction: row;
-  margin: 2rem;
-  gap: 6rem;
-  width: 70vw;
-  margin-inline: auto;
-  text-align: center;
+	display: flex;
+	flex-direction: row;
+	margin: 2rem;
+	width: 95vw;
+	margin-inline: auto;
+	text-align: center;
+	align-items: center;
+	justify-content: center;
+	height: 780px;
 }
 /*
 .menu-management th {
@@ -47,12 +56,33 @@ height: max-content;
 } */
 
 .menu-management-nav-list {
-  width: 50vh;
-  padding: 1rem;
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-  border-radius: 7px;
+	width: 25vw;
+	height: 100%;
+	padding: 1rem;
+	box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+	border-radius: 7px;
+	flex-wrap: wrap;
+}
+
+.menu-management-nav-list h3 {
+	margin-bottom: 2rem;
 }
 
 .menu-management-nav-list td {
-  width: 1000px;
-} 
+	width: 1000px;
+}
+
+.arrow-container {
+	display: flex;
+	justify-content: center; /* Középre vízszintesen */
+	align-items: center; /* Középre függőlegesen */
+	height: 100px; /* Teljes képernyőmagasság */
+  flex-direction: column;
+}
+
+.arrow-svg {
+	width: 80%; /* Arányosan méretezhető */
+	max-width: 600px; /* Maximum szélesség */
+	height: auto; /* Magasság automatikusan méreteződik */
+  
+}

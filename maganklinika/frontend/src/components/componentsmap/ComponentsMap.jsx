@@ -6,7 +6,7 @@ import Bejelentkezes from "../../pages/Bejelentkezes";
 import Fooldal from "../../pages/Fooldal";
 import Kijelentkezes from "../../pages/Kijelentkezes";
 import Felhasznalok from "../../pages/Felhasznalok";
-import Kapcsolat from "../../pages/Kapcsolat";
+import Kapcsolat from "../../pages/contact/Kapcsolat";
 import Appointments from "../../pages/Appointments";
 import CreateAppointmentsByDoctor from "../../pages/CreateAppointmentsByDoctor";
 import Treatment from "../../pages/treatment/Treatment";

@@ -5,6 +5,7 @@ import "leaflet.awesome-markers";
 import "leaflet.awesome-markers/dist/leaflet.awesome-markers.css";
 import L from "leaflet";
 import "font-awesome/css/font-awesome.min.css";
+import "./contact.css"
 
 const Kapcsolat = () => {
   const position = [ 16.761785, -169.515644 ]; // Budapest koordinátája
@@ -24,9 +25,9 @@ const Kapcsolat = () => {
   return (
     <div>
       <h2 className="text-2xl font-bold text-center mb-4">Kapcsolat</h2>
-      <div className="container mx-auto mt-10 p-8 bg-white shadow-lg rounded-lg">
+      <div className="map container mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
 
-        <MapContainer center={position} zoom={14} style={{ height: "400px", width: "100%" }}>
+        <MapContainer center={position} zoom={14} style={{ height: "380px", width: "100%" }}>
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
