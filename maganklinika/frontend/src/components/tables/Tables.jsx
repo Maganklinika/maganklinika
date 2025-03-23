@@ -4,35 +4,36 @@ import { Droppable, Draggable } from "@hello-pangea/dnd";
 import TableRow from "./TableRow";
 import "./roletables.css";
 
-const Tables = (props) => {
-  const [items, setItems] = useState(props.lista);
+const Tables = ( props ) => {
+  const [ items, setItems ] = useState( props.lista );
 
-  useEffect(() => {
-    setItems(props.lista); 
-  }, [props.lista]);
+  useEffect( () => {
+    setItems( props.lista );
+  }, [ props.lista ] );
 
   return (
     <Droppable droppableId={props.nev}>
-      {(provided) => (
+      {( provided ) => (
         <Table
           className="table"
           striped
           bordered
+          style={{ borderColor: "#8d643b" }}
           hover
-          {...provided.droppableProps} 
-          ref={provided.innerRef} 
+          {...provided.droppableProps}
+          ref={provided.innerRef}
         >
           <thead>
-            <tr>
-              <th>{props.nev}</th>
+            <tr >
+              <th style={{ backgroundColor: "#D4A373" }}>{props.nev}</th>
             </tr>
           </thead>
           <tbody>
-            {items.map((e, i) => {
-              if (props.nev === e.role_name) {
+            {items.map( ( e, i ) => {
+              if ( props.nev === e.role_name ) {
                 return (
-                  <Draggable key={e.navRole_id} draggableId={String(e.navRole_id)} index={i} >
-                    {(provided) => (
+                  <Draggable key={e.navRole_id} draggableId={String( e.navRole_id )} index={i} >
+                    {( provided ) => (
                       <>
                         <TableRow provided={provided} e={e} />
                       </>
@@ -40,7 +41,7 @@ const Tables = (props) => {
                   </Draggable>
                 );
               }
-            })}
+            } )}
             {provided.placeholder}
           </tbody>
         </Table>
