@@ -1,0 +1,58 @@
+body {
+    background: url('../../../public/images/backgrounds/aboutUs_bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+  }
+
+.rolunk-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .rolunk-title {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #050505;
+  }
+  
+  .rolunk-card {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(2px);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.6s ease-in-out;
+  }
+  
+  .rolunk-card:hover {
+    transition: 2s;
+    transform: translateY(-5px);
+    backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.086);
+    box-shadow: 0 4px 10px rgb(0, 0, 0);
+  }
+  
+  .rolunk-card h2 {
+    font-size: 1.75rem;
+    color: #1c1c1cae;
+    margin-bottom: 10px;
+  }
+  
+  .rolunk-card p,
+  .rolunk-card ul {
+    color: #374151;
+    line-height: 1.6;
+  }
+  
+  .rolunk-card ul {
+    padding-left: 20px;
+  }
+  
+  .rolunk-card ul li {
+    list-style-type: disc;
+  }
+  

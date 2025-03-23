@@ -10,6 +10,7 @@ import Kapcsolat from "../../pages/contact/Kapcsolat";
 import Appointments from "../../pages/Appointments";
 import CreateAppointmentsByDoctor from "../../pages/CreateAppointmentsByDoctor";
 import Treatment from "../../pages/treatment/Treatment";
+import Rolunk from "../../pages/rolunk/Rolunk";
 
 export const ComponentsMap = {
   Doktorok,
@@ -24,4 +25,5 @@ export const ComponentsMap = {
   Appointments,
   CreateAppointmentsByDoctor,
   Treatment,
+  Rolunk,
 };
