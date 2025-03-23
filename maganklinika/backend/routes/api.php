@@ -72,6 +72,7 @@ Route::middleware(['auth:sanctum', Patient::class])
         Route::put('/booking-appointment/{id}', [DoctorAppointmentController::class, 'bookingAppointment']);
         Route::get('/get-all-appointment-by-doctor', [DoctorAppointmentController::class, 'getAllAppointmentByDoctor']);
         Route::put('/cancel-appointment-by-patient/{id}', [PatientController::class, 'cancelAppointmentByPatient']);
+        Route::post('/file-upload', [FileController::class, 'store'])->name('file.store');
     });
 
 Route::get('/nav-items', [NavigationRoleController::class, 'getNavItemsByRole']);
@@ -80,4 +81,3 @@ Route::get('/treatments', [TreatmentController::class, 'index']);
 Route::get('/specializations', [SpecializationController::class, 'index']);
 Route::get('/checkLicenceById/{id}', [DoctorLicenceController::class, 'checkLicenceById']);
 Route::get('/get-available-appointments', [DoctorAppointmentController::class, 'getAvailableAppointmentsByTreatment']);
-Route::post('/file-upload', [FileController::class, 'store'])->name('file.store');
