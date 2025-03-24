@@ -102,7 +102,7 @@ const Fooldal = () => {
       <UncontrolledExample />
 
       <div className="specializations">
-        <h3>Az alábbi témákban fordulhatnak hozzánk:</h3>
+        <h3>Az alábbi témákban fordulhatnak hozzánk</h3>
         <ul>
           {specializations.length > 0 ? (
             specializations.map( ( spec, index ) => (
