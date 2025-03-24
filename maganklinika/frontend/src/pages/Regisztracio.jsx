@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import useAuthContext from "../contexts/AuthContext";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import './regisztracio.css';
 
 
 const Regisztracio = () => {
