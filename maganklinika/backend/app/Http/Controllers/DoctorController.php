@@ -55,7 +55,7 @@ class DoctorController extends Controller
     public function listDoctorsWithSpecialization()
     {
         $data = DB::select("
-            SELECT DISTINCT u.name as d_name, s.specialization_name as s_name, u.email
+            SELECT DISTINCT u.name as d_name, s.specialization_name as s_name, u.email, u.profile_picture as img
             FROM doctors as d
             INNER JOIN users as u on d.user_id = u.id
             INNER JOIN specializations as s on d.specialization_id = s.specialization_id

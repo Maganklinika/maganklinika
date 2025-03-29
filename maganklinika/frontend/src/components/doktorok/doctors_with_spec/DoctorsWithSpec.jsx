@@ -2,32 +2,32 @@ import React, { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import ReactStars from "react-stars";
 
-const DoctorsWithSpec = (props) => {
-  const [show, setShow] = useState(false);
+const DoctorsWithSpec = ( props ) => {
+  const [ show, setShow ] = useState( false );
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleClose = () => setShow( false );
+  const handleShow = () => setShow( true );
 
   const getStarCount = () => {
     const result = props.ratingList
-      .map((e) => {
-        if (props.e.d_name === e.doctor_name) {
+      .map( ( e ) => {
+        if ( props.e.d_name === e.doctor_name ) {
           // Csillagok kiírása a kerekített pontszám alapján
           //return "⭐".repeat(Math.round(parseFloat(e.rating)))
           return <ReactStars
-          count={5}
-          size={24}
-          value={e.rating}
-          edit={false}
-          activeColor="gold"
-          half={true}
-        />;
+            count={5}
+            size={24}
+            value={e.rating}
+            edit={false}
+            activeColor="gold"
+            half={true}
+          />;
         }
         return ""; // Ha nincs megfelelő találat, üres stringet adunk vissza
-      })
-      .filter((stars) => stars !== ""); // Eltávolítjuk az üres stringeket
+      } )
+      .filter( ( stars ) => stars !== "" ); // Eltávolítjuk az üres stringeket
 
-    return result.length > 0 ? result[0] : "Nincs értékelés"; // Ha van találat, visszaadjuk, ha nincs, jelezzük
+    return result.length > 0 ? result[ 0 ] : "Nincs értékelés"; // Ha van találat, visszaadjuk, ha nincs, jelezzük
   };
   return (
     <div className="card">
@@ -35,7 +35,14 @@ const DoctorsWithSpec = (props) => {
         <h5>{props.e.d_name}</h5>
       </div>
       <div className="card-body">
-        <div className="image">image</div>
+        <div className="image">
+          {
+            props.e.img ?
+              <img src={`http://localhost:8000/storage/${ props.e.img }`} alt={props.e.img} /> :
+              <img src="/images/profile_picture/default_profil_picture.webp" alt="default_profile_picture" />
+          }
+
+        </div>
         <div className="description">
           <div className="text">
             <div className="spec">
@@ -45,7 +52,7 @@ const DoctorsWithSpec = (props) => {
             <div className="email">
               <h6>Email:</h6>
               <p>
-                <a href={`mailto:${props.e.email}`}>{props.e.email}</a>
+                <a href={`mailto:${ props.e.email }`}>{props.e.email}</a>
               </p>
             </div>
           </div>
@@ -71,7 +78,7 @@ const DoctorsWithSpec = (props) => {
                 </div>
                 <div>
                   <h6>Értékelés:</h6>
-                    {getStarCount()}
+                  {getStarCount()}
                 </div>
               </Modal.Body>
               <Modal.Footer>
