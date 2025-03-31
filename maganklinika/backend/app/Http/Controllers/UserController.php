@@ -105,6 +105,13 @@ class UserController extends Controller
                 where u.id = {$patient->user_id}"
             );
             return response()->json($data);
+        }else{
+            $u = User::find($user->id);
+            $data = DB::select(
+                "SELECT * FROM `users` u 
+                where u.id = {$u->id}"
+            );
+            return response()->json($data);
         }
     }
 
