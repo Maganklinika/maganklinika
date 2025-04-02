@@ -82,7 +82,10 @@ const Profile = () => {
           {!isUploadSelected ? (
             userData?.[0]?.profile_picture ? (
               <img
-                src={`http://localhost:8000/storage/${userData[0].profile_picture}`}
+                src={`${
+                  process.env.REACT_APP_PRIMARY_API_URL ||
+                  "http://localhost:8000"
+                }/storage/${userData[0]?.profile_picture || ""}`}
                 alt="Profilkép"
                 width="150"
                 height="150"
@@ -95,6 +98,7 @@ const Profile = () => {
                 alt="Alapértelmezett profilkép"
                 width="150"
                 style={{ borderRadius: "50%" }}
+                onClick={handleUploadPicture}
               />
             )
           ) : (

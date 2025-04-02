@@ -20,10 +20,10 @@ services:
   db:
     image: mysql:5.7
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      #MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: privateclinic
-      MYSQL_PASSWORD: root
-      MYSQL_CHARSET: utf8mb4  # Az adatbázis charset-je
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_CHARSET: utf8mb4  
       MYSQL_COLLATION: utf8mb4_hungarian_ci
     volumes:
       - ./data:/var/lib/mysql
@@ -34,6 +34,9 @@ services:
       - mysql-phpmyadmin
   nginx:
     image: pcfrontend
+    # build:
+    #   context: ./frontend
+    #   dockerfile: Dockerfile
     ports:
       - "80:80"
     networks:
@@ -46,7 +49,7 @@ services:
     restart: always
     environment:
       PMA_HOST: db
-      MYSQL_ROOT_PASSWORD: root
+      #MYSQL_ROOT_PASSWORD: 
     ports:
       - "8080:80"
     networks:

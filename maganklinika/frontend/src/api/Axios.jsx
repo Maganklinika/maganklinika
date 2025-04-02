@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const PRIMARY_BASE_URL = "http://localhost:8000";
-const SECONDARY_BASE_URL = "http://localhost:9000";
+const PRIMARY_BASE_URL = process.env.REACT_APP_PRIMARY_API_URL || "http://localhost:8000";
+const SECONDARY_BASE_URL = "http://localhost";
 
 // Axios példány létrehozása
 export const myAxios = axios.create({
@@ -10,16 +10,23 @@ export const myAxios = axios.create({
 });
 
 // Interceptorok
-myAxios.interceptors.response.use(
+/*myAxios.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+
+    if (originalRequest.url.includes('/sanctum/csrf-cookie')) {
+      console.warn(`⚠️ CSRF request failed on ${PRIMARY_BASE_URL}, trying secondary backend.`);
+
+      originalRequest.baseURL = SECONDARY_BASE_URL;  // Átváltás a secondary backendre
+      return myAxios(originalRequest);  // Újrapróbálkozás
+    }
 
     // 🔴 Hálózati hiba esetén (`ERR_NETWORK`) ne ellenőrizzük a `response.status`-t, mert `response` nincs!
     if (
       !originalRequest._retry &&
       (error.code === "ERR_NETWORK" ||
-        (error.response && error.response.status >= 500))
+        (error.response && error.response.status >= 400))
     ) {
       originalRequest._retry = true;
 
@@ -45,7 +52,7 @@ myAxios.interceptors.response.use(
 
     return Promise.reject(error);
   }
-);
+);*/
 
 // Kérések interceptorai
 myAxios.interceptors.request.use(

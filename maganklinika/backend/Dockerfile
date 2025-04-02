@@ -46,5 +46,7 @@ RUN composer install
 # Port megnyitása
 EXPOSE 9000
 
+RUN composer dump-autoload --optimize && php artisan storage:link
+RUN php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan optimize 
 # Alkalmazás elindítása
 CMD /usr/local/bin/wait-for-it.sh db:3306 -- php artisan migrate:fresh --seed --force; php-fpm

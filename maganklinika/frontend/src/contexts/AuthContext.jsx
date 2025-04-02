@@ -149,7 +149,7 @@ export const AuthProvider = ( { children } ) => {
     formData.append( 'profile_picture', selectedFile );
 
     try {
-      const response = await myAxios.post( 'http://localhost:8000/api/file-upload', formData, {
+      const response = await myAxios.post( '/api/file-upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
