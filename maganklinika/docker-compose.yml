@@ -1,6 +1,6 @@
 services:
   app:
-    image: container-registry.fornaxict.hu:5005/karsai.bence/privateclinic/backend:${CI_BUILD_TAG}
+    image: container-registry.fornaxict.hu:5005/karsai.bence/privateclinic/maganklinika/backend:${CI_BUILD_TAG}
     # build:
     #   context: ./backend
     #   dockerfile: Dockerfile
@@ -33,7 +33,7 @@ services:
     networks:
       - mysql-phpmyadmin
   nginx:
-    image: container-registry.fornaxict.hu:5005/karsai.bence/privateclinic/frontend:${CI_BUILD_TAG}
+    image: container-registry.fornaxict.hu:5005/karsai.bence/privateclinic/maganklinika/frontend:${CI_BUILD_TAG}
     # build:
     #   context: ./frontend
     #   dockerfile: Dockerfile
