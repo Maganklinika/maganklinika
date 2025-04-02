@@ -9,7 +9,7 @@ build-backend:
   stage: build
   script:
     - docker login -u gitlab-ci-token -p ${CI_BUILD_TOKEN} ${CI_REGISTRY}
-    - cd backend
+    - cd maganklinika/backend
     - docker build --build-arg RELEASE_DATE=`date -u +%Y-%m-%dT%H:%M` -t $CI_REGISTRY_IMAGE/backend:$CI_BUILD_TAG .
     - docker push $CI_REGISTRY_IMAGE/backend:$CI_BUILD_TAG
   only:
@@ -21,7 +21,7 @@ build-frontend:
   stage: build
   script:
     - docker login -u gitlab-ci-token -p ${CI_BUILD_TOKEN} ${CI_REGISTRY}
-    - cd frontend
+    - cd maganklinika/frontend
     - docker build --build-arg RELEASE_DATE=`date -u +%Y-%m-%dT%H:%M` -t $CI_REGISTRY_IMAGE/frontend:$CI_BUILD_TAG .
     - docker push $CI_REGISTRY_IMAGE/frontend:$CI_BUILD_TAG
   only:
