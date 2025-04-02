@@ -8,7 +8,7 @@ services:
       - ./backend:/var/www/html
       - /var/www/html/storage
       - /var/www/html/bootstrap/cache
-      - ./backend/php-fpm/www.conf:/usr/local/etc/php-fpm.d/www.conf
+      - /home/docker/php-fpm/www.conf:/usr/local/etc/php-fpm.d/www.conf
     env_file: ".env"
     ports:
       - 9000:9000
@@ -26,8 +26,8 @@ services:
       MYSQL_CHARSET: utf8mb4  
       MYSQL_COLLATION: utf8mb4_hungarian_ci
     volumes:
-      - ./data:/var/lib/mysql
-      - ./mysql.cnf:/etc/mysql/conf.d/mysql.cnf
+      - /home/docker/data:/var/lib/mysql
+      - /home/docker/mysql.cnf:/etc/mysql/conf.d/mysql.cnf
     ports:
       - 3306:3306
     networks:
