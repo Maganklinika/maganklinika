@@ -1,0 +1,49 @@
+before_script:
+  - echo "$CI_BUILD_TOKEN" | docker login -u gitlab-ci-token $CI_REGISTRY --password-stdin
+
+stages:
+  - build
+  - deploy
+
+build-backend:
+  stage: build
+  script:
+    - docker login -u gitlab-ci-token -p ${CI_BUILD_TOKEN} ${CI_REGISTRY}
+    - cd backend
+    - docker build --build-arg RELEASE_DATE=`date -u +%Y-%m-%dT%H:%M` -t $CI_REGISTRY_IMAGE/backend:$CI_BUILD_TAG .
+    - docker push $CI_REGISTRY_IMAGE/backend:$CI_BUILD_TAG
+  only:
+    - tags   
+  tags:
+    - ssh-runner
+
+build-frontend:
+  stage: build
+  script:
+    - docker login -u gitlab-ci-token -p ${CI_BUILD_TOKEN} ${CI_REGISTRY}
+    - cd frontend
+    - docker build --build-arg RELEASE_DATE=`date -u +%Y-%m-%dT%H:%M` -t $CI_REGISTRY_IMAGE/frontend:$CI_BUILD_TAG .
+    - docker push $CI_REGISTRY_IMAGE/frontend:$CI_BUILD_TAG
+  only:
+    - tags   
+  tags:
+    - ssh-runner
+
+deploy:
+  stage: deploy
+  script:
+    - eval $(docker-machine env devops-test)
+    - docker login -u gitlab-ci-token -p ${CI_BUILD_TOKEN} ${CI_REGISTRY}
+
+    - docker ps -a
+
+    - docker-compose-v2 --file docker-compose.yml up -d
+    - docker ps -a
+  tags:
+    - ssh-runner
+  only:
+    - tags
+  dependencies:
+    - build-backend
+    - build-frontend
+  when: on_success
