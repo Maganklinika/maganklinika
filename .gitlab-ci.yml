@@ -37,7 +37,7 @@ deploy:
 
     - docker ps -a
 
-    - docker-compose-v2 --file docker-compose.yml up -d
+    - docker-compose-v2 --file maganklinika/docker-compose.yml up -d
     - docker ps -a
   tags:
     - ssh-runner
