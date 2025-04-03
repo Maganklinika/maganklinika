@@ -36,7 +36,6 @@ COPY . /var/www
 
 # Alkalmazás fájlok másolása a megfelelő jogosultságokkal
 COPY --chown=www:www . /var/www/html
-COPY ../.env var/www/html
 
 # PHP-FPM felhasználó beállítása
 USER www
