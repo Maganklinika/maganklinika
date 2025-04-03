@@ -33,9 +33,10 @@ RUN useradd -u 1000 -ms /bin/bash -g www www
 
 
 COPY . /var/www
+
 # Alkalmazás fájlok másolása a megfelelő jogosultságokkal
 COPY --chown=www:www . /var/www/html
-
+COPY ../.env var/www/html
 
 # PHP-FPM felhasználó beállítása
 USER www
