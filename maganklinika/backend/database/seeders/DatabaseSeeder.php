@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\doctor;
-use App\Models\patient;
+use App\Models\Doctor;
+use App\Models\Patient;
 use App\Models\Specialization;
 use App\Models\User;
 use Illuminate\Database\Seeder;
