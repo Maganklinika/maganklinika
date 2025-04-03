@@ -37,7 +37,7 @@ deploy:
 
     - docker ps -a
     #- mv .env devops-test:/home/docker
-    - docker push .env
+    - docker push ./.env
     - docker-compose-v2 --file docker-compose.yml up -d
     - docker ps -a
   tags:
