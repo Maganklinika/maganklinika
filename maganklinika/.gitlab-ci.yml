@@ -34,10 +34,8 @@ deploy:
   script:
     - eval $(docker-machine env devops-test)
     - docker login -u gitlab-ci-token -p ${CI_BUILD_TOKEN} ${CI_REGISTRY}
-
+    - scp -o StrictHostKeyChecking=no .env karsaib@devops-test:/home/docker/.env
     - docker ps -a
-    #- mv .env devops-test:/home/docker
-    - docker push ./.env
     - docker-compose-v2 --file docker-compose.yml up -d
     - docker ps -a
   tags:
