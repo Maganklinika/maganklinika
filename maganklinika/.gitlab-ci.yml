@@ -34,7 +34,7 @@ deploy:
   script:
     - eval $(docker-machine env devops-test)
     - docker login -u gitlab-ci-token -p ${CI_BUILD_TOKEN} ${CI_REGISTRY}
-    - scp -o StrictHostKeyChecking=no .env gitlab-ci-token@devops-test:/home/docker/.env
+    #- scp -o StrictHostKeyChecking=no .env gitlab-ci-token@devops-test:/home/docker/.env
     - docker ps -a
     - docker-compose-v2 --file docker-compose.yml up -d
     - docker ps -a
