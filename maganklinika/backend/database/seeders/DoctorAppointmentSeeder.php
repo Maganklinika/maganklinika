@@ -3,32 +3,103 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use App\Models\Doctor;
+use App\Models\Treatment;
+use App\Models\Patient;
+use App\Models\DoctorAppointment;
 
 class DoctorAppointmentSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
+    public function run()
     {
-        $doctorIds = DB::table('doctors')->pluck('user_id')->toArray();
+        $doctors = Doctor::with('specialization.treatments')->get();
+        $patients = Patient::pluck('user_id')->toArray();
 
-        $patientIds = DB::table('patients')->pluck('user_id')->toArray();
+        $startDate = Carbon::now()->startOfDay();
+        $endDate = Carbon::now()->addMonth()->startOfDay(); // Csak 1 hónapra előre
 
-        $treatmentIds = DB::table('treatments')->pluck('treatment_id')->toArray();
+        $scheduledDays = []; // [specialization_id][date] => treatment_id
+        $weeklyScheduleCount = []; // [doctor_id][weekNumber] => count
 
-        $statuses = ['b', 'p', 'd', 'c', 'v'];
+        foreach ($doctors as $doctor) {
+            $specialization = $doctor->specialization;
 
-        for ($i = 0; $i < 10; $i++) {
-            DB::table('doctor_appointments')->insert([
-                'doctor_id' => $doctorIds[array_rand($doctorIds)],
-                'start_time' => now()->subDays(rand(1, 30))->setTime(rand(8, 17), rand(0, 59), 0),
-                'patient_id' => $patientIds[array_rand($patientIds)],
-                'treatment_id' => $treatmentIds[array_rand($treatmentIds)],
-                'description' => "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Explicabo repellendus tempore fugit praesentium quis repellat, eos cum cupiditate quibusdam earum consequatur ducimus omnis recusandae voluptatibus harum soluta numquam ex iste.",
-                'status' => $statuses[array_rand($statuses)],
-                'rating' => rand(1, 5),
+            if (!$specialization || $specialization->treatments->isEmpty()) {
+                continue;
+            }
+
+            $treatments = $specialization->treatments;
+            $currentDate = $startDate->copy();
+
+            while ($currentDate->lte($endDate)) {
+                if ($currentDate->isWeekday()) {
+                    $week = $currentDate->format('W');
+                    $alreadyScheduled = $weeklyScheduleCount[$doctor->user_id][$week] ?? 0;
+                    $dayKey = $currentDate->format('Y-m-d');
+
+                    if ($alreadyScheduled < 2) {
+                        // Válassz random kezelést
+                        $treatment = $treatments->random();
+
+                        // Ha ezen a napon már volt ugyanez a kezelés másik orvossal, hagyjuk ki
+                        if (!empty($scheduledDays[$specialization->specialization_id][$dayKey]) &&
+                            in_array($treatment->treatment_id, $scheduledDays[$specialization->specialization_id][$dayKey])) {
+                            $currentDate->addDay();
+                            continue;
+                        }
+
+                        $weeklyScheduleCount[$doctor->user_id][$week] = $alreadyScheduled + 1;
+                        $scheduledDays[$specialization->specialization_id][$dayKey][] = $treatment->treatment_id;
+
+                        // Műszak
+                        $shift = rand(0, 1) === 0
+                            ? ['start' => '07:00', 'end' => '14:00']
+                            : ['start' => '13:00', 'end' => '18:00'];
+
+                        $start = Carbon::parse($currentDate->format('Y-m-d') . ' ' . $shift['start']);
+                        $end = Carbon::parse($currentDate->format('Y-m-d') . ' ' . $shift['end']);
+
+                        $length = Carbon::parse($treatment->treatment_length);
+                        $duration = $length->hour * 60 + $length->minute;
+
+                        $appointments = [];
+                        $currentStart = $start->copy();
+
+                        while ($currentStart->addMinutes($duration)->lte($end)) {
+                            $appointments[] = [
+                                'doctor_id' => $doctor->user_id,
+                                'start_time' => $currentStart->copy()->subMinutes($duration),
+                                'treatment_id' => $treatment->treatment_id,
+                                'patient_id' => null,
+                                'status' => 'v',
+                                'created_at' => now(),
+                                'updated_at' => now(),
+                            ];
+                            $currentStart->addMinutes(10); // 10 perc "szünet"
+                        }
+
+                        DoctorAppointment::insert($appointments);
+                    }
+                }
+
+                $currentDate->addDay();
+            }
+
+            // Egy elvégzett kezelés minden orvoshoz
+            $treatmentDone = $treatments->random();
+            $lengthDone = Carbon::parse($treatmentDone->treatment_length);
+            $durationDone = $lengthDone->hour * 60 + $lengthDone->minute;
+
+            $startTime = now()->subDays(rand(1, 30))->setTime(rand(8, 15), rand(0, 59));
+            $endTime = $startTime->copy()->addMinutes($durationDone);
+
+            DoctorAppointment::create([
+                'doctor_id' => $doctor->user_id,
+                'start_time' => $startTime,
+                'treatment_id' => $treatmentDone->treatment_id,
+                'patient_id' => $patients[array_rand($patients)],
+                'status' => 'd',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
