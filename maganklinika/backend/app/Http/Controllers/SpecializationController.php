@@ -54,7 +54,6 @@ class SpecializationController extends Controller
     public function testGetTBS()
     {
         $specializations = Specialization::with('treatments')->get();
-        // JSON válasz visszaadása
         return response()->json($specializations);
     }
 }
