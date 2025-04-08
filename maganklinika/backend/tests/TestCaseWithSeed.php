@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Database\Seeders\RoleSeeder;
@@ -19,6 +20,8 @@ abstract class TestCaseWithSeed extends BaseTestCase
 
         $this->artisan('migrate:fresh');
 
-        $this->seed(RoleSeeder::class);
+        $this->seed(
+            DatabaseSeeder::class,
+        );
     }
 }
