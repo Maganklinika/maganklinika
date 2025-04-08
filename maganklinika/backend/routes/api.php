@@ -65,7 +65,7 @@ Route::middleware(['auth:sanctum', Patient::class])
         Route::get('/doctors-with-spec', [DoctorController::class, 'listDoctorsWithSpecialization']);
         Route::get('/get-treatments', [TreatmentController::class, 'index']);
         Route::get('/get-treatment/{id}', [TreatmentController::class, 'show']);
-        Route::post('/book-appointment', [DoctorAppointmentController::class, 'bookAppointment']);
+        //Route::post('/book-appointment', [DoctorAppointmentController::class, 'bookAppointment']);
         Route::get('/user-data', [UserController::class, 'userData']);
         Route::get('/get-appointments-by-patients/{id}', [DoctorAppointmentController::class, 'getAppointmentsByPatients']);
         Route::put('/profile/rate/{id}', [DoctorAppointmentController::class, 'appointmentRating']);
