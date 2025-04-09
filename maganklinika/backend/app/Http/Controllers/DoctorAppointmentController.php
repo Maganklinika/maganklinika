@@ -145,6 +145,7 @@ class DoctorAppointmentController extends Controller
             inner join users as u on u.id=d.user_id
             inner join treatments as t on t.treatment_id = da.treatment_id
             where p.user_id=$id
+            AND da.status = 'd';
         ");
 
         return response()->json($data);

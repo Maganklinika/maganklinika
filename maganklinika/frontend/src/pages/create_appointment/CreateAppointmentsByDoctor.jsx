@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import useDoctorContext from "../contexts/DoctorContext";
+import useDoctorContext from "../../contexts/DoctorContext";
 import { Button, ListGroup, Modal } from "react-bootstrap";
 import "./appointment.css";
-import usePatientContext from "../contexts/PatientsContext";
-import useAuthContext from "../contexts/AuthContext";
-import { myAxios } from "../api/Axios";
+import usePatientContext from "../../contexts/PatientsContext";
+import useAuthContext from "../../contexts/AuthContext";
+import { myAxios } from "../../api/Axios";
 import { hu } from 'date-fns/locale';
-import ListGroupRow from "../components/listgroup/ListGroupRow";
+import ListGroupRow from "../../components/listgroup/ListGroupRow";
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
@@ -182,7 +182,7 @@ const CreateallAppointmentsByDoctor = () => {
   };
 
   return (
-    <div className="container mt-4 calendarParent">
+    <div className="appointment-generate mt-4 calendarParent">
       <h2 className="h2book">Időpont létrehozása</h2>
       {
         allAppointmentsByDoctor ?

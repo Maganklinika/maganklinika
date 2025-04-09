@@ -7,8 +7,8 @@ import Fooldal from "../../pages/Fooldal";
 import Kijelentkezes from "../../pages/Kijelentkezes";
 import Felhasznalok from "../../pages/Felhasznalok";
 import Kapcsolat from "../../pages/contact/Kapcsolat";
-import Appointments from "../../pages/Appointments";
-import CreateAppointmentsByDoctor from "../../pages/CreateAppointmentsByDoctor";
+import Appointments from "../../pages/create_appointment/Appointments";
+import CreateAppointmentsByDoctor from "../../pages/create_appointment/CreateAppointmentsByDoctor";
 import Treatment from "../../pages/treatment/Treatment";
 import Rolunk from "../../pages/rolunk/Rolunk";
 

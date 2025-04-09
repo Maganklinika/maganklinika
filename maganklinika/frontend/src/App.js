@@ -40,7 +40,8 @@ function App() {
 							<Route
 								key={index}
 								path={urls[index]}
-								element={<Component />} // Komponens JSX-ben történő renderelése
+								
+									element={<Component />} // Komponens JSX-ben történő renderelése
 							/>
 						)
 					})

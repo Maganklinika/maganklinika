@@ -46,9 +46,9 @@ export const DoctorProvider = ( { children } ) => {
     setFilteredAllPatientsList( [ ...response.data ] );
   };
 
-  const fetchAppointmentByPatients = async ( pac_id ) => {
+  const fetchAppointmentByPatients = async ( pat_id ) => {
     const response = await myAxios.get(
-      `/api/get-appointments-by-patients/${ pac_id }`
+      `/api/get-appointments-by-patients/${ pat_id }`
     );
     setAppointmentsByPatients( response.data );
   };
