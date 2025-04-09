@@ -1,0 +1,10 @@
+.custom-hover:hover {
+  border: 3px solid rgb(230, 191, 101);
+  width: fit-content;
+  cursor: pointer;
+}
+
+.custom-hover {
+    border: 3px solid transparent;
+    width: fit-content;
+  }

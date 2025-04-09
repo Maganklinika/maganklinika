@@ -23,19 +23,27 @@ class DatabaseSeeder extends Seeder
             SpecializationSeeder::class,
             TreatmentSeeder::class,
         ]);
+
         //----------------------------------------------------------------------------
 
         $doctorRoleId = 2;
         $patientRoleId = 3;
 
         // 1. Először generálunk néhány random beteget
-        User::factory(40)->create()->each(function ($user) use ($patientRoleId) {
+        User::factory(40)->create()->each(function ($user) use ($doctorRoleId, $patientRoleId) {
             if ($user->role_id === $patientRoleId) {
+                // Ha a user páciens
                 Patient::create([
                     'user_id' => $user->id,
                     'taj_number' => fake()->unique()->randomNumber(8, true),
                     'birth_date' => fake()->date(),
                     'address' => fake()->address(),
+                ]);
+            } elseif ($user->role_id === $doctorRoleId) {
+                // Ha a user orvos
+                Doctor::create([
+                    'user_id' => $user->id,
+                    'specialization_id' => Specialization::inRandomOrder()->first()->specialization_id, // Véletlenszerű specializáció
                 ]);
             }
         });
