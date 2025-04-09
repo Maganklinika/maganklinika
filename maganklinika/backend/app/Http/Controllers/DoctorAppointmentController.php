@@ -91,7 +91,7 @@ class DoctorAppointmentController extends Controller
         $endTime = Carbon::parse($request->end_time);
 
         $treatmentLength = Carbon::parse($treatment->treatment_length);
-        $treatmentLengthMinutes = $treatmentLength->hour * 60 + $treatmentLength->minute; 
+        $treatmentLengthMinutes = $treatmentLength->hour * 60 + $treatmentLength->minute;
 
         $appointments = [];
         $currentStartTime = $startTime;
@@ -129,6 +129,7 @@ class DoctorAppointmentController extends Controller
             select p.user_id as u_id ,count(*) as da_number
             from doctor_appointments da
             INNER join patients p on p.user_id=da.patient_id
+            WHERE da.status = 'd'
             GROUP by p.user_id
         ");
         return response()->json($data);
@@ -258,7 +259,6 @@ class DoctorAppointmentController extends Controller
                 $user = User::find($record->patient_id);
                 Mail::to($user->email)->send(new AppointmentStatusUpdated($record, $record->status));
             }
-
         } else {
             $record->status = 'v';
         }
@@ -279,7 +279,7 @@ class DoctorAppointmentController extends Controller
             $appointment->rating = $request->rating;
             $appointment->save();
             return response()->json([
-                'message' => 'Rögzült jee.',
+                'message' => 'Sikeres értékelés.',
                 'status' => 'success',
                 'data' => $appointment
             ], 200);
