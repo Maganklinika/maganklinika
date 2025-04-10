@@ -24,12 +24,6 @@ class NavigationRoleSeeder extends Seeder
         DB::table('navigation_roles')->insert([
             'ranking' => $ranking++,
             'role_id' => $guestRoleId,
-            'navigation_id' => 10,
-        ]);
-
-        DB::table('navigation_roles')->insert([
-            'ranking' => $ranking++,
-            'role_id' => $guestRoleId,
             'navigation_id' => 13,
         ]);
 
@@ -64,6 +58,13 @@ class NavigationRoleSeeder extends Seeder
             'role_id' => 3,
             'navigation_id' => 3,
         ]);
+
+        DB::table('navigation_roles')->insert([
+            'ranking' => $ranking++,
+            'role_id' => 3,
+            'navigation_id' => 10,
+        ]);
+
         DB::table('navigation_roles')->insert([
             'ranking' => $ranking++,
             'role_id' => 3,
