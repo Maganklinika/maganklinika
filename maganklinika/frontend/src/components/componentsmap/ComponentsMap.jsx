@@ -5,7 +5,7 @@ import Regisztracio from "../../pages/Regisztracio";
 import Bejelentkezes from "../../pages/Bejelentkezes";
 import Fooldal from "../../pages/Fooldal";
 import Kijelentkezes from "../../pages/Kijelentkezes";
-import Felhasznalok from "../../pages/Felhasznalok";
+import Felhasznalok from "../../pages/users/Felhasznalok";
 import Kapcsolat from "../../pages/contact/Kapcsolat";
 import Appointments from "../../pages/create_appointment/Appointments";
 import CreateAppointmentsByDoctor from "../../pages/create_appointment/CreateAppointmentsByDoctor";

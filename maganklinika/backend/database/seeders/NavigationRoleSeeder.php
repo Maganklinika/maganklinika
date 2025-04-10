@@ -13,7 +13,31 @@ class NavigationRoleSeeder extends Seeder
     public function run()
     {
         $guestRoleId = 4;
+
         $ranking = 1;
+        DB::table('navigation_roles')->insert([
+            'ranking' => $ranking++,
+            'role_id' => $guestRoleId,
+            'navigation_id' => 3,
+        ]);
+
+        DB::table('navigation_roles')->insert([
+            'ranking' => $ranking++,
+            'role_id' => $guestRoleId,
+            'navigation_id' => 13,
+        ]);
+
+        DB::table('navigation_roles')->insert([
+            'ranking' => $ranking++,
+            'role_id' => $guestRoleId,
+            'navigation_id' => 5,
+        ]);
+
+        DB::table('navigation_roles')->insert([
+            'ranking' => $ranking++,
+            'role_id' => $guestRoleId,
+            'navigation_id' => 4,
+        ]);
 
         DB::table('navigation_roles')->insert([
             'ranking' => $ranking++,
@@ -27,33 +51,57 @@ class NavigationRoleSeeder extends Seeder
             'navigation_id' => 2,
         ]);
 
-        DB::table('navigation_roles')->insert([
-            'ranking' => $ranking++,
-            'role_id' => $guestRoleId,
-            'navigation_id' => 3,
-        ]);
         $ranking = 1;
+
         DB::table('navigation_roles')->insert([
             'ranking' => $ranking++,
             'role_id' => 3,
-            'navigation_id' => 10,
+            'navigation_id' => 3,
+        ]);
+        DB::table('navigation_roles')->insert([
+            'ranking' => $ranking++,
+            'role_id' => 3,
+            'navigation_id' => 13,
+        ]);
+        DB::table('navigation_roles')->insert([
+            'ranking' => $ranking++,
+            'role_id' => 3,
+            'navigation_id' => 5,
+        ]);
+        DB::table('navigation_roles')->insert([
+            'ranking' => $ranking++,
+            'role_id' => 3,
+            'navigation_id' => 4,
         ]);
         DB::table('navigation_roles')->insert([
             'ranking' => $ranking++,
             'role_id' => 3,
             'navigation_id' => 9,
         ]);
+
         $ranking = 1;
         DB::table('navigation_roles')->insert([
             'ranking' => $ranking++,
             'role_id' => 2,
-            'navigation_id' => 9,
+            'navigation_id' => 3,
         ]);
 
         DB::table('navigation_roles')->insert([
             'ranking' => $ranking++,
             'role_id' => 2,
-            'navigation_id' => 11,
+            'navigation_id' => 13,
+        ]);
+
+        DB::table('navigation_roles')->insert([
+            'ranking' => $ranking++,
+            'role_id' => 2,
+            'navigation_id' => 5,
+        ]);
+
+        DB::table('navigation_roles')->insert([
+            'ranking' => $ranking++,
+            'role_id' => 2,
+            'navigation_id' => 4,
         ]);
 
         DB::table('navigation_roles')->insert([
@@ -65,8 +113,21 @@ class NavigationRoleSeeder extends Seeder
         DB::table('navigation_roles')->insert([
             'ranking' => $ranking++,
             'role_id' => 2,
+            'navigation_id' => 11,
+        ]);
+
+        DB::table('navigation_roles')->insert([
+            'ranking' => $ranking++,
+            'role_id' => 2,
             'navigation_id' => 12,
         ]);
+
+        DB::table('navigation_roles')->insert([
+            'ranking' => $ranking++,
+            'role_id' => 2,
+            'navigation_id' => 9,
+        ]);
+
         $adminRoleId = 1;
 
         $navItems = DB::table('navigations')->get();

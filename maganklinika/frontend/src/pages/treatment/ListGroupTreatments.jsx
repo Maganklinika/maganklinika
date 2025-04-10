@@ -1,6 +1,6 @@
 import React from "react";
 import ListGroup from "react-bootstrap/ListGroup";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./listgroup.css";
 
 const ListGroupTreatments = (props) => {

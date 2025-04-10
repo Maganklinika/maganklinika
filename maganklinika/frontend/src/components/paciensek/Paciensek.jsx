@@ -34,7 +34,7 @@ const Paciensek = () => {
   if ( filteredPatientsByAppointmentsList <= 0 ) {
   }
   return (
-    <div>
+    <div className="patients" >
       <h1>Páciensek</h1>
       <div className="d-flex flex-wrap justify-content-between align-items-center">
         <Button onClick={handleClick}
@@ -51,7 +51,8 @@ const Paciensek = () => {
           }
         />
       </div>
-      <Table striped>
+      <div className="patients-table">
+      <Table striped >
         <thead>
           <tr>
             {headerList.map( ( e, i ) => {
@@ -69,7 +70,7 @@ const Paciensek = () => {
             } )}
         </tbody>
       </Table>
-
+      </div>
     </div >
   );
 };

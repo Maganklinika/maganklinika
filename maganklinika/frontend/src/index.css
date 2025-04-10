@@ -25,3 +25,14 @@ main {
 	flex: 1;
 	padding-top: 110px;
 }
+
+.btn-primary{
+	background-color: var(--infobar-bg-color) !important;
+	border-color: var(--nav-and-border-color) !important;
+}
+
+.btn-primary:hover{
+	background-color: var(--nav-and-border-color) !important;
+	border-color: var(--infobar-bg-color) !important;
+	color: var(--button-border-color) !important;
+}

@@ -108,7 +108,7 @@
   }
 
   .appointment-button {
-    background-color: #007bff;
+    background-color: var(--button-border-color);
     color: white;
     border: none;
     padding: 15px 80px;
@@ -124,9 +124,10 @@
   }
   
   .appointment-button:hover {
-    background-color: #0056b3;
+    background-color: var(--nav-and-border-color);
     box-shadow: 1px 9px 48px 10px rgba(0,0,0,0.67);
-    transition: 2s;
+    color: var(--button-border-color);
+    transition: .5s;
   }
   
   .carousel-control {

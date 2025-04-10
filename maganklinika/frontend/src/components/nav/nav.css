@@ -1,4 +1,29 @@
 .navbar {
-	background-color: var(--nav-and-border-color);
-	margin-top: 24px;
+  background-color: var(--nav-and-border-color);
+  margin-top: 24px;
+  position: static;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: start;
+}
+
+.logout {
+  position: absolute;
+  right: 5px;
+  white-space: nowrap;
+}
+.navbar-nav {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  position: relative;
+}
+
+@media (max-width: 1100px) {
+  .logout {
+    position: static;
+  }
 }

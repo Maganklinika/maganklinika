@@ -5,6 +5,24 @@
 }
 
 .custom-hover {
-    border: 3px solid transparent;
-    width: fit-content;
-  }
+  border: 3px solid transparent;
+  width: fit-content;
+}
+
+.treatment-page {
+  background-color: white;
+  width: fit-content;
+  margin-inline: auto;
+  padding: 3rem;
+  margin-top: 2rem;
+  border-radius: .6rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.treatment-page h1{
+  margin-bottom: 2rem;
+}

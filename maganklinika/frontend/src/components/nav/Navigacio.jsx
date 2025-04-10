@@ -19,10 +19,8 @@ const Navigacio = () => {
                   </Link>
                 </li>
               ) : (
-                <li className="navbar-item" key={i} onClick={logout}>
-                   <Link className="nav-link disable" to={item.url}>
-                    {item.name}
-                  </Link>
+                <li className="navbar-item logout" key={i} onClick={logout}>
+                  <Link className="nav-link">{item.name}</Link>
                 </li>
               )
             )

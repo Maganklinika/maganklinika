@@ -1,0 +1,11 @@
+.menu-management {
+  margin-block: 3rem;
+  display: flex;
+  align-items: start;
+  height: fit-content;
+
+}
+
+.arrow-description {
+    margin-block: auto;
+}
