@@ -18,7 +18,7 @@ const CreateallAppointmentsByDoctor = () => {
   const [ date, setDate ] = useState( new Date() );
   const [ currentDate, setCurrentDate ] = useState( new Date() );
   const [ show, setShow ] = useState( false );
-  const [ view, setView ] = useState( 'week' );
+  const [ view, setView ] = useState( 'month' );
   const [ selectedDate, setSelectedDate ] = useState( null );
   const [ treatment, setTreatment ] = useState( "" );
   const [ startTime, setStartTime ] = useState( "7:00" );
