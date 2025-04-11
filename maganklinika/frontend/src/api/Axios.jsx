@@ -9,51 +9,6 @@ export const myAxios = axios.create({
   withCredentials: true,
 });
 
-// Interceptorok
-/*myAxios.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
-
-    if (originalRequest.url.includes('/sanctum/csrf-cookie')) {
-      console.warn(`⚠️ CSRF request failed on ${PRIMARY_BASE_URL}, trying secondary backend.`);
-
-      originalRequest.baseURL = SECONDARY_BASE_URL;  // Átváltás a secondary backendre
-      return myAxios(originalRequest);  // Újrapróbálkozás
-    }
-
-    // 🔴 Hálózati hiba esetén (`ERR_NETWORK`) ne ellenőrizzük a `response.status`-t, mert `response` nincs!
-    if (
-      !originalRequest._retry &&
-      (error.code === "ERR_NETWORK" ||
-        (error.response && error.response.status >= 400))
-    ) {
-      originalRequest._retry = true;
-
-      console.warn(
-        `⚠️ Primary backend failed (${PRIMARY_BASE_URL}), switching to secondary backend (${SECONDARY_BASE_URL})`
-      );
-
-      // 🔵 Ellenőrizzük, hogy a másodlagos szerver elérhető-e
-      try {
-        const secondaryCheck = await axios.get(SECONDARY_BASE_URL);
-        if (secondaryCheck.status === 200) {
-          console.warn(
-            `✅ Switching to secondary backend: ${SECONDARY_BASE_URL}`
-          );
-          originalRequest.baseURL = SECONDARY_BASE_URL; // Új alap URL
-          return myAxios(originalRequest); // Újrapróbálkozás
-        }
-      } catch (secondaryError) {
-        console.error("❌ Secondary backend is also unreachable.");
-        return Promise.reject(secondaryError);
-      }
-    }
-
-    return Promise.reject(error);
-  }
-);*/
-
 // Kérések interceptorai
 myAxios.interceptors.request.use(
   (config) => {
