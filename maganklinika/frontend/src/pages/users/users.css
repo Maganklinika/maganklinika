@@ -1,0 +1,18 @@
+.user-list {
+  width: 90vw;
+  background-color: rgb(255, 244, 224);
+  margin-inline: auto;
+  padding: 2rem;
+  border-radius: 0.7rem;
+  margin-block: 2rem;
+}
+
+.user-list form {
+    box-shadow: none ;
+    background-color: transparent;
+    border-radius: 0;
+}
+
+.user-list h1 {
+  text-align: center;
+}

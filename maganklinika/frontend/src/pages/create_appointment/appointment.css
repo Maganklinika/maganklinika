@@ -35,7 +35,21 @@
   font-size: 3rem;
 }
 
+.appointment-generate{
+  background-color: white;
+  width: 95vw;
+  margin-inline: auto;
+  border-radius: 1rem;
+  padding: 2rem;
+}
+
 .calendarParent {
   display: flex;
   flex-direction: column;
+}
+
+.select-time-form{
+  box-shadow: none;
+  background-color: transparent;
+  border-radius: 0;
 }

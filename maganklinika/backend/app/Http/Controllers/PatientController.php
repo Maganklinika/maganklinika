@@ -114,7 +114,9 @@ class PatientController extends Controller
         if ($appointment->status !== $previousStatus) {
             // E-mail küldése a páciensnek
             $user = User::find($appointment->patient_id);
-            Mail::to($user->email)->send(new AppointmentStatusUpdated($appointment, $appointment->status));
+            if ($user && $user->email) {
+                Mail::to($user->email)->send(new AppointmentStatusUpdated($appointment, $appointment->status));
+            }
         }
         $appointment->patient_id = null;
         $appointment->save();

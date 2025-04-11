@@ -62,10 +62,9 @@ Route::middleware(['auth:sanctum', Patient::class])
         Route::get('/get-treatments-by-specialization', [GetTreatmentBySpecializationController::class, 'index']);
         Route::get('/test-get-tbs', [SpecializationController::class, 'testGetTBS']);
         Route::get('/appointments', [DoctorAppointmentController::class, 'index']);
-        Route::get('/doctors-with-spec', [DoctorController::class, 'listDoctorsWithSpecialization']);
         Route::get('/get-treatments', [TreatmentController::class, 'index']);
         Route::get('/get-treatment/{id}', [TreatmentController::class, 'show']);
-        Route::post('/book-appointment', [DoctorAppointmentController::class, 'bookAppointment']);
+        //Route::post('/book-appointment', [DoctorAppointmentController::class, 'bookAppointment']);
         Route::get('/user-data', [UserController::class, 'userData']);
         Route::get('/get-appointments-by-patients/{id}', [DoctorAppointmentController::class, 'getAppointmentsByPatients']);
         Route::put('/profile/rate/{id}', [DoctorAppointmentController::class, 'appointmentRating']);
@@ -76,6 +75,7 @@ Route::middleware(['auth:sanctum', Patient::class])
         Route::post('/file-upload', [FileController::class, 'store'])->name('file.store');
     });
 
+Route::get('/doctors-with-spec', [DoctorController::class, 'listDoctorsWithSpecialization']);
 Route::get('/nav-items', [NavigationRoleController::class, 'getNavItemsByRole']);
 Route::get('/get-avg-ratings-by-doctors', [DoctorRatingsViewController::class, 'getAVGRatingsByDoctors']);
 Route::get('/treatments', [TreatmentController::class, 'index']);

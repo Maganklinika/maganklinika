@@ -13,7 +13,7 @@ class DoctorAppointment extends Model
     protected $fillable = [
         'doctor_id',
         'start_time',
-        'taj_number',
+        'patient_id',
         'treatment_id',
         'description',
         'status',
@@ -27,7 +27,7 @@ class DoctorAppointment extends Model
 
     public function patient()
     {
-        return $this->belongsTo(Patient::class, 'taj_number', 'taj_number'); // Hivatkozás a patients.taj_number mezőjére
+        return $this->belongsTo(Patient::class, 'patient_id', 'user_id'); // Hivatkozás a patients.taj_number mezőjére
     }
 
     public function treatment()

@@ -37,11 +37,15 @@ const UsersTableRow = (props) => {
       <td>
         <form>
           <select value={props.e.role_name} onChange={handleChange}>
-            {props.roles.map((e, i) => (
-              <option value={e.name} key={i}>
-                {e.name}
-              </option>
-            ))}
+            {props.roles.map((e, i) =>
+              props.e.role_name === e.name || e.name === "guest" ? (
+                <option value={e.name} key={i}>
+                  {e.name}
+                </option>
+              ) : (
+                ""
+              )
+            )}
           </select>
         </form>
       </td>

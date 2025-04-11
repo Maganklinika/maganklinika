@@ -88,13 +88,14 @@ class UserController extends Controller
     public function userData()
     {
         $user = Auth::user();
+
         if ($user->role_id === 2) {
-            $doctor = Doctor::find($user->id);
+            $doctor = Doctor::where('user_id', $user->id)->first();
             $data = DB::select(
                 "SELECT * FROM `users` u 
                 INNER JOIN doctors d on d.user_id = u.id
                 INNER JOIN specializations s on s.specialization_id = d.specialization_id
-                where u.id = {$doctor->user_id};"
+                where u.id = {$doctor->user_id}"
             );
             return response()->json($data);
         } elseif ($user->role_id === 3) {
@@ -105,7 +106,7 @@ class UserController extends Controller
                 where u.id = {$patient->user_id}"
             );
             return response()->json($data);
-        }else{
+        } else {
             $u = User::find($user->id);
             $data = DB::select(
                 "SELECT * FROM `users` u 
@@ -115,35 +116,32 @@ class UserController extends Controller
         }
     }
 
-    public function changeUserInfo(Request $request, string $id){
+    public function changeUserInfo(Request $request, string $id)
+    {
         $user = User::find($id);
 
         if (!$user) {
             return response()->json(['error' => 'User not found'], 404);
         }
 
-    if ($user->role_id === 2) {
-        $user->name = $request->name;
-        $user->phone_number = $request->phone;
-        $user->email = $request->email;
-        $user->save();
-        return response()->json($user);
-
-    } elseif($user->role_id === 3) {
-        $patient = Patient::find($user->id);
-        $user->name = $request->name;
-        $user->phone_number = $request->phone;
-        $user->email = $request->email;
-        $patient->address = $request->address;
-        $user->save();
-        $patient->save();
-        return response()->json([
-            'user' => $user,
-            'patient' => $patient,
-        ]);
+        if ($user->role_id === 2) {
+            $user->name = $request->name;
+            $user->phone_number = $request->phone;
+            $user->email = $request->email;
+            $user->save();
+            return response()->json($user);
+        } elseif ($user->role_id === 3) {
+            $patient = Patient::find($user->id);
+            $user->name = $request->name;
+            $user->phone_number = $request->phone;
+            $user->email = $request->email;
+            $patient->address = $request->address;
+            $user->save();
+            $patient->save();
+            return response()->json([
+                'user' => $user,
+                'patient' => $patient,
+            ]);
+        }
     }
-
-    }
-
-
 }

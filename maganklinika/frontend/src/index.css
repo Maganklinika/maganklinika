@@ -1,27 +1,68 @@
 html,
 body {
-	margin: 0;
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-		sans-serif;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	background: rgb(107, 107, 110);
-	background: linear-gradient(180deg, rgba(107, 107, 110, 1) 0%, rgba(254, 250, 224, 1) 0%, rgba(255, 255, 255, 0) 100%);
-	height: fit-content; /* height: fit-content;*/
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: rgb(107, 107, 110);
+  background: linear-gradient(
+    180deg,
+    rgba(107, 107, 110, 1) 0%,
+    rgba(254, 250, 224, 1) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  height: fit-content; /* height: fit-content;*/
 }
 
 #root {
-	display: flex;
-	flex-direction: column;
-	min-height: 100vh;
-	margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin-top: 40px;
 }
 
 code {
-	font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
 }
 
 main {
-	flex: 1;
-	padding-top: 110px;
+  flex: 1;
+  padding-top: 110px;
+}
+
+.btn-primary {
+  background-color: var(--infobar-bg-color) !important;
+  border-color: var(--nav-and-border-color) !important;
+}
+
+.btn-primary:hover {
+  background-color: var(--nav-and-border-color) !important;
+  border-color: var(--infobar-bg-color) !important;
+  color: var(--button-border-color) !important;
+}
+
+@media (max-width: 575px) {
+  main {
+    padding-top: 0;
+  }
+
+  #root {
+	margin-top: 0;
+  }
+
+  .fixed-top {
+    position: relative !important;
+  }
+  .navbar{
+	margin-top: 0 !important;
+  }
+
+  .infobar{
+	display: flex;
+	justify-content: space-between;
+	font-size: 12px;
+  }
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import { Tab, Tabs } from "react-bootstrap";
-import "./appointment.css";
+import "./create_appointment/appointment.css";
 import ReservationAppointments from "../components/appointments/ReservationAppointments";
 import DoctorAppointments from "../components/appointments/DoctorAppointments";
 
