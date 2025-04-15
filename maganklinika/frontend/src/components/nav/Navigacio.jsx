@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import useAuthContext from "../../contexts/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "./nav.css";
 
 const Navigacio = () => {
@@ -8,6 +8,7 @@ const Navigacio = () => {
   const logoutRef = useRef();
   const navRef = useRef();
   const [isOverlapping, setIsOverlapping] = useState(false);
+  const location = useLocation();
 
   const checkLayout = () => {
     const logoutEl = logoutRef.current;
@@ -44,7 +45,7 @@ const Navigacio = () => {
   // A ResizeObserver és a resize események kezelése
   useEffect(() => {
     const resizeObserver = new ResizeObserver(() => {
-      requestAnimationFrame(checkLayout);  // Frissítjük a layoutot a legközelebbi animációs frissítésnél
+      requestAnimationFrame(checkLayout); // Frissítjük a layoutot a legközelebbi animációs frissítésnél
     });
 
     if (navRef.current) resizeObserver.observe(navRef.current);
@@ -70,11 +71,12 @@ const Navigacio = () => {
           {navigation ? (
             navigation.map((item, i) => {
               const isLogout = item.url === "/logout";
+              const isActive = location.pathname === item.url;
               return (
                 <li
                   className={`navbar-item ${isLogout ? "logout" : ""} ${
                     isLogout && isOverlapping ? "static-logout" : ""
-                  }`}
+                  } ${isActive ? "active" : ""}`}
                   key={i}
                   onClick={isLogout ? logout : undefined}
                   ref={isLogout ? logoutRef : undefined}

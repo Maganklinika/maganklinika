@@ -124,7 +124,7 @@ class UserController extends Controller
             return response()->json(['error' => 'User not found'], 404);
         }
 
-        if ($user->role_id === 2) {
+        if ($user->role_id === 2 || $user->role_id === 1) {
             $user->name = $request->name;
             $user->phone_number = $request->phone;
             $user->email = $request->email;

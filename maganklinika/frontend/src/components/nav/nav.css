@@ -1,11 +1,13 @@
+/* Kijelentkezés: jobb oldalra kerül */
 .logout {
   position: absolute;
   right: 5px;
   white-space: nowrap;
 }
 
+/* Ha a logout visszakerül a szülő elembe, statikus pozícióval */
 .static-logout {
-  position: static !important;
+  position: relative !important;
 }
 
 .navbar-nav {
@@ -25,4 +27,43 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: start;
+}
+
+/* Menüelem alatti animációs vonal */
+.navbar-item:not(.logout) {
+  position: relative;
+}
+
+/* Az aláhúzó vonal */
+.navbar-item::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: var(--link-hover-underline, var(--button-border-color));
+  transition: width 0.3s ease;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+/* Hover esetén: csak a szélesség nőjön meg */
+.navbar-item:hover::after {
+  width: 100%;
+}
+
+/* Aktív menüpont: a vonal végig látszik */
+.navbar-item.active::after {
+  width: 100%;
+}
+
+/* Ha a logout külön pozicionált: a hover ne húzza alá az egész navbar-t */
+/* .logout:not(.static-logout)::after {
+  display: none !important;
+} */
+
+/* Csak a logout menüpontot húzza alá, ha az a szülőben van */
+.static-logout .navbar-item:hover::after {
+  width: 100%;
 }
