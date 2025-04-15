@@ -12,7 +12,7 @@ import SelectedTreatment from "./pages/treatment/SelectedTreatment";
 import DisabledUser from "./pages/disabledUser/DisabledUser";
 
 function App() {
-  const { navigation } = useAuthContext(); // getNavItems lekérése az AuthContextből
+  const { navigation } = useAuthContext();
 
   const urls = [];
   navigation.forEach((e) => {
@@ -31,18 +31,18 @@ function App() {
         <Route index element={<Fooldal />} />
         {navigation ? (
           navigation.map((e, index) => {
-            const Component = ComponentsMap[e.component_name]; // Komponens referenciájának lekérése
+            const Component = ComponentsMap[e.component_name];
 
             if (!Component) {
               console.error(`Component ${e.component_name} not found.`);
-              return null; // Hibakezelés: ha nincs megfelelő komponens, kihagyjuk a route-ot
+              return null;
             }
 
             return (
               <Route
                 key={index}
                 path={urls[index]}
-                element={<Component />} // Komponens JSX-ben történő renderelése
+                element={<Component />}
               />
             );
           })

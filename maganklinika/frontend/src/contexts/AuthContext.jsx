@@ -86,12 +86,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   const login = async ({ ...adat }) => {
-    //lekérjük a csrf tokent
     await csrf();
 
     try {
       const response = await myAxios.post("/login", adat);
-      console.log("siker");
       await getUser();
       if (response.data.success) {
         navigate("/");
