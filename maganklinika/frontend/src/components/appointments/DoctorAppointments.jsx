@@ -21,6 +21,7 @@ const DoctorAppointments = () => {
   const [view, setView] = useState("week");
   const [currentDate, setCurrentDate] = useState(new Date());
   const [show, setShow] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState({});
   const navigate = useNavigate();
 
   const localizer = dateFnsLocalizer({
@@ -97,18 +98,21 @@ const DoctorAppointments = () => {
   };
 
   const handleEventClick = (event) => {
-      handleShow();
-    };
+    let elem = appointmentsDoctor?.find((e) => e.id == event.id);
+    setSelectedAppointment(elem);
+    handleShow();
+  };
 
-  const bookAppointmentClick = (events) => {
-    bookingAppointment(events[0].da_id);
-    navigate('/profile');
-  }
+  const bookAppointmentClick = (e) => {
+    console.log(e)
+    bookingAppointment(e.id);
+    navigate("/profile");
+  };
 
   return (
-    <div>
-      <TextFilter list={appointments} filterListSetter={setFilteredList} />
+    <div className="doctor-appointments">
       <h2>Doktoraink</h2>
+      <TextFilter list={appointments} filterListSetter={setFilteredList} />
       <div className="container mt-4">
         <Table striped bordered hover>
           <thead>
@@ -132,7 +136,7 @@ const DoctorAppointments = () => {
                   end: new Date(appointment.end_time),
                   title: `${appointment.patient_name} (${appointment.treatment_name})`,
                   da_id: appointment.id,
-                  d_name: appointment.d_name
+                  d_name: appointment.d_name,
                 }));
 
                 return (
@@ -179,7 +183,9 @@ const DoctorAppointments = () => {
                                 firstDayOfWeek={1}
                                 style={{ height: 500 }}
                                 messages={messages}
-                                onSelectEvent={handleEventClick}
+                                onSelectEvent={(event) =>
+                                  handleEventClick(event)
+                                }
                               />
                             ) : (
                               <p>Nincs elérhető időpont.</p>
@@ -195,21 +201,35 @@ const DoctorAppointments = () => {
                       keyboard={false}
                     >
                       <Modal.Header closeButton>
-                        <Modal.Title>Biztosan le szeretné foglalni az időpontot?</Modal.Title>
+                        <Modal.Title>
+                          Biztosan le szeretné foglalni az időpontot?
+                        </Modal.Title>
                       </Modal.Header>
 
                       <Modal.Body>
-                        <p><b>Kezelés neve: </b>{doctorAppointments[0]?.treatment.treatment_name}</p>
-                        <p><b>Kezelés kezdése: </b>{doctorAppointments[0]?.start_time.toString()}</p>
-                        <p><b>Kezelés hossza: </b>{doctorAppointments[0]?.treatment.treatment_length}</p>
-                        <p><b>Kezelés ára: </b>{doctorAppointments[0]?.treatment.price} Ft</p>
+                        <p>
+                          <b>Kezelés neve: </b>
+                          {selectedAppointment?.treatment?.treatment_name}
+                        </p>
+                        <p>
+                          <b>Kezelés kezdése: </b>
+                          {selectedAppointment?.start_time}
+                        </p>
+                        <p>
+                          <b>Kezelés hossza: </b>
+                          {selectedAppointment?.treatment?.treatment_length}
+                        </p>
+                        <p>
+                          <b>Kezelés ára: </b>
+                          {selectedAppointment?.treatment?.price} Ft
+                        </p>
                       </Modal.Body>
 
                       <Modal.Footer>
                         <Button
                           variant="primary"
                           onClick={() => {
-                            bookAppointmentClick(events);
+                            bookAppointmentClick(selectedAppointment);
                           }}
                         >
                           Igen

@@ -1,0 +1,14 @@
+.email-verify {
+    display: flex;
+    flex-direction: column;
+    background-color: antiquewhite;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    border-radius: .7rem;
+    box-shadow: 1px 9px 48px 10px rgba(0,0,0,0.45);
+    margin-inline: auto;
+    margin-top: 2rem;
+    padding: 2rem;
+}

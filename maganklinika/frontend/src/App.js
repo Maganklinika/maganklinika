@@ -4,12 +4,12 @@ import VendegLayout from "./layouts/VendegLayout";
 import Fooldal from "./pages/Fooldal";
 import useAuthContext from "./contexts/AuthContext";
 import { ComponentsMap } from "./components/componentsmap/ComponentsMap";
-import VerifyEmailPage from "./pages/VerifyEmailPage";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Profile from "./pages/profiles/Profile";
 import SelectedTreatment from "./pages/treatment/SelectedTreatment";
 import DisabledUser from "./pages/disabledUser/DisabledUser";
+import VerifyEmailPage from "./pages/verify_email/VerifyEmailPage";
 
 function App() {
   const { navigation } = useAuthContext();

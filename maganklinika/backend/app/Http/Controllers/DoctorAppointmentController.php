@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\AppointmentStatusUpdated;
+use App\Models\Doctor;
 use App\Models\DoctorAppointment;
 use App\Models\Treatment;
 use App\Models\User;
@@ -80,11 +81,17 @@ class DoctorAppointmentController extends Controller
             'treatment_name' => 'required|string',
         ]);
 
-        $doctor = Auth::user()->id;
+        $doctor = Auth::id();
 
-        $treatment = Treatment::where('treatment_name', $request->treatment_name)->first();
+        $specializationId = Doctor::where('user_id', $doctor)->value('specialization_id');
+
+        $treatment = Treatment::where([
+            ['treatment_name', '=', $request->treatment_name],
+            ['specialization_id', '=', $specializationId],
+        ])->first();
+
         if (!$treatment) {
-            return response()->json(['error' => 'Kezelés nem található'], 404);
+            return response()->json(['error' => 'Kezelés nem található az orvos szakterületén belül'], 404);
         }
 
         $startTime = Carbon::parse($request->start_time);
@@ -145,7 +152,6 @@ class DoctorAppointmentController extends Controller
             inner join users as u on u.id=d.user_id
             inner join treatments as t on t.treatment_id = da.treatment_id
             where p.user_id=$id
-            AND da.status = 'd';
         ");
 
         return response()->json($data);

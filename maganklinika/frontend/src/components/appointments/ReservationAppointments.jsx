@@ -37,7 +37,7 @@ const ReservationAppointments = () => {
   };
 
   return (
-    <div className="container mt-4">
+    <div className="res-app container mt-4">
       <h2>Foglalási Időpontok</h2>
 
       <Form.Group controlId="treatmentSelect">

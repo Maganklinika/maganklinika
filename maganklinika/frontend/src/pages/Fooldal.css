@@ -56,7 +56,7 @@
   }
 
   .specializations li:hover {
-    transition: 2s;
+    transition: .5s;
     font-size: 2rem;
     color: #555;  
     box-shadow: 5px 20px 99px -30px rgba(0,0,0,0.42);

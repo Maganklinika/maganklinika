@@ -11,8 +11,10 @@ const ListGroupTreatments = (props) => {
   };
 
   return (
-    <ListGroup horizontal className="my-2 custom-hover" onClick={handleOnClick}>
-      <ListGroup.Item> {props.e.treatment_time}</ListGroup.Item>
+    <ListGroup horizontal  className="my-2 custom-hover" onClick={handleOnClick}>
+      <ListGroup.Item >
+        {props.e.treatment_time}
+      </ListGroup.Item>
       {props.e.patient_name ? (
         <ListGroup.Item>{props.e.patient_name}</ListGroup.Item>
       ) : (

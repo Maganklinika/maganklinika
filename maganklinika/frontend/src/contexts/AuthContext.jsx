@@ -174,6 +174,10 @@ export const AuthProvider = ({ children }) => {
     if (storedIsLoggedIn) {
       getUser().then(() => fetchEmailStatus());
     }
+
+    if (user && !isVerified) {
+      navigate("/verify-email");
+    }
   }, []);
 
   useEffect(() => {

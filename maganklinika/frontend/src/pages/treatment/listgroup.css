@@ -15,7 +15,7 @@
   margin-inline: auto;
   padding: 3rem;
   margin-top: 2rem;
-  border-radius: .6rem;
+  border-radius: 0.6rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -23,6 +23,35 @@
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
-.treatment-page h1{
+.treatment-page h1 {
   margin-bottom: 2rem;
+}
+
+.selected-treatment {
+  background-color: white;
+  margin-inline: auto;
+  padding: 2rem;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  border-radius: 0.7rem;
+  margin-block: 2rem;
+  min-width: 600px;
+  max-width: 90vw;
+}
+
+.selected-treatment h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.selected-treatment form {
+  padding: 0;
+  margin: 0;
+  box-shadow: none;
+  background: none;
+}
+
+@media (max-width: 650px) {
+  .selected-treatment {
+    max-width: fit-content;
+    min-width: fit-content;
+  }
 }

@@ -41,7 +41,6 @@ const Fooldal = () => {
             alt="First slide"
           />
           <Carousel.Caption>
-            <h3>Ügyfélfogadás</h3>
           </Carousel.Caption>
         </Carousel.Item>
         <Carousel.Item>
@@ -51,7 +50,6 @@ const Fooldal = () => {
             alt="Second slide"
           />
           <Carousel.Caption>
-            <h3>Épületünk</h3>
           </Carousel.Caption>
         </Carousel.Item>
         <Carousel.Item>
@@ -61,7 +59,6 @@ const Fooldal = () => {
             alt="Third slide"
           />
           <Carousel.Caption>
-            <h3>Belső nézet</h3>
           </Carousel.Caption>
         </Carousel.Item>
         <Carousel.Item>
@@ -71,7 +68,6 @@ const Fooldal = () => {
             alt="Fourth slide"
           />
           <Carousel.Caption>
-            <h3>Új szárny</h3>
           </Carousel.Caption>
         </Carousel.Item>
         <Carousel.Item>
@@ -81,7 +77,6 @@ const Fooldal = () => {
             alt="Fourth slide"
           />
           <Carousel.Caption>
-            <h3>Új szárny</h3>
           </Carousel.Caption>
         </Carousel.Item>
       </Carousel>
