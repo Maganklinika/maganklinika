@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { myAxios } from "../api/Axios";
+import { myAxios } from "../../api/Axios";
+import "./resetPassword.css";
 
 const ResetPassword = () => {
   const [password, setPassword] = useState("");
@@ -39,9 +40,9 @@ const ResetPassword = () => {
         password,
         password_confirmation: passwordConfirmation,
       });
-      if (response.data.status === "PASSWORD_RESET") {
+      if (response.data.status === "Your password has been reset.") {
         setSuccess("Sikeresen megváltoztatta a jelszavát.");
-        navigate("/bejelentkezes"); 
+        navigate("/login");
       }
     } catch (err) {
       setError(
@@ -51,7 +52,7 @@ const ResetPassword = () => {
   };
 
   return (
-    <div>
+    <div className="reset-password">
       <h2>Új jelszó</h2>
       <form onSubmit={handleSubmit}>
         <div>
@@ -74,7 +75,11 @@ const ResetPassword = () => {
             required
           />
         </div>
-        <button type="submit">Jelszó visszaállítása</button>
+        <div>
+          <button className="btn btn-primary w-100" type="submit">
+            Jelszó visszaállítása
+          </button>
+        </div>
       </form>
       {error && <div>{error}</div>}
       {success && <div>{success}</div>}

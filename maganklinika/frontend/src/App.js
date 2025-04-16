@@ -5,11 +5,11 @@ import Fooldal from "./pages/Fooldal";
 import useAuthContext from "./contexts/AuthContext";
 import { ComponentsMap } from "./components/componentsmap/ComponentsMap";
 import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
 import Profile from "./pages/profiles/Profile";
 import SelectedTreatment from "./pages/treatment/SelectedTreatment";
 import DisabledUser from "./pages/disabledUser/DisabledUser";
 import VerifyEmailPage from "./pages/verify_email/VerifyEmailPage";
+import ResetPassword from "./pages/reset_password/ResetPassword";
 
 function App() {
   const { navigation } = useAuthContext();

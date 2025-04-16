@@ -25,7 +25,7 @@ const ForgotPassword = () => {
     }
   };
   return (
-    <div>
+    <div className="reset-password">
       <h2>Jelszó reset</h2>
       <form onSubmit={handleSubmit}>
         <div>
@@ -38,7 +38,9 @@ const ForgotPassword = () => {
             required
           />
         </div>
-        <button type="submit">Jelszó reset</button>
+        <button className="btn btn-primary w-100" type="submit">
+          Jelszó reset
+        </button>
       </form>
       {message && <div>{message}</div>}
       {error && <div>{error}</div>}
