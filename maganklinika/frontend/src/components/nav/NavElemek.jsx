@@ -239,16 +239,6 @@ const NavElemek = () => {
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
-                          // style={{
-                          //   ...provided.draggableProps.style, // Alap stílusok, amelyeket a drag-and-drop rendszer ad
-                          //   width: "310px",
-                          //   padding: "fit-parent",
-                          //   cursor: snapshot.isDragging ? "grabbing" : "grab", // Különböző kurzor húzás közben
-                          //   zIndex: snapshot.isDragging ? 1000 : 1, // Ha húzod, a legelső elem legyen
-                          //   boxShadow: snapshot.isDragging
-                          //     ? "0 4px 8px rgba(0, 0, 0, 0.2)"
-                          //     : "none", // Árnyék a húzott elem körül
-                          // }}
                           >
                             <td style={{ backgroundColor: "#eed199" }} >{e.name}</td>
                           </tr>
