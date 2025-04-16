@@ -1,13 +1,10 @@
-/* Kijelentkezés: jobb oldalra kerül */
-.logout {
-  position: absolute;
-  right: 5px;
-  white-space: nowrap;
-}
-
-/* Ha a logout visszakerül a szülő elembe, statikus pozícióval */
-.static-logout {
-  position: relative !important;
+/* Navigációs sáv alap stílusok */
+.navbar {
+  background-color: var(--nav-and-border-color);
+  margin-top: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  position: static;
 }
 
 .navbar-nav {
@@ -17,24 +14,17 @@
   padding: 0;
   margin: 0;
   list-style: none;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Navigációs elemek */
+.navbar-item {
   position: relative;
+  white-space: nowrap;
 }
 
-.navbar {
-  background-color: var(--nav-and-border-color);
-  margin-top: 24px;
-  position: static;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: start;
-}
-
-/* Menüelem alatti animációs vonal */
-.navbar-item:not(.logout) {
-  position: relative;
-}
-
-/* Az aláhúzó vonal */
+/* Aláhúzás animáció */
 .navbar-item::after {
   content: "";
   position: absolute;
@@ -48,22 +38,33 @@
   pointer-events: none;
 }
 
-/* Hover esetén: csak a szélesség nőjön meg */
-.navbar-item:hover::after {
-  width: 100%;
-}
-
-/* Aktív menüpont: a vonal végig látszik */
+.navbar-item:hover::after,
 .navbar-item.active::after {
   width: 100%;
 }
 
-/* Ha a logout külön pozicionált: a hover ne húzza alá az egész navbar-t */
-/* .logout:not(.static-logout)::after {
-  display: none !important;
-} */
+/* Autentikációs menüpontok: jobbra igazítás */
+.navbar-auth {
+  display: flex;
+  margin-left: auto;
+  gap: clamp(4px, 1vw, 14px);
+}
 
-/* Csak a logout menüpontot húzza alá, ha az a szülőben van */
-.static-logout .navbar-item:hover::after {
-  width: 100%;
+/* Kis képernyőn auth menüpontok középre és sorba */
+@media (max-width: 768px) {
+  .navbar-auth {
+    flex-direction: row;
+    align-items: center;
+    margin-right: 0;
+    width: fit-content;
+  }
+}
+
+@media (max-width: 575px) {
+  .navbar-auth {
+    flex-direction: column;
+    align-items: center;
+    margin-left: 0;
+    width: fit-content;
+  }
 }
