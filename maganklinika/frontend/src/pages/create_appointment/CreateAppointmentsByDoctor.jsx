@@ -84,7 +84,6 @@ const CreateallAppointmentsByDoctor = () => {
         end_time: endDateTime,
         treatment_name: treatment,
       } )
-    console.log( response.message )
     fetchAllAppontmentsByDoctor( user.id )
 
   };
@@ -161,7 +160,6 @@ const CreateallAppointmentsByDoctor = () => {
   };
 
   const generateEvents = ( appointments ) => {
-    console.log( appointments )
     return appointments
       .map( ( appointment ) => {
         const id = appointment.id

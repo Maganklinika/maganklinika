@@ -26,7 +26,6 @@ export const DoctorProvider = ({ children }) => {
     try {
       await myAxios.put(`/api/appointment-delete-by-doctor/${id}`);
     } catch (error) {
-      console.log(error);
     }
   };
 
@@ -76,7 +75,7 @@ export const DoctorProvider = ({ children }) => {
   const fetchAppontmentsByDoctor = async (doctor_id) => {
     const response = await myAxios.get("/api/get-appointments-by-doctor", {
       params: {
-        doctor_id: doctor_id, // A doctor_id értéke, amit át akarsz adni
+        doctor_id: doctor_id,
       },
     });
     setAppointmentsByDoctor(response.data);
@@ -86,7 +85,7 @@ export const DoctorProvider = ({ children }) => {
   const fetchAllAppontmentsByDoctor = async (doctor_id) => {
     const response = await myAxios.get("/api/get-all-appointment-by-doctor", {
       params: {
-        doctor_id: doctor_id, // A doctor_id értéke, amit át akarsz adni
+        doctor_id: doctor_id, 
       },
     });
     setAllAppointmentsByDoctor(response.data);
@@ -94,9 +93,7 @@ export const DoctorProvider = ({ children }) => {
   };
 
   const groupAppointmentsByDate = (appointmentsArray) => {
-    // Csoportosítjuk az appointments-t a start_time alapján dátum szerint
     const groupedAppointments = appointmentsArray.reduce((acc, appointment) => {
-      // Csak a dátumot veszük figyelembe (YYYY-MM-DD)
       const date = appointment.start_time.split(" ")[0];
       if (!acc[date]) {
         acc[date] = [];
@@ -109,9 +106,7 @@ export const DoctorProvider = ({ children }) => {
   };
 
   const groupAllAppointmentsByDate = (appointmentsArray) => {
-    // Csoportosítjuk az appointments-t a start_time alapján dátum szerint
     const groupedAppointments = appointmentsArray.reduce((acc, appointment) => {
-      // Csak a dátumot veszük figyelembe (YYYY-MM-DD)
       const date = appointment.start_time.split(" ")[0];
       if (!acc[date]) {
         acc[date] = [];

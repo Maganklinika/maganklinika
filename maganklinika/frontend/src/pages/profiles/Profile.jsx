@@ -61,7 +61,6 @@ const Profile = () => {
 
   const handleEdit = () => setIsEditing(true);
   const handleSave = () => {
-    console.log("Mentett adatok:", formData);
     changeUserInfo(userData[0].id, formData);
     setIsEditing(false);
   };

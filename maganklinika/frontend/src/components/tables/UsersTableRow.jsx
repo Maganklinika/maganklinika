@@ -8,7 +8,6 @@ const UsersTableRow = (props) => {
     const newRole = event.target.value;
 
     setRole(newRole);
-    console.log(role);
     await fetchUserRoleData(newRole);
   };
 
@@ -24,7 +23,6 @@ const UsersTableRow = (props) => {
             role_id: roleId,
           }
         );
-        console.log("Role updated:", response.data);
       } catch (error) {
         console.error("Error updating role:", error);
       }

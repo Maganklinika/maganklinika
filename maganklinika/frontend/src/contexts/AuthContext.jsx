@@ -95,7 +95,6 @@ export const AuthProvider = ({ children }) => {
         navigate("/");
       }
     } catch (error) {
-      console.log(error);
       if (error.response.status === 422) {
         setErrors(error.response.data.errors);
       }
@@ -109,7 +108,6 @@ export const AuthProvider = ({ children }) => {
 
   const reg = async ({ ...adat }) => {
     await csrf();
-    console.log(adat);
 
     try {
       await myAxios.post("/register", adat);
@@ -162,7 +160,7 @@ export const AuthProvider = ({ children }) => {
       });
 
       setUploadMessage(response.data.message);
-      setPreview(response.data.url); // Frissíti a profilképet az új URL-re
+      setPreview(response.data.url);
     } catch (error) {
       setUploadMessage("Feltöltés sikertelen!");
       console.error(error);
