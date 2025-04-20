@@ -18,27 +18,7 @@
 .role-tables td {
 	width: 210px;
 }
-/*
-.table_roles{
-height: max-content;
-}
 
-.table_roles td {
-  text-align: center;
-  height: 40px;
-  min-width: 275px;
-}
-
-.table {
-  height: max-content;
-  width: 50px;
-}
-.table td {
-  text-align: center;
-  height: 40px;
-  width: 100px;
-}
-  */
 .menu-management {
 	display: flex;
 	flex-direction: row;
@@ -50,10 +30,6 @@ height: max-content;
 	justify-content: center;
 	height: 780px;
 }
-/*
-.menu-management th {
-  text-align: center;
-} */
 
 .menu-management-nav-list {
 	width: 25vw;
@@ -74,15 +50,15 @@ height: max-content;
 
 .arrow-container {
 	display: flex;
-	justify-content: center; /* Középre vízszintesen */
-	align-items: center; /* Középre függőlegesen */
-	height: 100px; /* Teljes képernyőmagasság */
+	justify-content: center;
+	align-items: center;
+	height: 100px;
   flex-direction: column;
 }
 
 .arrow-svg {
-	width: 80%; /* Arányosan méretezhető */
-	max-width: 600px; /* Maximum szélesség */
-	height: auto; /* Magasság automatikusan méreteződik */
+	width: 80%;
+	max-width: 600px;
+	height: auto;
   
 }

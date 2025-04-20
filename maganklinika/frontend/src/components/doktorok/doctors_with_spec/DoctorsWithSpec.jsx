@@ -12,8 +12,6 @@ const DoctorsWithSpec = ( props ) => {
     const result = props.ratingList
       .map( ( e ) => {
         if ( props.e.d_name === e.doctor_name ) {
-          // Csillagok kiírása a kerekített pontszám alapján
-          //return "⭐".repeat(Math.round(parseFloat(e.rating)))
           return <ReactStars
             count={5}
             size={24}
@@ -23,11 +21,11 @@ const DoctorsWithSpec = ( props ) => {
             half={true}
           />;
         }
-        return ""; // Ha nincs megfelelő találat, üres stringet adunk vissza
+        return ""; 
       } )
-      .filter( ( stars ) => stars !== "" ); // Eltávolítjuk az üres stringeket
+      .filter( ( stars ) => stars !== "" ); 
 
-    return result.length > 0 ? result[ 0 ] : "Nincs értékelés"; // Ha van találat, visszaadjuk, ha nincs, jelezzük
+    return result.length > 0 ? result[ 0 ] : "Nincs értékelés";
   };
   return (
     <div className="card">

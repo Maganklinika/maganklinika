@@ -21,7 +21,6 @@ const Navigacio = () => {
     );
   }
 
-  // Két csoportra osztjuk az elemeket
   const mainNav = navigation.filter(
     (item) => !["/login", "/logout", "/register"].includes(item.url)
   );
@@ -33,7 +32,6 @@ const Navigacio = () => {
     <nav className="navbar navbar-expand-sm fixed-top">
       <div className="container-fluid">
         <ul className="navbar-nav">
-          {/* Fő navigációs pontok */}
           {mainNav.map((item, i) => {
             const isActive = location.pathname === item.url;
             return (
@@ -45,7 +43,6 @@ const Navigacio = () => {
             );
           })}
 
-          {/* Login / Logout / Regisztráció gombok */}
           <div className="navbar-auth">
             {authNav.map((item, i) => {
               const isActive = location.pathname === item.url;

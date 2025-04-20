@@ -10,7 +10,6 @@ const NavElemek = () => {
   const { role, navRoleInfo, navs, fetchNavRoleInfo } = useAdminContext();
   const [ globalItems, setGlobalItems ] = useState( {} );
 
-  // Frissítjük a globalItems állapotot a szerepkörökhöz tartozó menüpontokkal
   useEffect( () => {
     const itemsByRole = role.reduce( ( acc, e ) => {
       const filteredNavItems = navRoleInfo.filter(
@@ -20,7 +19,6 @@ const NavElemek = () => {
 
       return acc;
     }, {} );
-    console.log( itemsByRole );
     setGlobalItems( ( prevItems ) => ( {
       ...prevItems,
       ...itemsByRole,
@@ -34,7 +32,6 @@ const NavElemek = () => {
     try {
       // Ha hozzáadjuk a menüpontot a szerepkörhöz
       if ( isAdding ) {
-        console.log( updatedMenuItem );
         const checkResponse = await myAxios.post(
           "/api/check-nav-assigned-to-role",
           {
@@ -56,9 +53,7 @@ const NavElemek = () => {
           const response = await myAxios.delete(
             `/api/remove-nav-from-role/${ id }`
           );
-          console.log( "Sikeres törlés:", response );
         } catch ( error ) {
-          console.log( "sikertelen törlés: ", error );
         }
       }
 
@@ -79,7 +74,7 @@ const NavElemek = () => {
         updatedGlobalItems[ roleName ] = roleItems;
         return updatedGlobalItems;
       } );
-      await fetchNavRoleInfo(); // Backend adatfrissítés
+      await fetchNavRoleInfo();
     } catch ( error ) {
       console.error( "Error handling menu item:", error );
     }
@@ -98,16 +93,11 @@ const NavElemek = () => {
     const menuItem = navs[ source.index ]; // A menüpont, amit áthúztak
     if ( !menuItem ) return;
 
-    console.log( "Source role:", sourceRoleName );
-    console.log( "Destination role:", destinationRoleName );
-
     // Ha a destination a "menuList", akkor azt jelenti, hogy vissza akarjuk helyezni a menüt a "menuList"-be
     if ( destinationRoleName === "menuList" ) {
-      console.log( "Moving menuItem back to menuList" );
       handleMoveMenuItem( menuItem, sourceRoleName, false, result.draggableId ); // Eltávolítjuk a szerepkörhöz tartozó táblázatból
     } else if ( sourceRoleName === "menuList" ) {
       // Ha a source a "menuList", akkor hozzáadjuk a menüt a megfelelő szerepkörhöz
-      console.log( "Moving menuItem to role:", destinationRoleName );
       handleMoveMenuItem( menuItem, destinationRoleName, true ); // Hozzáadjuk a megfelelő szerepkörhöz
     } else if (
       !globalItems[ sourceRoleName ] ||
@@ -120,8 +110,7 @@ const NavElemek = () => {
       return;
     } else {
       // Átrendezzük a menüpontokat az új sorrend szerint
-      console.log( "Moving menuItem within role:", sourceRoleName );
-      const reorderedItems = Array.from( globalItems[ sourceRoleName ] || [] ); // Használj [] alapértelmezett értéket
+      const reorderedItems = Array.from( globalItems[ sourceRoleName ] || [] );
       const [ removed ] = reorderedItems.splice( source.index, 1 ); // Eltávolítjuk a menüpontot
       reorderedItems.splice( destination.index, 0, removed ); // Beszúrjuk az új helyre
 
@@ -143,7 +132,6 @@ const NavElemek = () => {
           role_name: sourceRoleName,
           items: updatedMenuItems, // Az új sorrend ID és ranking kulcsokkal
         } );
-        console.log( "Sorrend frissítve:", response.data );
       } catch ( error ) {
         console.error( "Hiba a sorrend frissítése közben:", error );
       }

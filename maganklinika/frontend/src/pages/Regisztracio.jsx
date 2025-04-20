@@ -43,7 +43,6 @@ const Regisztracio = () => {
       specialization_id: spec_id,
     }
 
-    console.log(licenceResponse.statusText)
     if (selectedValue === "doctor") {
       if (licenceResponse.statusText === "OK") {
         reg(adat);

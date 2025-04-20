@@ -20,7 +20,6 @@ const PatientAppointmentTableRow = (props) => {
       ...prevRatings,
       [appointmentId]: newRating,
     }));
-    console.log(`Időpont ${appointmentId} új értékelése: ${newRating}`);
     fetchAppointmentRating(appointmentId, newRating);
     fetchAppointmentByPatients(props.e.u_id);
   };

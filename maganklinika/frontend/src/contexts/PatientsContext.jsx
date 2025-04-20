@@ -31,7 +31,7 @@ export const PatientProvider = ({ children }) => {
       const data = await response.json();
       return data;
     } catch (error) {
-      return undefined; // Ezen még változtatni
+      return undefined;
     }
   };
   
@@ -41,7 +41,6 @@ export const PatientProvider = ({ children }) => {
       const response = await myAxios.get("/api/get-appointments-by-doctor", {
         params: { doctor_id: doctorId },
       });
-      console.log("Appointments:", response.data);
       setAppointmentsDoctor(response.data);
     } catch (error) {
       console.error("Error fetching appointments:", error);
@@ -96,7 +95,6 @@ export const PatientProvider = ({ children }) => {
   const fetchAppointmentRating = async (id, rating) => {
     try {
         const response = await myAxios.put(`/api/profile/rate/${id}`, { rating });
-        console.log("Sikeres mentés:", response.data);
     } catch (error) {
         console.error("Hiba az értékelés mentésekor:", error.response?.data || error.message);
     }

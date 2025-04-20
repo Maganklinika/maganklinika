@@ -1,4 +1,3 @@
-/* Navigációs sáv alap stílusok */
 .navbar {
   background-color: var(--nav-and-border-color);
   margin-top: 24px;
@@ -18,13 +17,11 @@
   justify-content: center;
 }
 
-/* Navigációs elemek */
 .navbar-item {
   position: relative;
   white-space: nowrap;
 }
 
-/* Aláhúzás animáció */
 .navbar-item::after {
   content: "";
   position: absolute;
@@ -43,14 +40,12 @@
   width: 100%;
 }
 
-/* Autentikációs menüpontok: jobbra igazítás */
 .navbar-auth {
   display: flex;
   margin-left: auto;
   gap: clamp(4px, 1vw, 14px);
 }
 
-/* Kis képernyőn auth menüpontok középre és sorba */
 @media (max-width: 768px) {
   .navbar-auth {
     flex-direction: row;
