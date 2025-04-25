@@ -24,19 +24,22 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): Response
     {
-        $request->validate([
+        $role = Role::where('name', $request->selectedValue)->value('role_id');
+
+        $rules = ([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'taj_number' => ['required_if:selectedValue,patient', 'number', 'digits:9', 'unique:' . Patient::class . ',taj_number'],
         ]);
+        if ($role == 3) {
+            $rules['taj_number'] = ['required', 'digits:9', 'unique:' . Patient::class . ',taj_number'];
+        } else {
+            $rules['taj_number'] = ['nullable'];
+        }
+
+        $request->validate($rules);
 
 
-        $role = Role::where('name', $request->selectedValue)->value('role_id');
-
-
-
-        // 2️⃣ Hozd létre a felhasználót, és győződj meg róla, hogy mentésre kerül
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -46,20 +49,16 @@ class RegisteredUserController extends Controller
         ]);
 
 
-
-        // 4️⃣ Ha patient, hozz létre egy Patient rekordot
         if ($request->selectedValue === "patient") {
             Patient::create([
                 'taj_number' => $request->taj_number,
                 'address' => $request->address,
                 'birth_date' => $request->birth_date,
-                'user_id' => $user->id, // ✔ Most már biztosan van ID
+                'user_id' => $user->id,
             ]);
-        }
-        // 5️⃣ Ha doctor, hozz létre egy Doctor rekordot
-        else if ($request->selectedValue === "doctor") {
+        } else if ($request->selectedValue === "doctor") {
             Doctor::create([
-                'user_id' => $user->id, // ✔ Most már biztosan van ID
+                'user_id' => $user->id,
                 'specialization_id' => $request->specialization_id,
             ]);
         }
