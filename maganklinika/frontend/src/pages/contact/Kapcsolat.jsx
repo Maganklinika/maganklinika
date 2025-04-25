@@ -8,17 +8,16 @@ import "font-awesome/css/font-awesome.min.css";
 import "./contact.css"
 
 const Kapcsolat = () => {
-  const position = [ 16.761785, -169.515644 ]; // Budapest koordinátája
+  const position = [ 16.761785, -169.515644 ];
 
   const awesomeMarker = L.AwesomeMarkers.icon( {
-    icon: "fa-map-marker", // FontAwesome ikon neve
-    prefix: "fa", // Mivel FontAwesome-t használunk
-    markerColor: "red", // Szín lehet: red, blue, green, orange, purple, darkred, lightred, beige, darkblue stb.
-    iconColor: "white", // Ikon színe
+    icon: "fa-map-marker",
+    prefix: "fa",
+    markerColor: "red", 
+    iconColor: "white", 
   } );
 
   useEffect( () => {
-    // Fix: Leaflet alapértelmezett ikonja ne dobjon hibát
     delete L.Icon.Default.prototype._getIconUrl;
   }, [] );
 

@@ -1,15 +1,12 @@
 import axios from "axios";
 
 const PRIMARY_BASE_URL = process.env.REACT_APP_PRIMARY_API_URL || "http://localhost:8000";
-const SECONDARY_BASE_URL = "http://localhost";
 
-// Axios példány létrehozása
 export const myAxios = axios.create({
   baseURL: PRIMARY_BASE_URL,
   withCredentials: true,
 });
 
-// Kérések interceptorai
 myAxios.interceptors.request.use(
   (config) => {
     const token = document.cookie
@@ -33,7 +30,6 @@ myAxios.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Hibakezelő interceptor
 myAxios.interceptors.response.use(
   (response) => response,
   (error) => {

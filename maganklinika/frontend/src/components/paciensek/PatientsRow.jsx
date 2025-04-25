@@ -9,7 +9,6 @@ const PatientsRow = (props) => {
     appointmentsByPatients,
   } = useDoctorContext();
   const [show, setShow] = useState(false);
-  //   const [selectedAppointmentCount, setSelectedAppointmentCount] = useState();
 
   const handleClose = () => setShow(false);
   const handleShow = async () => {

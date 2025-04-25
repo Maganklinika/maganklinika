@@ -104,7 +104,6 @@ const DoctorAppointments = () => {
   };
 
   const bookAppointmentClick = (e) => {
-    console.log(e)
     bookingAppointment(e.id);
     navigate("/profile");
   };
