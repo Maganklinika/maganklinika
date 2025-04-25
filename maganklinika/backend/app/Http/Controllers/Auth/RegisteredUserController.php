@@ -34,6 +34,7 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'phone_number' => ['required', 'string', 'min:6', 'max:16', 'regex:/^[0-9\+\-\/]+$/'],
         ]);
+        
         if ($role == 3) {
             $rules['taj_number'] = ['required', 'digits:9', 'unique:' . Patient::class . ',taj_number'];
             $rules['birth_date'] = ['required', 'date', 'before:today'];

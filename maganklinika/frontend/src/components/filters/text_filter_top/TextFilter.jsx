@@ -3,27 +3,28 @@ import { Form } from "react-bootstrap";
 import "./textfilter.css";
 
 
-const TextFilter = (props) => {
-  const [filteredText, setFilteredText] = useState("");
+const TextFilter = ( props ) => {
+  const [ filteredText, setFilteredText ] = useState( "" );
 
-  const handleChange = (event) => {
-    setFilteredText(event.target.value);
-    if (event.target.value === "") {
-      props.filterListSetter([...props.list]);
+  const handleChange = ( event ) => {
+    setFilteredText( event.target.value );
+    if ( event.target.value === "" ) {
+      props.filterListSetter( [ ...props.list ] );
     }
 
-    const filteredList = props.list.filter((e) => {
+    const filteredList = props.list.filter( ( e ) => {
       if (
-        e.d_name?.toLowerCase().includes(event.target.value.toLowerCase()) ||
-        e.s_name?.toLowerCase().includes(event.target.value.toLowerCase()) ||
-        e.user_name?.toLowerCase().includes(event.target.value.toLowerCase()) ||
-        e.u_phone?.toLowerCase().includes(event.target.value.toLowerCase()) ||
-        e.tn?.toString().includes(event.target.value)
+        e.d_name?.toLowerCase().includes( event.target.value.toLowerCase() ) ||
+        e.s_name?.toLowerCase().includes( event.target.value.toLowerCase() ) ||
+        e.user_name?.toLowerCase().includes( event.target.value.toLowerCase() ) ||
+        e.u_phone?.toLowerCase().includes( event.target.value.toLowerCase() ) ||
+        e.tn?.toString().includes( event.target.value ) ||
+        e.treatment_name?.toLowerCase().includes( event.target.value.toLowerCase() )
       ) {
         return true;
       }
-    });
-    props.filterListSetter([...filteredList]);
+    } );
+    props.filterListSetter( [ ...filteredList ] );
 
   };
 
