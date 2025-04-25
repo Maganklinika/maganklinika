@@ -19,7 +19,7 @@ const TextFilter = ( props ) => {
         e.user_name?.toLowerCase().includes( event.target.value.toLowerCase() ) ||
         e.u_phone?.toLowerCase().includes( event.target.value.toLowerCase() ) ||
         e.tn?.toString().includes( event.target.value ) ||
-        e.treatment_name?.toLowerCase().includes( event.target.value.toLowerCase() )
+        e.t_name?.toLowerCase().includes( event.target.value.toLowerCase() )
       ) {
         return true;
       }
