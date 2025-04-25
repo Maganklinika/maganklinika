@@ -62,28 +62,27 @@ const DoctorAppointments = () => {
 
   const generateEvents = (appointments) => {
     return appointments
-      .filter(
-        (appointment) =>
-          appointment.doctor_id === openAppointments.doctorId &&
-          appointment.treatment_id === openAppointments.treatmentId
-      )
+      .filter((appointment) => {
+        const appointmentStart = new Date(appointment.start_time);
+        return currentDate < appointmentStart;
+      })
       .map((appointment) => {
         const id = appointment.id;
         const start = new Date(appointment.start_time.replace(" ", "T"));
-
+  
         const [hours, minutes] = appointment.treatment.treatment_length
           .split(":")
           .map(Number);
         const durationInMinutes = hours * 60 + minutes;
-
+  
         const end = new Date(start.getTime() + durationInMinutes * 60000);
-
+  
         return {
           id,
           start,
           end,
           title: `${
-            appointment.patient ? appointment.patient.name : "Szabad időpont"
+            appointment.patient ? appointment.patient.name :""
           } (${appointment.treatment.treatment_name})`,
         };
       });
@@ -128,15 +127,7 @@ const DoctorAppointments = () => {
                 const doctorAppointments = appointmentsDoctor.filter(
                   (appointment) => appointment.doctor_id === doctor.d_id
                 );
-
-                const events = doctorAppointments.map((appointment) => ({
-                  id: appointment.doctor_id,
-                  start: new Date(appointment.start_time),
-                  end: new Date(appointment.end_time),
-                  title: `${appointment.patient_name} (${appointment.treatment_name})`,
-                  da_id: appointment.id,
-                  d_name: appointment.d_name,
-                }));
+                
 
                 return (
                   <React.Fragment key={i}>
