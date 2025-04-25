@@ -28,6 +28,7 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'taj_number' => ['required_if:selectedValue,patient', 'number', 'digits:9', 'unique:' . Patient::class . ',taj_number'],
         ]);
 
 
