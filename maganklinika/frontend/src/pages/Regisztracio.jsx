@@ -136,7 +136,7 @@ const Regisztracio = () => {
                       name="phone"
                     />
                   </div>
-                  <div>{errors.phone && <span className="text-danger">{errors.phone[0]}</span>}</div>
+                  <div>{errors.phone_number && <span className="text-danger">{errors.phone_number[0]}</span>}</div>
 
                   <div className="mb-3 mt-3">
                     <label htmlFor="email" className="form-label">
@@ -167,7 +167,7 @@ const Regisztracio = () => {
                       name="birthDay"
                     />
                   </div>
-                  <div>{errors.birthDay && <span className="text-danger">{errors.birthDay[0]}</span>}</div>
+                  <div>{errors.birth_date && <span className="text-danger">{errors.birth_date[0]}</span>}</div>
                 </Form.Group>
               </Col>
 
@@ -203,7 +203,7 @@ const Regisztracio = () => {
                       name="taj"
                     />
                   </div>
-                  <div>{errors.taj && <span className="text-danger">{errors.taj[0]}</span>}</div>
+                  <div>{errors.taj_number && <span className="text-danger">{errors.taj_number[0]}</span>}</div>
 
                   <div className="mb-3">
                     <label htmlFor="pwd" className="form-label">

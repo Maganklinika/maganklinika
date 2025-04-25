@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Role;
+use App\Models\Specialization;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
@@ -30,11 +31,17 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'phone_number' => ['required', 'string', 'min:6', 'max:16', 'regex:/^[0-9\+\-\/]+$/'],
         ]);
         if ($role == 3) {
-            $rules['taj_number'] = ['required', 'digits:9', 'unique:' . Patient::class . ',taj_number'];
-        } else {
-            $rules['taj_number'] = ['nullable'];
+            $rules = ([
+                'taj_number' => ['required', 'digits:9', 'unique:' . Patient::class . ',taj_number'],
+                'birth_date' => ['required', 'date', 'before:today']
+            ]);
+        } 
+
+        if ($role == 2){
+            $rules['specialization_id'] = ['required', 'exists:specializations,id'];
         }
 
         $request->validate($rules);
