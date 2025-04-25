@@ -26,6 +26,7 @@ class RegisteredUserController extends Controller
     public function store(Request $request): Response
     {
         $role = Role::where('name', $request->selectedValue)->value('role_id');
+        echo($request->selectedValue);
 
         $rules = ([
             'name' => ['required', 'string', 'max:255'],
@@ -35,14 +36,12 @@ class RegisteredUserController extends Controller
         ]);
         
         if ($role == 3) {
-            $rules = ([
-                'taj_number' => ['required', 'digits:9', 'unique:' . Patient::class . ',taj_number'],
-                'birth_date' => ['required', 'date', 'before:today']
-            ]);
-        } 
+            $rules['taj_number'] = ['required', 'digits:9', 'unique:' . Patient::class . ',taj_number'];
+            $rules['birth_date'] = ['required', 'date', 'before:today'];
+        }
 
-        if ($role == 2){
-            $rules['specialization_id'] = ['required', 'exists:specializations,id'];
+        if ($role == 2) {
+            $rules['specialization_id'] = ['required', 'exists:specializations,specialization_id'];
         }
 
         $request->validate($rules);
