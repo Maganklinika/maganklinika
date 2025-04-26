@@ -1,0 +1,339 @@
+
+-   .env
+-   .gitignore
+-   .gitlab-ci.yml
+-   docker-compose.yml
+-   mysql.cnf
+-   package-lock.json
+-   tree.txt
+-   
++���backend
+-   -   .dockerignore
+-   -   .editorconfig
+-   -   .env
+-   -   .env.example
+-   -   .gitattributes
+-   -   .gitignore
+-   -   .phpunit.result.cache
+-   -   artisan
+-   -   composer.json
+-   -   composer.lock
+-   -   Dockerfile
+-   -   phpunit.xml
+-   -   README.md
+-   -   
+-   +���app
+-   -   +���Http
+-   -   -   +���Controllers
+-   -   -   -   -   Controller.php
+-   -   -   -   -   DoctorAppointmentController.php
+-   -   -   -   -   DoctorController.php
+-   -   -   -   -   DoctorLicenceController.php
+-   -   -   -   -   DoctorRatingsViewController.php
+-   -   -   -   -   FileController.php
+-   -   -   -   -   GetTreatmentBySpecializationController.php
+-   -   -   -   -   NavigationController.php
+-   -   -   -   -   NavigationRoleController.php
+-   -   -   -   -   PatientController.php
+-   -   -   -   -   RoleController.php
+-   -   -   -   -   SpecializationController.php
+-   -   -   -   -   TreatmentController.php
+-   -   -   -   -   UserController.php
+-   -   -   -   -   
+-   -   -   -   L���Auth
+-   -   -   -           AuthenticatedSessionController.php
+-   -   -   -           EmailVerificationNotificationController.php
+-   -   -   -           NewPasswordController.php
+-   -   -   -           PasswordResetLinkController.php
+-   -   -   -           RegisteredUserController.php
+-   -   -   -           VerifyEmailController.php
+-   -   -   -           
+-   -   -   +���Middleware
+-   -   -   -       Admin.php
+-   -   -   -       Doctor.php
+-   -   -   -       EnsureEmailIsVerified.php
+-   -   -   -       Patient.php
+-   -   -               
+-   -   +���Mail
+-   -   -       AppointmentStatusUpdated.php
+-   -   -       
+-   -   +���Models
+-   -   -       Doctor.php
+-   -   -       DoctorAppointment.php
+-   -   -       DoctorLicence.php
+-   -   -       GetTreatmentBySpecialization.php
+-   -   -       Navigation.php
+-   -   -       NavigationRole.php
+-   -   -       Patient.php
+-   -   -       Role.php
+-   -   -       Specialization.php
+-   -   -       Treatment.php
+-   -   -       User.php           
+-   +���database
+-   -   -   .gitignore
+-   -   +���factories
+-   -   -       DoctorAppointmentFactory.php
+-   -   -       DoctorFactory.php
+-   -   -       DoctorLicenceFactory.php
+-   -   -       NavigationFactory.php
+-   -   -       NavigationRoleFactory.php
+-   -   -       PatientFactory.php
+-   -   -       RoleFactory.php
+-   -   -       SpecializationFactory.php
+-   -   -       TreatmentFactory.php
+-   -   -       UserFactory.php
+-   -   -       
+-   -   +���migrations
+-   -   -       0000_02_08_090408_create_roles_table.php
+-   -   -       0001_01_01_000000_create_users_table.php
+-   -   -       0001_01_01_000001_create_cache_table.php
+-   -   -       0001_01_01_000002_create_jobs_table.php
+-   -   -       2025_02_08_090242_create_personal_access_tokens_table.php
+-   -   -       2025_02_08_090657_create_navigations_table.php
+-   -   -       2025_02_08_090723_create_navigation_roles_table.php
+-   -   -       2025_02_08_090735_create_patients_table.php
+-   -   -       2025_02_08_090759_create_specializations_table.php
+-   -   -       2025_02_08_090812_create_doctors_table.php
+-   -   -       2025_02_08_090822_create_treatments_table.php
+-   -   -       2025_02_08_090846_create_doctor_appointments_table.php
+-   -   -       2025_02_14_111542_get_treatment_by_specialization.php
+-   -   -       2025_02_19_102106_doctors_ratings_view.php
+-   -   -       2025_02_21_111958_add_appointment_overlap_trigger.php
+-   -   -       2025_03_08_073623_create_doctor_licences_table.php
+-   -   -       
+-   -   L���seeders
+-   -           DatabaseSeeder.php
+-   -           DoctorAppointmentSeeder.php
+-   -           DoctorLicenceSeeder.php
+-   -           DoctorSeeder.php
+-   -           NavigationRoleSeeder.php
+-   -           NavigationSeeder.php
+-   -           PatientSeeder.php
+-   -           RoleSeeder.php
+-   -           SpecializationSeeder.php
+-   -           TreatmentSeeder.php  
+-   +���public
+-   -   -   .htaccess
+-   -   -   favicon.ico
+-   -   -   index.php
+-   -   -   robots.txt
+-   -   -   
+-   -   L���storage
+-   -       L���profile_pictures
+-   -               1743430056_ben-sweet-2LowviVHZ-E-unsplash.jpg
+-   -               1743430347_ben-sweet-2LowviVHZ-E-unsplash.jpg
+-   -               1743526946_1.jpg
+-   -               1743526975_1.jpg
+-   -               1743527130_1.jpg
+-   -               
+-   +���resources
+-   -   +���lang
+-   -   -   L���hu
+-   -   -           auth.php
+-   -   -           passwords.php
+-   -   -           validation.php
+-   -   -           
+-   -   L���views
+-   -           .gitkeep
+-   -           appointment-status-updated.blade.php
+-   -           fileUpload.blade.php
+-   -           
+-   +���routes
+-   -       api.php
+-   -       auth.php
+-   -       console.php
+-   -       web.php
+-   -       
+-   +���storage
+-   -   -   .gitignore
+-   -   -   
+-   -   +���app
+-   -   -   -   .gitignore
+-   -   -   -   
+-   -   -   L���public
+-   -   -       L���profile_pictures
+-   -   -               1743430056_ben-sweet-2LowviVHZ-E-unsplash.jpg
+-   -   -               1743430347_ben-sweet-2LowviVHZ-E-unsplash.jpg
+-   -   -               1743526946_1.jpg
+-   -   -               1743526975_1.jpg
+-   -   -               1743527130_1.jpg
+-   -   -               
+-   +���tests
+-   -   -   TestCase.php
+-   -   -   TestCaseWithSeed.php
+-   -   -   
+-   -   +���Feature
+-   -   -   -   DoctorAppointmentTest.php
+-   -   -   -   DoctorLicenceTest.php
+-   -   -   -   DoctorRatingsViewTest.php
+-   -   -   -   DoctorTest.php
+-   -   -   -   ExampleTest.php
+-   -   -   -   NavigationTest.php
+-   -   -   -   PatientTest.php
+-   -   -   -   RoleTest.php
+-   -   -   -   SpecializationTest.php
+-   -   -   -   TreatmentTest.php
+-   -   -   -   UserTest.php
+-   -   -   -   
+-   -   -   L���Auth
+-   -   -           AuthenticationTest.php
+-   -   -           EmailVerificationTest.php
+-   -   -           PasswordResetTest.php
+-   -   -           RegistrationTest.php
+-   -   -           
+-   -   L���Unit
+-   -           ExampleTest.php
+                    
+L���frontend
+    -   .gitignore
+    -   default.conf
+    -   Dockerfile
+    -   package-lock.json
+    -   package.json
+    -   README.md        
+    +���public
+    -   -   favicon.ico
+    -   -   index.html
+    -   -   logo192.png
+    -   -   logo512.png
+    -   -   manifest.json
+    -   -   robots.txt
+    -   -   
+    -   L���images
+    -       -   clinic1.jpg
+    -       -   clinic2.jpg
+    -       -   clinic3.jpg
+    -       -   clinic4.jpg
+    -       -   clinic5.jpg
+    -       -   
+    -       +���backgrounds
+    -       -       aboutUs_bg.jpg
+    -       -       rolunk_bg.jpg
+    -       -       
+    -       L���profile_picture
+    -               default_profil_picture.webp
+    -               
+    L���src
+        -   App.css
+        -   App.js
+        -   App.test.js
+        -   index.css
+        -   index.js
+        -   logo.svg
+        -   reportWebVitals.js
+        -   setupTests.js
+        -   variables.css
+        -   
+        +���api
+        -       Axios.jsx
+        -       
+        +���components
+        -   +���appointments
+        -   -       DoctorAppointments.jsx
+        -   -       ReservationAppointments.css
+        -   -       ReservationAppointments.jsx
+        -   -       
+        -   +���componentsmap
+        -   -       ComponentsMap.jsx
+        -   -       
+        -   +���doktorok
+        -   -   -   doctors.css
+        -   -   -   Doktorok.jsx
+        -   -   -   
+        -   -   L���doctors_with_spec
+        -   -           DoctorsWithSpec.jsx
+        -   -           
+        -   +���filters
+        -   -   L���text_filter_top
+        -   -           textfilter.css
+        -   -           TextFilter.jsx
+        -   -           
+        -   +���listgroup
+        -   -       ListGroupRow.jsx
+        -   -       
+        -   +���nav
+        -   -       nav.css
+        -   -       navElemek.css
+        -   -       NavElemek.jsx
+        -   -       Navigacio.jsx
+        -   -       
+        -   +���paciensek
+        -   -       Paciensek.jsx
+        -   -       PatientsRow.jsx
+        -   -       userlist.css
+        -   -       
+        -   +���tables
+        -   -       roletables.css
+        -   -       TableRow.jsx
+        -   -       Tables.jsx
+        -   -       UsersTableRow.jsx
+        -   -       
+        -   L���userdivlist
+        -           ListHeader.jsx
+        -           UserDivList.jsx
+        -           
+        +���contexts
+        -       AdminContext.jsx
+        -       AuthContext.jsx
+        -       DoctorContext.jsx
+        -       PatientsContext.jsx
+        -       
+        +���layouts
+        -   -   VendegLayout.jsx
+        -   -   
+        -   +���footer
+        -   -       footer.css
+        -   -       Footer.jsx
+        -   -       
+        -   L���infobar
+        -           infobar.css
+        -           InfoBar.jsx
+        -           
+        L���pages
+            -   Appointments.jsx
+            -   Bejelentkezes.jsx
+            -   Fooldal.css
+            -   Fooldal.jsx
+            -   ForgotPassword.jsx
+            -   Kijelentkezes.jsx
+            -   regisztracio.css
+            -   Regisztracio.jsx
+            -   
+            +���contact
+            -       contact.css
+            -       Kapcsolat.jsx
+            -       
+            +���create_appointment
+            -       appointment.css
+            -       CreateAppointmentsByDoctor.jsx
+            -       
+            +���disabledUser
+            -       disabledUser.css
+            -       DisabledUser.jsx
+            -       
+            +���profiles
+            -       PatientAppointmentTableRow.jsx
+            -       profile.css
+            -       Profile.jsx
+            -       
+            +���reset_password
+            -       resetPassword.css
+            -       ResetPassword.jsx
+            -       
+            +���rolunk
+            -       rolunk.css
+            -       Rolunk.jsx
+            -       
+            +���treatment
+            -       listgroup.css
+            -       ListGroupTreatments.jsx
+            -       SelectedTreatment.jsx
+            -       Treatment.jsx
+            -       
+            +���users
+            -       Felhasznalok.jsx
+            -       users.css
+            -       
+            L���verify_email
+                    verifyEmail.css
+                    VerifyEmailPage.jsx
