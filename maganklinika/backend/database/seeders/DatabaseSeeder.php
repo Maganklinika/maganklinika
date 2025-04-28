@@ -96,8 +96,34 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'test',
             'email' => 'test@test.com',
-            'password' => Hash::make('teszt123'),
+            'password' => Hash::make('password'),
             'role_id' => 1,
+        ]);
+
+        $patient = User::factory()->create([
+            'name' => 'patienttest',
+            'email' => 'patienttest@test.com',
+            'password' => Hash::make('password'),
+            'role_id' => 3,
+        ]);
+
+        Patient::create([
+            'user_id' => $patient->id,
+            'taj_number' => fake()->unique()->randomNumber(9, true),
+            'birth_date' => fake()->date(),
+            'address' => fake()->address(),
+        ]);
+
+        $doctor = User::factory()->create([
+            'name' => 'doctortest',
+            'email' => 'doctortest@test.com',
+            'password' => Hash::make('password'),
+            'role_id' => 2,
+        ]);
+
+        Doctor::create([
+            'user_id' => $doctor->id,
+            'specialization_id' => Specialization::inRandomOrder()->first()->specialization_id,
         ]);
 
         $this->call([
